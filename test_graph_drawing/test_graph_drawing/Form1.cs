@@ -24,16 +24,25 @@ namespace test_graph_drawing
 
             //create a viewer object 
             viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
+            viewer.EdgeInsertButtonVisible = false;
+            viewer.LayoutAlgorithmSettingsButtonVisible = false;
+            viewer.NavigationVisible = false;
+            viewer.UndoRedoButtonsVisible = false;
+
             //create a graph object 
             g = new Graph("graph");
             //create the graph content 
-            g.AddEdge("A", "B");
-            g.AddEdge("B", "A");
-            g.AddEdge("B", "C");
-            g.AddEdge("A", "C").Attr.Color = Microsoft.Msagl.Drawing.Color.Green;
+            g.AddEdge("A", "B").Attr.ArrowheadAtTarget = ArrowStyle.None;
+            g.AddEdge("B", "C").Attr.ArrowheadAtTarget = ArrowStyle.None;
+            g.AddEdge("A", "C").Attr.ArrowheadAtTarget = ArrowStyle.None;
+
+            int[] b = { 1, 2, 3 };
+            int eCount = g.EdgeCount;
+            IEnumerable<Edge> edges = g.Edges;
+
             g.FindNode("A").Attr.FillColor = Microsoft.Msagl.Drawing.Color.Magenta;
-            Node b = g.FindNode("B");
-            b.Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
+            g.FindNode("B").Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
+
             Node c = g.FindNode("C");
             c.Attr.FillColor = Microsoft.Msagl.Drawing.Color.PaleGreen;
             c.Attr.Shape = Shape.Diamond;
@@ -65,7 +74,7 @@ namespace test_graph_drawing
 
             if(n1 != null && n2 != null)
             {
-                g.AddEdge(t1, t2);
+                g.AddEdge(t1, t2).Attr.ArrowheadAtTarget = ArrowStyle.None;
                 viewer.Graph = g;
                 this.SuspendLayout();
                 this.panel1.Controls.Add(viewer);

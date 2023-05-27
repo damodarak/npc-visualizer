@@ -40,7 +40,7 @@ namespace test_graph_drawing
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(780, 3);
+            this.button1.Location = new System.Drawing.Point(904, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(133, 69);
             this.button1.TabIndex = 0;
@@ -53,7 +53,7 @@ namespace test_graph_drawing
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
             this.tableLayoutPanel1.SetRowSpan(this.panel1, 4);
-            this.panel1.Size = new System.Drawing.Size(771, 544);
+            this.panel1.Size = new System.Drawing.Size(892, 636);
             this.panel1.TabIndex = 1;
             // 
             // tableLayoutPanel1
@@ -66,19 +66,19 @@ namespace test_graph_drawing
             this.tableLayoutPanel1.Controls.Add(this.button1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.textBox1, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.textBox2, 1, 3);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(105, 40);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, -1);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.65217F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.34783F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 334F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(919, 550);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 380F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1066, 642);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(780, 87);
+            this.button2.Location = new System.Drawing.Point(904, 105);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(133, 69);
             this.button2.TabIndex = 3;
@@ -88,14 +88,14 @@ namespace test_graph_drawing
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(780, 187);
+            this.textBox1.Location = new System.Drawing.Point(904, 227);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 4;
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(780, 218);
+            this.textBox2.Location = new System.Drawing.Point(904, 264);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 5;
@@ -107,7 +107,7 @@ namespace test_graph_drawing
             this.ClientSize = new System.Drawing.Size(1067, 642);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "NPC-visualizer";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
