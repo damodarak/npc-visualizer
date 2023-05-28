@@ -40,6 +40,11 @@ namespace test_graph_drawing
             int eCount = g.EdgeCount;
             IEnumerable<Edge> edges = g.Edges;
 
+            foreach (var edge in edges)
+            {
+                Console.WriteLine($"{edge.Source} ---- {edge.Target}");
+            }
+
             g.FindNode("A").Attr.FillColor = Microsoft.Msagl.Drawing.Color.Magenta;
             g.FindNode("B").Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
 
