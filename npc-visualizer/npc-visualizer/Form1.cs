@@ -16,21 +16,16 @@ namespace npc_visualizer
     {
         Graph g;
         Microsoft.Msagl.GraphViewerGdi.GViewer viewer;
-        int counter = 0;
+        int counter = 3;
+        int[] solution;
 
         public Form1()
         {
             InitializeComponent();
-            init_graph_layout();
+            InitGraphLayout();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            g.AddNode((counter++).ToString()).Attr.Shape = Shape.Circle;
-            viewer.Graph = g;
-        }
-
-        private void init_graph_layout()
+        private void InitGraphLayout()
         {
             //create a viewer object 
             viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
@@ -38,6 +33,7 @@ namespace npc_visualizer
             viewer.LayoutAlgorithmSettingsButtonVisible = false;
             viewer.NavigationVisible = false;
             viewer.UndoRedoButtonsVisible = false;
+            viewer.SaveAsMsaglEnabled = false;
 
             //create a graph object 
             g = new Graph("graph");
@@ -45,34 +41,27 @@ namespace npc_visualizer
             g.Directed = false;
 
             //create the graph content 
-            Edge e = g.AddEdge("-1", "-2");
+            Edge e = g.AddEdge("0", "1");
             e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-            e.Attr.Id = "-1_-2";
+            e.Attr.Id = "0_1";
 
-            e = g.AddEdge("-2", "-3");   
+            e = g.AddEdge("1", "2");   
             e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-            e.Attr.Id = "-2_-3";
+            e.Attr.Id = "1_2";
 
-            e = g.AddEdge("-1", "-3");
+            e = g.AddEdge("0", "2");
             e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-            e.Attr.Id = "-1_-3";
-
-            //IEnumerable<Edge> edges = g.Edges;
-
-            //foreach (var edge in edges)
-            //{
-            //    Console.WriteLine($"{edge.Source} ---- {edge.Target}");
-            //}
+            e.Attr.Id = "0_2";
 
             //change vertex color
             //g.FindNode("A").Attr.FillColor = Microsoft.Msagl.Drawing.Color.Magenta;
             //g.FindNode("B").Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
 
-            Node c = g.FindNode("-3");
+            Node c = g.FindNode("2");
             //c.Attr.FillColor = Microsoft.Msagl.Drawing.Color.PaleGreen;
             c.Attr.Shape = Shape.Circle;
-            g.FindNode("-1").Attr.Shape = Shape.Circle;
-            g.FindNode("-2").Attr.Shape = Shape.Circle;
+            g.FindNode("0").Attr.Shape = Shape.Circle;
+            g.FindNode("1").Attr.Shape = Shape.Circle;
 
             //bind the graph to the viewer 
             viewer.Graph = g;
@@ -83,43 +72,107 @@ namespace npc_visualizer
             this.ResumeLayout();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            g.AddNode((counter++).ToString()).Attr.Shape = Shape.Circle;
+            Utilities.ClearVertexColor(g);
+            viewer.Graph = g;
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
-            string t1 = textBox1.Text;
-            string t2 = textBox2.Text;
+            string vertex1 = textBox1.Text;
+            string vertex2 = textBox2.Text;
 
-            Node n1 = g.FindNode(t1);
-            Node n2 = g.FindNode(t2);
+            Node n1 = g.FindNode(vertex1);
+            Node n2 = g.FindNode(vertex2);
 
-            Edge e1 = EdgeById(t1 + "_" + t2);
-            Edge e2 = EdgeById(t2 + "_" + t1);
+            Edge e1 = Utilities.EdgeById(g, vertex1 + "_" + vertex2);
+            Edge e2 = Utilities.EdgeById(g, vertex2 + "_" + vertex1);
 
-            if (n1 != null && n2 != null && e1 == null && e2 == null)
+            if (n1 != null && n2 != null && e1 == null && e2 == null && n1.Id != n2.Id)
             {
-                Edge new_e = g.AddEdge(t1, t2);
-                new_e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                new_e.Attr.Id = t1 + "_" + t2;
+                int index1 = int.Parse(vertex1);
+                int index2 = int.Parse(vertex2);
 
+                //edge is always from vertex with smaller index to vertex with higher index
+                if (index1 > index2)
+                {
+                    string temp = vertex1;
+                    vertex1 = vertex2;
+                    vertex2 = temp;
+                }
+
+                Edge new_e = g.AddEdge(vertex1, vertex2);
+                new_e.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                new_e.Attr.Id = vertex1 + "_" + vertex2;
+
+                Utilities.ClearVertexColor(g);
                 viewer.Graph = g;
             }
         }
-
-        private Edge EdgeById(string id)
+        
+        private void button3_Click(object sender, EventArgs e)
         {
-            IEnumerable<Edge> edges = g.Edges;
+            int index = comboBox1.SelectedIndex;
+            int param = (int)numericUpDown1.Value;
 
-            string[] vertices = id.Split('_');
-
-            foreach (Edge edge in edges)
+            switch (index)
             {
-                if((edge.Source == vertices[0] && edge.Target == vertices[1]) || 
-                    (edge.Target == vertices[0] && edge.Source == vertices[1]))
+                case 0:
+                    Utilities.ClearVertexColor(g);
+                    solution = Clique.CliqueToSat(g, param);
+                    for (int i = 0; i < solution.Length; i++)
+                    {
+                        g.FindNode(solution[i].ToString()).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Purple;
+                    }
+                    viewer.Graph = g;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {       
+            while (g.EdgeCount > 0)
+            {
+                IEnumerable<Edge> edges = g.Edges;
+                foreach (var ed in edges)
                 {
-                    return edge;
+                    g.RemoveEdge(ed);
+                    break;
                 }
             }
 
-            return null;
+            while (g.NodeCount > 0)
+            {
+                IEnumerable<Node> nodes = g.Nodes;
+                foreach (var nod in nodes)
+                {
+                    g.RemoveNode(nod);
+                    break;
+                }
+            }
+
+            int param = (int)numericUpDown2.Value;
+            counter = param;
+
+            for (int i = 0; i < param; i++)
+            {
+                g.AddNode(i.ToString()).Attr.Shape = Shape.Circle;
+            }
+            for (int i = 0; i < param; i++)
+            {
+                for (int j = i + 1; j < param; j++)
+                {
+                    Edge ed = g.AddEdge(i.ToString(), j.ToString());
+                    ed.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                    ed.Attr.Id = i.ToString() + "_" + j.ToString();
+                }
+            }
+
+            viewer.Graph = g;
         }
     }
 }

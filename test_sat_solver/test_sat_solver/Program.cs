@@ -50,34 +50,42 @@ namespace test_sat_solver
             //    Console.WriteLine("There are solutions");
             //}
 
+
+            //Literal[][] clauses = new Literal[][]
+            //{
+            //    new Literal[] { new Literal(1, false), new Literal(2, false) },   // Clause 1: !1 or !2
+            //    new Literal[] { new Literal(1, false), new Literal(3, false) },   // Clause 2: !1 or !3
+            //    new Literal[] { new Literal(1, false), new Literal(4, false) },   // Clause 3: !1 or !4
+
+            //    new Literal[] { new Literal(2, false), new Literal(3, false) },   // Clause 4: !2 or !3
+            //    new Literal[] { new Literal(2, false), new Literal(4, false) },   // Clause 5: !2 or !4
+
+            //    new Literal[] { new Literal(3, false), new Literal(4, false) },   // Clause 6: !3 or !4
+
+            //    new Literal[] { new Literal(1, true), new Literal(2, true), new Literal(3, true), new Literal(4, true) } // Clause 7: 1 or 2 or 3 or 4
+            //};
             SatSolverParams parameters = new SatSolverParams();
-            int limVar = 5;//highest literal + 1
+            int limVar = 7;//highest literal + 1
             Literal[][] clauses = new Literal[][]
             {
-                new Literal[] { new Literal(1, false), new Literal(2, false) },   // Clause 1: !1 or !2
-                new Literal[] { new Literal(1, false), new Literal(3, false) },   // Clause 2: !1 or !3
-                new Literal[] { new Literal(1, false), new Literal(4, false) },   // Clause 3: !1 or !4
-
-                new Literal[] { new Literal(2, false), new Literal(3, false) },   // Clause 4: !2 or !3
-                new Literal[] { new Literal(2, false), new Literal(4, false) },   // Clause 5: !2 or !4
-
-                new Literal[] { new Literal(3, false), new Literal(4, false) },   // Clause 6: !3 or !4
-
-                new Literal[] { new Literal(1, true), new Literal(2, true), new Literal(3, true), new Literal(4, true) } // Clause 7: 1 or 2 or 3 or 4
+                new Literal[] { new Literal(1, false), new Literal(4, false) },  
+                new Literal[] { new Literal(2, false), new Literal(5, false) },   
+                new Literal[] { new Literal(3, false), new Literal(6, false) }    
             };
 
             IEnumerable<SatSolution> solutions = SatSolver.Solve(parameters, limVar, clauses);
 
             foreach (SatSolution solution in solutions)
             {
-                bool[] sol = new bool[4];
+                //bool[] sol = new bool[4];
                 IEnumerable<Literal> lits = solution.Literals;
-                foreach (Literal lit in lits)
-                {
-                    sol[lit.Var - 1] = lit.Sense;
-                }
+                IEnumerable<int> pos = solution.Pos;
+                //foreach (Literal lit in lits)
+                //{
+                //    sol[lit.Var - 1] = lit.Sense;
+                //}
 
-                Console.WriteLine($"Solution found: 1 = {sol[0]}, 2 = {sol[1]}, 3 = {sol[2]}, 4 = {sol[3]}");
+                //Console.WriteLine($"Solution found: 1 = {sol[0]}, 2 = {sol[1]}, 3 = {sol[2]}, 4 = {sol[3]}");
             }
 
             Console.WriteLine("Press enter to close...");
