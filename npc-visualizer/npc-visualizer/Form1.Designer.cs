@@ -134,7 +134,8 @@ namespace npc_visualizer
             this.comboBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "Clique"});
+            "Clique",
+            "Independent set"});
             this.comboBox1.Location = new System.Drawing.Point(798, 170);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);

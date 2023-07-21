@@ -11,7 +11,7 @@ namespace npc_visualizer
 {
     class Clique
     {
-        public static int[] CliqueToSat(Graph g, int cliqueSize)
+        public static int[] Solve(Graph g, int cliqueSize)
         {
             if (cliqueSize == 0 || g.NodeCount == 0)
             {

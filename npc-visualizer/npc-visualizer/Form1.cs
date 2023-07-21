@@ -117,20 +117,22 @@ namespace npc_visualizer
             int index = comboBox1.SelectedIndex;
             int param = (int)numericUpDown1.Value;
 
+            Utilities.ClearVertexColor(g);
             switch (index)
             {
-                case 0:
-                    Utilities.ClearVertexColor(g);
-                    solution = Clique.CliqueToSat(g, param);
-                    for (int i = 0; i < solution.Length; i++)
-                    {
-                        g.FindNode(solution[i].ToString()).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Purple;
-                    }
-                    viewer.Graph = g;
+                case 0:               
+                    solution = Clique.Solve(g, param);
+                    Utilities.DrawSolution(g, solution);
+                    break;
+                case 1:
+                    solution = IndepSet.Solve(g, param);
+                    Utilities.DrawSolution(g, solution);
                     break;
                 default:
                     break;
             }
+            
+            viewer.Graph = g;
         }
 
         private void button4_Click(object sender, EventArgs e)

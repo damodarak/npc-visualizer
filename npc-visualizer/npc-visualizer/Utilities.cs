@@ -17,6 +17,7 @@ namespace npc_visualizer
                 node.Attr.FillColor = Color.White;
             }
         }
+
         public static Edge EdgeById(Graph g, string id)
         {
             IEnumerable<Edge> edges = g.Edges;
@@ -53,6 +54,44 @@ namespace npc_visualizer
             }
 
             return missingEdges;
+        }
+
+        public static Graph FlipEdges(Graph g)
+        {
+            Graph flippedGraph = new Graph("flippedGraph");
+
+            foreach (Node node in g.Nodes)
+            {
+                flippedGraph.AddNode(node.Id);
+            }
+
+            Tuple<int, int>[] missingEdges = FindMissingEdges(g);
+            Edge new_e;
+            for (int i = 0; i < missingEdges.Length; i++)
+            {
+                if (missingEdges[i].Item1 < missingEdges[i].Item2)
+                {
+                    new_e = flippedGraph.AddEdge(missingEdges[i].Item1.ToString(), missingEdges[i].Item2.ToString());
+                    new_e.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                    new_e.Attr.Id = missingEdges[i].Item1.ToString() + "_" + missingEdges[i].Item2.ToString();
+                }
+                else
+                {
+                    new_e = flippedGraph.AddEdge(missingEdges[i].Item2.ToString(), missingEdges[i].Item1.ToString());
+                    new_e.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                    new_e.Attr.Id = missingEdges[i].Item2.ToString() + "_" + missingEdges[i].Item1.ToString();
+                }
+            }
+
+            return flippedGraph;
+        }
+
+        public static void DrawSolution(Graph g, int[] solution)
+        {
+            for (int i = 0; i < solution.Length; i++)
+            {
+                g.FindNode(solution[i].ToString()).Attr.FillColor = Color.Purple;
+            }
         }
     }
 }
