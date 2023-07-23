@@ -34,6 +34,10 @@ namespace npc_visualizer
             viewer.NavigationVisible = false;
             viewer.UndoRedoButtonsVisible = false;
             viewer.SaveAsMsaglEnabled = false;
+            viewer.AllowDrop = false;
+            //viewer.AutoValidate ?
+            viewer.InsertingEdge = false;
+            viewer.LayoutEditingEnabled = false;
 
             //create a graph object 
             g = new Graph("graph");
@@ -126,6 +130,10 @@ namespace npc_visualizer
                     break;
                 case 1:
                     solution = IndepSet.Solve(g, param);
+                    Utilities.DrawSolution(g, solution);
+                    break;
+                case 2:
+                    solution = VertexCover.Solve(g, param);
                     Utilities.DrawSolution(g, solution);
                     break;
                 default:

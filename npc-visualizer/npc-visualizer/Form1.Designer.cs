@@ -50,7 +50,7 @@ namespace npc_visualizer
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 85.80441F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.19558F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 142F));
             this.tableLayoutPanel1.Controls.Add(this.button1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.button2, 2, 0);
@@ -75,7 +75,7 @@ namespace npc_visualizer
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(798, 3);
+            this.button1.Location = new System.Drawing.Point(796, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(118, 70);
             this.button1.TabIndex = 0;
@@ -88,12 +88,12 @@ namespace npc_visualizer
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
             this.tableLayoutPanel1.SetRowSpan(this.panel1, 5);
-            this.panel1.Size = new System.Drawing.Size(789, 637);
+            this.panel1.Size = new System.Drawing.Size(787, 637);
             this.panel1.TabIndex = 4;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(929, 3);
+            this.button2.Location = new System.Drawing.Point(927, 3);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(118, 70);
             this.button2.TabIndex = 1;
@@ -103,7 +103,7 @@ namespace npc_visualizer
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(798, 84);
+            this.textBox1.Location = new System.Drawing.Point(796, 84);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 2;
@@ -111,7 +111,7 @@ namespace npc_visualizer
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(929, 84);
+            this.textBox2.Location = new System.Drawing.Point(927, 84);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 3;
@@ -119,7 +119,7 @@ namespace npc_visualizer
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(929, 170);
+            this.button3.Location = new System.Drawing.Point(927, 170);
             this.button3.Name = "button3";
             this.tableLayoutPanel1.SetRowSpan(this.button3, 2);
             this.button3.Size = new System.Drawing.Size(118, 58);
@@ -135,8 +135,9 @@ namespace npc_visualizer
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "Clique",
-            "Independent set"});
-            this.comboBox1.Location = new System.Drawing.Point(798, 170);
+            "Independent Set",
+            "Vertex Cover"});
+            this.comboBox1.Location = new System.Drawing.Point(796, 170);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 5;
@@ -144,14 +145,29 @@ namespace npc_visualizer
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(798, 208);
+            this.numericUpDown1.Location = new System.Drawing.Point(796, 208);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown1.TabIndex = 8;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(798, 349);
+            this.button4.Location = new System.Drawing.Point(796, 349);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(121, 23);
             this.button4.TabIndex = 9;
@@ -161,7 +177,7 @@ namespace npc_visualizer
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(929, 349);
+            this.numericUpDown2.Location = new System.Drawing.Point(927, 349);
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown2.TabIndex = 10;

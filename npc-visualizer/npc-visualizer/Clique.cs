@@ -13,7 +13,7 @@ namespace npc_visualizer
     {
         public static int[] Solve(Graph g, int cliqueSize)
         {
-            if (cliqueSize == 0 || g.NodeCount == 0)
+            if (g.NodeCount == 0)
             {
                 return new int[] { };
             }
@@ -22,17 +22,15 @@ namespace npc_visualizer
                 return new int[] { 0 };
             }
 
-            int nodeCount = g.NodeCount;
-            int edgeCount = g.EdgeCount;
-            Dictionary<int, int> satVarToVertex = new Dictionary<int, int>();
+            int[] satVarToVertex = new int[cliqueSize * g.NodeCount];
             Dictionary<int, int> indexToSatVar = new Dictionary<int, int>();
 
-            CreateMapping(satVarToVertex, indexToSatVar, nodeCount, cliqueSize);
-            int clauseCount = ClauseCount(nodeCount, cliqueSize, edgeCount);
+            CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, cliqueSize);
+            int clauseCount = ClauseCount(g.NodeCount, cliqueSize, g.EdgeCount);
 
             Literal[][] clauses = new Literal[clauseCount][];
             DefineClauses(clauses, cliqueSize, g, indexToSatVar);
-            int varLim = (nodeCount * cliqueSize) + 1;
+            int varLim = g.NodeCount * cliqueSize;
             IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, clauses);
 
             foreach (SatSolution solution in solutions)
@@ -57,8 +55,7 @@ namespace npc_visualizer
 
             return new int[] { };
         }
-
-        static void CreateMapping(Dictionary<int,int> satVarToVertex, Dictionary<int, int> indexToSatVar, int nodeCount, int cliqueSize)
+        static void CreateMapping(int[] satVarToVertex, Dictionary<int, int> indexToSatVar, int nodeCount, int cliqueSize)
         {
             int satVar = 0;
 
