@@ -16,7 +16,7 @@ namespace npc_visualizer
             int[] satVarToVertex = new int[coverSize * g.NodeCount];
             Dictionary<int, int> indexToSatVar = new Dictionary<int, int>();
 
-            CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, coverSize);
+            Utilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, coverSize);
             int clauseCount = ClauseCount(g.NodeCount, coverSize, g.EdgeCount);
 
             Literal[][] clauses = new Literal[clauseCount][];
@@ -78,19 +78,6 @@ namespace npc_visualizer
                     clauses[clauseIndex][literal++] = new Literal(indexToSatVar[i * 1000 + int.Parse(e.Target)], true);                   
                 }
                 clauseIndex++;
-            }
-        }
-        static void CreateMapping(int[] satVarToVertex, Dictionary<int, int> indexToSatVar, int nodeCount, int coverSize)
-        {
-            int satVar = 0;
-
-            for (int i = 1; i < coverSize + 1; i++)
-            {
-                for (int vertexNum = 0; vertexNum < nodeCount; vertexNum++)
-                {
-                    indexToSatVar[i * 1000 + vertexNum] = satVar;
-                    satVarToVertex[satVar++] = vertexNum;
-                }
             }
         }
 

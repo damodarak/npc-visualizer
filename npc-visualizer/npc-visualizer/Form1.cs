@@ -23,6 +23,8 @@ namespace npc_visualizer
         {
             InitializeComponent();
             InitGraphLayout();
+            this.edgeNode1.Maximum = counter - 1;
+            this.edgeNode2.Maximum = counter - 1;
         }
 
         private void InitGraphLayout()
@@ -78,15 +80,22 @@ namespace npc_visualizer
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (counter == 20)
+            {
+                return;
+            }
             g.AddNode((counter++).ToString()).Attr.Shape = Shape.Circle;
             Utilities.ClearVertexColor(g);
             viewer.Graph = g;
+
+            this.edgeNode1.Maximum = counter - 1;
+            this.edgeNode2.Maximum = counter - 1;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string vertex1 = textBox1.Text;
-            string vertex2 = textBox2.Text;
+            string vertex1 = edgeNode1.Text;
+            string vertex2 = edgeNode2.Text;
 
             Node n1 = g.FindNode(vertex1);
             Node n2 = g.FindNode(vertex2);
@@ -118,6 +127,11 @@ namespace npc_visualizer
         
         private void button3_Click(object sender, EventArgs e)
         {
+            if (g.NodeCount == 0)
+            {
+                return;
+            }
+
             int index = comboBox1.SelectedIndex;
             int param = (int)numericUpDown1.Value;
 
@@ -134,6 +148,10 @@ namespace npc_visualizer
                     break;
                 case 2:
                     solution = VertexCover.Solve(g, param);
+                    Utilities.DrawSolution(g, solution);
+                    break;
+                case 3:
+                    solution = DominatingSet.Solve(g, param);
                     Utilities.DrawSolution(g, solution);
                     break;
                 default:

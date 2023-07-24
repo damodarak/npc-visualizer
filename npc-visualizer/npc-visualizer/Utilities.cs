@@ -93,6 +93,19 @@ namespace npc_visualizer
                 g.FindNode(solution[i].ToString()).Attr.FillColor = Color.Purple;
             }
         }
+        public static void CreateMapping(int[] satVarToVertex, Dictionary<int, int> indexToSatVar, int nodeCount, int param)
+        {
+            int satVar = 0;
+
+            for (int i = 1; i < param + 1; i++)
+            {
+                for (int vertexNum = 0; vertexNum < nodeCount; vertexNum++)
+                {
+                    indexToSatVar[i * 1000 + vertexNum] = satVar;
+                    satVarToVertex[satVar++] = vertexNum;
+                }
+            }
+        }
     }
 }
 
