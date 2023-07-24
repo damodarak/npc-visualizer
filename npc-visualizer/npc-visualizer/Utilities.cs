@@ -69,18 +69,8 @@ namespace npc_visualizer
             Edge new_e;
             for (int i = 0; i < missingEdges.Length; i++)
             {
-                if (missingEdges[i].Item1 < missingEdges[i].Item2)
-                {
-                    new_e = flippedGraph.AddEdge(missingEdges[i].Item1.ToString(), missingEdges[i].Item2.ToString());
-                    new_e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                    new_e.Attr.Id = missingEdges[i].Item1.ToString() + "_" + missingEdges[i].Item2.ToString();
-                }
-                else
-                {
-                    new_e = flippedGraph.AddEdge(missingEdges[i].Item2.ToString(), missingEdges[i].Item1.ToString());
-                    new_e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                    new_e.Attr.Id = missingEdges[i].Item2.ToString() + "_" + missingEdges[i].Item1.ToString();
-                }
+                new_e = flippedGraph.AddEdge(missingEdges[i].Item1.ToString(), missingEdges[i].Item2.ToString());
+                new_e.Attr.Id = missingEdges[i].Item1.ToString() + "_" + missingEdges[i].Item2.ToString();
             }
 
             return flippedGraph;

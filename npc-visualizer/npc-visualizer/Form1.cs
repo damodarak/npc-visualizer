@@ -39,7 +39,6 @@ namespace npc_visualizer
             viewer.AllowDrop = false;
             //viewer.AutoValidate ?
             viewer.InsertingEdge = false;
-            viewer.LayoutEditingEnabled = false;
 
             //create a graph object 
             g = new Graph("graph");
