@@ -201,5 +201,19 @@ namespace npc_visualizer
 
             viewer.Graph = g;
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (counter == 1)
+            {
+                return;
+            }
+            g.RemoveNode(g.FindNode((--counter).ToString()));
+            Utilities.ClearVertexColor(g);
+            viewer.Graph = g;
+
+            this.edgeNode1.Maximum = counter - 1;
+            this.edgeNode2.Maximum = counter - 1;
+        }
     }
 }

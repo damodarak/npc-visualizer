@@ -13,11 +13,7 @@ namespace npc_visualizer
     {
         public static int[] Solve(Graph g, int cliqueSize)
         {
-            if (g.NodeCount == 0)
-            {
-                return new int[] { };
-            }
-            else if (cliqueSize == 1)
+            if (cliqueSize == 1)
             {
                 return new int[] { 0 };
             }
@@ -58,11 +54,12 @@ namespace npc_visualizer
 
         static int ClauseCount(int nodeCount, int cliqueSize, int edgeCount)
         {
-            int seriesSum = (cliqueSize - 1) * cliqueSize / 2;
-            int maxEdges = nodeCount * (nodeCount - 1) / 2;
+            int seriesSumClique = ((cliqueSize - 1) * cliqueSize) / 2;
+            int seriesSumNodes = ((nodeCount - 1) * nodeCount) / 2;
+            int maxEdges = (nodeCount * (nodeCount - 1)) / 2;
             int missingEdges = maxEdges - edgeCount;
 
-            return (seriesSum * nodeCount) + (seriesSum * missingEdges * 2) + cliqueSize;
+            return (seriesSumClique * nodeCount) + (seriesSumClique * missingEdges * 2) + cliqueSize + (cliqueSize * seriesSumNodes);
         }
 
         static void DefineClauses(Literal[][] clauses, int cliqueSize, Graph g, Dictionary<int, int> indexToSatVar)
@@ -119,6 +116,22 @@ namespace npc_visualizer
                 }
 
                 clauseIndex++;
+            }
+
+            //there is only one ith vertex in the clique
+            for (int i = 1; i < cliqueSize + 1; i++)
+            {
+                for (int nodeNum1 = 0; nodeNum1 < g.NodeCount; nodeNum1++)
+                {
+                    for (int nodeNum2 = nodeNum1 + 1; nodeNum2 < g.NodeCount; nodeNum2++)
+                    {
+                        clauses[clauseIndex++] = new Literal[]
+                        {
+                        new Literal(indexToSatVar[i * 1000 + nodeNum1], false),
+                        new Literal(indexToSatVar[i * 1000 + nodeNum2], false)
+                        };
+                    }
+                }
             }
         }
     }   

@@ -41,6 +41,7 @@ namespace npc_visualizer
             this.button5 = new System.Windows.Forms.Button();
             this.edgeNode1 = new System.Windows.Forms.NumericUpDown();
             this.edgeNode2 = new System.Windows.Forms.NumericUpDown();
+            this.button6 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -57,22 +58,24 @@ namespace npc_visualizer
             this.tableLayoutPanel1.Controls.Add(this.button1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.button2, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.button3, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.comboBox1, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.numericUpDown1, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.button4, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.numericUpDown2, 2, 4);
-            this.tableLayoutPanel1.Controls.Add(this.button5, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.edgeNode1, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.edgeNode2, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.button4, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.numericUpDown2, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.numericUpDown1, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.button5, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.comboBox1, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.button3, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.button6, 1, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 48.52071F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 51.47929F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 141F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 296F));
+            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.66666F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 95F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 144F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 230F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 343F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1067, 643);
             this.tableLayoutPanel1.TabIndex = 0;
@@ -91,7 +94,7 @@ namespace npc_visualizer
             // 
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.tableLayoutPanel1.SetRowSpan(this.panel1, 5);
+            this.tableLayoutPanel1.SetRowSpan(this.panel1, 6);
             this.panel1.Size = new System.Drawing.Size(786, 637);
             this.panel1.TabIndex = 4;
             // 
@@ -107,7 +110,7 @@ namespace npc_visualizer
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(926, 170);
+            this.button3.Location = new System.Drawing.Point(926, 236);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(118, 21);
             this.button3.TabIndex = 7;
@@ -125,7 +128,7 @@ namespace npc_visualizer
             "Independent Set",
             "Vertex Cover",
             "Dominating Set"});
-            this.comboBox1.Location = new System.Drawing.Point(795, 170);
+            this.comboBox1.Location = new System.Drawing.Point(795, 236);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 5;
@@ -133,7 +136,7 @@ namespace npc_visualizer
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(795, 208);
+            this.numericUpDown1.Location = new System.Drawing.Point(795, 271);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             20,
             0,
@@ -155,7 +158,7 @@ namespace npc_visualizer
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(795, 349);
+            this.button4.Location = new System.Drawing.Point(795, 415);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(121, 23);
             this.button4.TabIndex = 9;
@@ -165,7 +168,7 @@ namespace npc_visualizer
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(926, 349);
+            this.numericUpDown2.Location = new System.Drawing.Point(926, 415);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             20,
             0,
@@ -187,7 +190,7 @@ namespace npc_visualizer
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(926, 208);
+            this.button5.Location = new System.Drawing.Point(926, 271);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(118, 20);
             this.button5.TabIndex = 11;
@@ -196,17 +199,27 @@ namespace npc_visualizer
             // 
             // edgeNode1
             // 
-            this.edgeNode1.Location = new System.Drawing.Point(795, 84);
+            this.edgeNode1.Location = new System.Drawing.Point(795, 95);
             this.edgeNode1.Name = "edgeNode1";
             this.edgeNode1.Size = new System.Drawing.Size(120, 20);
             this.edgeNode1.TabIndex = 12;
             // 
             // edgeNode2
             // 
-            this.edgeNode2.Location = new System.Drawing.Point(926, 84);
+            this.edgeNode2.Location = new System.Drawing.Point(926, 95);
             this.edgeNode2.Name = "edgeNode2";
             this.edgeNode2.Size = new System.Drawing.Size(120, 20);
             this.edgeNode2.TabIndex = 13;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(795, 141);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(118, 44);
+            this.button6.TabIndex = 14;
+            this.button6.Text = "Delete Vertex";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // Form1
             // 
@@ -240,6 +253,7 @@ namespace npc_visualizer
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.NumericUpDown edgeNode1;
         private System.Windows.Forms.NumericUpDown edgeNode2;
+        private System.Windows.Forms.Button button6;
     }
 }
 
