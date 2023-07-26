@@ -24,31 +24,7 @@ namespace npc_visualizer
             int varLim = g.NodeCount * coverSize;
             IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, clauses);
 
-            foreach (SatSolution solution in solutions)
-            {
-                //if inside, then there is a solution
-                IEnumerable<int> positive = solution.Pos;
-                int[] vertices = new int[coverSize];
-                for (int i = 0; i < vertices.Length; i++)
-                {
-                    vertices[i] = -1;
-                }
-                int index = 0;
-                foreach (int pos in positive)
-                {
-                    if (index < coverSize)
-                    {
-                        vertices[index++] = satVarToVertex[pos];
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                return vertices;
-            }
-
-            return new int[] { };
+            return Utilities.SatSolutionToVertices(solutions, coverSize, satVarToVertex);
         }
 
         static void DefineClauses(Literal[][] clauses, int vertexCover, Graph g, Dictionary<int, int> indexToSatVar)

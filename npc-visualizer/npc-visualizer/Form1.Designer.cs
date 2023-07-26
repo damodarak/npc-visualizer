@@ -33,20 +33,20 @@ namespace npc_visualizer
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.button4 = new System.Windows.Forms.Button();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.button5 = new System.Windows.Forms.Button();
             this.edgeNode1 = new System.Windows.Forms.NumericUpDown();
             this.edgeNode2 = new System.Windows.Forms.NumericUpDown();
+            this.button4 = new System.Windows.Forms.Button();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.button5 = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edgeNode1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.edgeNode2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -108,53 +108,19 @@ namespace npc_visualizer
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button3
+            // edgeNode1
             // 
-            this.button3.Location = new System.Drawing.Point(926, 236);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(118, 21);
-            this.button3.TabIndex = 7;
-            this.button3.Text = "Find solution";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.edgeNode1.Location = new System.Drawing.Point(795, 95);
+            this.edgeNode1.Name = "edgeNode1";
+            this.edgeNode1.Size = new System.Drawing.Size(120, 20);
+            this.edgeNode1.TabIndex = 12;
             // 
-            // comboBox1
+            // edgeNode2
             // 
-            this.comboBox1.AccessibleDescription = "";
-            this.comboBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Clique",
-            "Independent Set",
-            "Vertex Cover",
-            "Dominating Set"});
-            this.comboBox1.Location = new System.Drawing.Point(795, 236);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 5;
-            this.comboBox1.Text = "Select NPC problem";
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(795, 271);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 8;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.edgeNode2.Location = new System.Drawing.Point(926, 95);
+            this.edgeNode2.Name = "edgeNode2";
+            this.edgeNode2.Size = new System.Drawing.Size(120, 20);
+            this.edgeNode2.TabIndex = 13;
             // 
             // button4
             // 
@@ -188,6 +154,28 @@ namespace npc_visualizer
             0,
             0});
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(795, 271);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 8;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(926, 271);
@@ -197,19 +185,32 @@ namespace npc_visualizer
             this.button5.Text = "Approximate";
             this.button5.UseVisualStyleBackColor = true;
             // 
-            // edgeNode1
+            // comboBox1
             // 
-            this.edgeNode1.Location = new System.Drawing.Point(795, 95);
-            this.edgeNode1.Name = "edgeNode1";
-            this.edgeNode1.Size = new System.Drawing.Size(120, 20);
-            this.edgeNode1.TabIndex = 12;
+            this.comboBox1.AccessibleDescription = "";
+            this.comboBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Clique",
+            "Independent Set",
+            "Vertex Cover",
+            "Dominating Set",
+            "Colorability"});
+            this.comboBox1.Location = new System.Drawing.Point(795, 236);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 5;
+            this.comboBox1.Text = "Select NPC problem";
             // 
-            // edgeNode2
+            // button3
             // 
-            this.edgeNode2.Location = new System.Drawing.Point(926, 95);
-            this.edgeNode2.Name = "edgeNode2";
-            this.edgeNode2.Size = new System.Drawing.Size(120, 20);
-            this.edgeNode2.TabIndex = 13;
+            this.button3.Location = new System.Drawing.Point(926, 236);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(118, 21);
+            this.button3.TabIndex = 7;
+            this.button3.Text = "Find solution";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button6
             // 
@@ -231,10 +232,10 @@ namespace npc_visualizer
             this.Name = "Form1";
             this.Text = "NPC-visualizer";
             this.tableLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edgeNode1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.edgeNode2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }

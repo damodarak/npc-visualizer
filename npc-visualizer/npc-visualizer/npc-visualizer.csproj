@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clique.cs" />
+    <Compile Include="Colorability.cs" />
     <Compile Include="DominatingSet.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

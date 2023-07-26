@@ -29,31 +29,7 @@ namespace npc_visualizer
             int varLim = g.NodeCount * cliqueSize;
             IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, clauses);
 
-            foreach (SatSolution solution in solutions)
-            {
-                //if inside, then there is a solution
-                IEnumerable<int> positive = solution.Pos;
-                int[] vertices = new int[cliqueSize];
-                for (int i = 0; i < vertices.Length; i++)
-                {
-                    vertices[i] = -1;
-                }
-                int index = 0;
-                foreach (int pos in positive)
-                {
-                    if(index < cliqueSize)
-                    {
-                        vertices[index++] = satVarToVertex[pos];
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                return vertices;
-            }
-
-            return new int[] { };
+            return Utilities.SatSolutionToVertices(solutions, cliqueSize, satVarToVertex);
         }
 
         static int ClauseCount(int nodeCount, int cliqueSize, int edgeCount)

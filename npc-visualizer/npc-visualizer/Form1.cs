@@ -153,6 +153,10 @@ namespace npc_visualizer
                     solution = DominatingSet.Solve(g, param);
                     Utilities.DrawSolution(g, solution);
                     break;
+                case 4:
+                    solution = Colorability.Solve(g, param);
+                    Utilities.ColorabilitySolution(g, solution);
+                    break;
                 default:
                     break;
             }

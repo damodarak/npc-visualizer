@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.Msagl.Drawing;
+using Microsoft.SolverFoundation.Solvers;
 
 namespace npc_visualizer
 {
@@ -86,6 +87,22 @@ namespace npc_visualizer
                 }       
             }
         }
+
+        public static void ColorabilitySolution(Graph g, int[] solution)
+        {
+            Color[] colors = new Color[20] 
+            {
+                Color.Blue, Color.Brown, Color.BlueViolet, Color.DarkGreen, Color.Gold, Color.Indigo, Color.Lime,
+                Color.Magenta, Color.MistyRose, Color.Olive, Color.Orange, Color.Red, Color.Purple, Color.Silver,
+                Color.Snow, Color.Tan, Color.White, Color.Yellow, Color.LightCoral, Color.LemonChiffon
+            };
+
+            for (int i = 0; i < solution.Length; i++)
+            {
+                g.FindNode(i.ToString()).Attr.FillColor = colors[solution[i]];
+            }
+        }
+
         public static void CreateMapping(int[] satVarToVertex, Dictionary<int, int> indexToSatVar, int nodeCount, int param)
         {
             int satVar = 0;
@@ -98,6 +115,35 @@ namespace npc_visualizer
                     satVarToVertex[satVar++] = vertexNum;
                 }
             }
+        }
+
+        public static int[] SatSolutionToVertices(IEnumerable<SatSolution> solutions, int solutionSize, int[] satVarToVertex)
+        {
+            foreach (SatSolution solution in solutions)
+            {
+                //if inside, then there is a solution
+                IEnumerable<int> positive = solution.Pos;
+                int[] vertices = new int[solutionSize];
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    vertices[i] = -1;
+                }
+                int index = 0;
+                foreach (int pos in positive)
+                {
+                    if (index < solutionSize)
+                    {
+                        vertices[index++] = satVarToVertex[pos];
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                return vertices;
+            }
+
+            return new int[] { };
         }
     }
 }
