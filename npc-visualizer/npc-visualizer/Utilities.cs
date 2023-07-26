@@ -99,7 +99,7 @@ namespace npc_visualizer
 
             for (int i = 0; i < solution.Length; i++)
             {
-                g.FindNode(i.ToString()).Attr.FillColor = colors[solution[i]];
+                g.FindNode(i.ToString()).Attr.FillColor = colors[solution[i] - 1];
             }
         }
 
