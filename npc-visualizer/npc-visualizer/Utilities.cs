@@ -80,7 +80,10 @@ namespace npc_visualizer
         {
             for (int i = 0; i < solution.Length; i++)
             {
-                g.FindNode(solution[i].ToString()).Attr.FillColor = Color.Purple;
+                if (solution[i] != -1)
+                {
+                    g.FindNode(solution[i].ToString()).Attr.FillColor = Color.Purple;
+                }       
             }
         }
         public static void CreateMapping(int[] satVarToVertex, Dictionary<int, int> indexToSatVar, int nodeCount, int param)

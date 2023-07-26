@@ -34,6 +34,10 @@ namespace npc_visualizer
                 //if inside, then there is a solution
                 IEnumerable<int> positive = solution.Pos;
                 int[] vertices = new int[cliqueSize];
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    vertices[i] = -1;
+                }
                 int index = 0;
                 foreach (int pos in positive)
                 {
