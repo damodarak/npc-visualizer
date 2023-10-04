@@ -13,7 +13,8 @@ namespace npc_visualizer
         public static int[] Solve(Graph g, int setSize)
         {
             Graph flippedGraph = Utilities.FlipEdges(g);
-            return Clique.Solve(flippedGraph, setSize);
+            //return Clique.Solve(flippedGraph, setSize);
+            return null;//calm down complier
         }
     }
 }

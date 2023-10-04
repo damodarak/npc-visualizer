@@ -6,43 +6,56 @@ using System.Threading.Tasks;
 
 using Microsoft.SolverFoundation.Solvers;
 using Microsoft.Msagl.Drawing;
+using Microsoft.Msagl.Core.Geometry.Curves;
 
 namespace npc_visualizer
 {
-    class Clique
+    class Clique : Problem
     {
-        public static int[] Solve(Graph g, int cliqueSize)
+        public Clique(Graph g, int param) 
         {
-            if (cliqueSize == 1)
-            {
-                return new int[] { 0 };
-            }
-
-            int[] satVarToVertex = new int[cliqueSize * g.NodeCount];
-            Dictionary<int, int> indexToSatVar = new Dictionary<int, int>();
-
-            Utilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, cliqueSize);
-            int clauseCount = ClauseCount(g.NodeCount, cliqueSize, g.EdgeCount);
-
-            Literal[][] clauses = new Literal[clauseCount][];
-            DefineClauses(clauses, cliqueSize, g, indexToSatVar);
-            int varLim = g.NodeCount * cliqueSize;
-            IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, clauses);
-
-            return Utilities.SatSolutionToVertices(solutions, cliqueSize, satVarToVertex);
+            this.g = g;
+            this.param = param;
         }
 
-        static int ClauseCount(int nodeCount, int cliqueSize, int edgeCount)
+        protected override void ToSat()
+        {
+            satVarToVertex = new int[param * g.NodeCount];
+            indexToSatVar = new Dictionary<int, int>();
+
+            Utilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
+            ClauseCount(g.NodeCount, param, g.EdgeCount);
+
+            sat = new Literal[clauseCount][];
+            DefineClauses();
+        }
+        public override void Solve()
+        {
+            if (param == 1)
+            {
+                solution = new int[] { 0 };
+                return;
+            }
+
+            ToSat();
+
+            int varLim = g.NodeCount * param;
+            IEnumerable<SatSolution> satSolutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
+
+            solution = Utilities.SatSolutionToVertices(satSolutions, param, satVarToVertex);
+        }
+
+        void ClauseCount(int nodeCount, int cliqueSize, int edgeCount)
         {
             int seriesSumClique = ((cliqueSize - 1) * cliqueSize) / 2;
             int seriesSumNodes = ((nodeCount - 1) * nodeCount) / 2;
             int maxEdges = (nodeCount * (nodeCount - 1)) / 2;
             int missingEdges = maxEdges - edgeCount;
 
-            return (seriesSumClique * nodeCount) + (seriesSumClique * missingEdges * 2) + cliqueSize + (cliqueSize * seriesSumNodes);
+            clauseCount =  (seriesSumClique * nodeCount) + (seriesSumClique * missingEdges * 2) + cliqueSize + (cliqueSize * seriesSumNodes);
         }
 
-        static void DefineClauses(Literal[][] clauses, int cliqueSize, Graph g, Dictionary<int, int> indexToSatVar)
+        protected override void DefineClauses()
         {
             int clauseIndex = 0;
             int nodeCount = g.NodeCount;
@@ -50,11 +63,11 @@ namespace npc_visualizer
             //ith and jth vertices in one clique are different
             for (int k = 0; k < nodeCount; k++)
             {
-                for (int i = 1; i < cliqueSize + 1; i++)
+                for (int i = 1; i < param + 1; i++)
                 {
-                    for (int j = i + 1; j < cliqueSize + 1; j++)
+                    for (int j = i + 1; j < param + 1; j++)
                     {
-                        clauses[clauseIndex++] = new Literal[]
+                        sat[clauseIndex++] = new Literal[]
                         {
                             new Literal(indexToSatVar[i * 1000 + k], false),
                             new Literal(indexToSatVar[j * 1000 + k], false)
@@ -67,17 +80,17 @@ namespace npc_visualizer
             Tuple<int, int>[] missingEdges = Utilities.FindMissingEdges(g);
             for (int k = 0; k < missingEdges.Length; k++)
             {
-                for (int i = 1; i < cliqueSize + 1; i++)
+                for (int i = 1; i < param + 1; i++)
                 {
-                    for (int j = i + 1; j < cliqueSize + 1; j++)
+                    for (int j = i + 1; j < param + 1; j++)
                     {
-                        clauses[clauseIndex++] = new Literal[]
+                        sat[clauseIndex++] = new Literal[]
                         {
                         new Literal(indexToSatVar[i * 1000 + missingEdges[k].Item1], false),
                         new Literal(indexToSatVar[j * 1000 + missingEdges[k].Item2], false)
                         };
 
-                        clauses[clauseIndex++] = new Literal[]
+                        sat[clauseIndex++] = new Literal[]
                         {
                         new Literal(indexToSatVar[j * 1000 + missingEdges[k].Item1], false),
                         new Literal(indexToSatVar[i * 1000 + missingEdges[k].Item2], false)
@@ -87,25 +100,25 @@ namespace npc_visualizer
             }
 
             //There is an ith vertex
-            for (int i = 1; i < cliqueSize + 1; i++)
+            for (int i = 1; i < param + 1; i++)
             {
-                clauses[clauseIndex] = new Literal[g.NodeCount];
+                sat[clauseIndex] = new Literal[g.NodeCount];
                 for (int j = 0; j < g.NodeCount; j++)
                 {
-                    clauses[clauseIndex][j] = new Literal(indexToSatVar[i * 1000 + j], true);
+                    sat[clauseIndex][j] = new Literal(indexToSatVar[i * 1000 + j], true);
                 }
 
                 clauseIndex++;
             }
 
             //there is only one ith vertex in the clique
-            for (int i = 1; i < cliqueSize + 1; i++)
+            for (int i = 1; i < param + 1; i++)
             {
                 for (int nodeNum1 = 0; nodeNum1 < g.NodeCount; nodeNum1++)
                 {
                     for (int nodeNum2 = nodeNum1 + 1; nodeNum2 < g.NodeCount; nodeNum2++)
                     {
-                        clauses[clauseIndex++] = new Literal[]
+                        sat[clauseIndex++] = new Literal[]
                         {
                         new Literal(indexToSatVar[i * 1000 + nodeNum1], false),
                         new Literal(indexToSatVar[i * 1000 + nodeNum2], false)
@@ -113,6 +126,36 @@ namespace npc_visualizer
                     }
                 }
             }
+        }
+
+        public override Graph ToClique()
+        {
+            return g;
+        }
+
+        public override Graph ToColorability()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Graph ToDominatingSet()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Graph ToHamilPath()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Graph ToIndepSet()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Graph ToVertexCover()
+        {
+            throw new NotImplementedException();
         }
     }   
 }

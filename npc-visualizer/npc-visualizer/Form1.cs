@@ -137,9 +137,10 @@ namespace npc_visualizer
             Utilities.ClearVertexColor(g);
             switch (index)
             {
-                case 0:               
-                    solution = Clique.Solve(g, param);
-                    Utilities.DrawSolution(g, solution);
+                case 0:
+                    Problem problem = new Clique(g, param);
+                    problem.Solve();
+                    problem.DrawSolution();
                     break;
                 case 1:
                     solution = IndepSet.Solve(g, param);
