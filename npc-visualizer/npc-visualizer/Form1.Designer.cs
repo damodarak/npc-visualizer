@@ -54,7 +54,7 @@ namespace npc_visualizer
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 85.80441F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.19558F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 143F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 191F));
             this.tableLayoutPanel1.Controls.Add(this.button1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.button2, 2, 0);
@@ -68,23 +68,25 @@ namespace npc_visualizer
             this.tableLayoutPanel1.Controls.Add(this.button3, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.button6, 1, 2);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 6;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.66666F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 95F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 144F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 230F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 343F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1067, 643);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 117F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 177F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 283F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 422F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1423, 791);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(795, 3);
+            this.button1.Location = new System.Drawing.Point(1061, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(118, 70);
+            this.button1.Size = new System.Drawing.Size(157, 86);
             this.button1.TabIndex = 0;
             this.button1.Text = "Add Vertex";
             this.button1.UseVisualStyleBackColor = true;
@@ -92,17 +94,19 @@ namespace npc_visualizer
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(3, 3);
+            this.panel1.Location = new System.Drawing.Point(4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
             this.tableLayoutPanel1.SetRowSpan(this.panel1, 6);
-            this.panel1.Size = new System.Drawing.Size(786, 637);
+            this.panel1.Size = new System.Drawing.Size(1048, 783);
             this.panel1.TabIndex = 4;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(926, 3);
+            this.button2.Location = new System.Drawing.Point(1235, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(118, 70);
+            this.button2.Size = new System.Drawing.Size(157, 86);
             this.button2.TabIndex = 1;
             this.button2.Text = "Add Edge";
             this.button2.UseVisualStyleBackColor = true;
@@ -110,23 +114,26 @@ namespace npc_visualizer
             // 
             // edgeNode1
             // 
-            this.edgeNode1.Location = new System.Drawing.Point(795, 95);
+            this.edgeNode1.Location = new System.Drawing.Point(1061, 118);
+            this.edgeNode1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.edgeNode1.Name = "edgeNode1";
-            this.edgeNode1.Size = new System.Drawing.Size(120, 20);
+            this.edgeNode1.Size = new System.Drawing.Size(160, 22);
             this.edgeNode1.TabIndex = 12;
             // 
             // edgeNode2
             // 
-            this.edgeNode2.Location = new System.Drawing.Point(926, 95);
+            this.edgeNode2.Location = new System.Drawing.Point(1235, 118);
+            this.edgeNode2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.edgeNode2.Name = "edgeNode2";
-            this.edgeNode2.Size = new System.Drawing.Size(120, 20);
+            this.edgeNode2.Size = new System.Drawing.Size(160, 22);
             this.edgeNode2.TabIndex = 13;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(795, 415);
+            this.button4.Location = new System.Drawing.Point(1061, 512);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(121, 23);
+            this.button4.Size = new System.Drawing.Size(161, 28);
             this.button4.TabIndex = 9;
             this.button4.Text = "add complete graph";
             this.button4.UseVisualStyleBackColor = true;
@@ -134,7 +141,8 @@ namespace npc_visualizer
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(926, 415);
+            this.numericUpDown2.Location = new System.Drawing.Point(1235, 512);
+            this.numericUpDown2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             20,
             0,
@@ -146,7 +154,7 @@ namespace npc_visualizer
             0,
             0});
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown2.Size = new System.Drawing.Size(160, 22);
             this.numericUpDown2.TabIndex = 10;
             this.numericUpDown2.Value = new decimal(new int[] {
             1,
@@ -156,7 +164,8 @@ namespace npc_visualizer
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(795, 271);
+            this.numericUpDown1.Location = new System.Drawing.Point(1061, 335);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             20,
             0,
@@ -168,7 +177,7 @@ namespace npc_visualizer
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(160, 22);
             this.numericUpDown1.TabIndex = 8;
             this.numericUpDown1.Value = new decimal(new int[] {
             1,
@@ -178,9 +187,10 @@ namespace npc_visualizer
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(926, 271);
+            this.button5.Location = new System.Drawing.Point(1235, 335);
+            this.button5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(118, 20);
+            this.button5.Size = new System.Drawing.Size(157, 25);
             this.button5.TabIndex = 11;
             this.button5.Text = "Approximate";
             this.button5.UseVisualStyleBackColor = true;
@@ -195,18 +205,21 @@ namespace npc_visualizer
             "Independent Set",
             "Vertex Cover",
             "Dominating Set",
-            "Colorability"});
-            this.comboBox1.Location = new System.Drawing.Point(795, 236);
+            "Colorability",
+            "Hamilton Path"});
+            this.comboBox1.Location = new System.Drawing.Point(1061, 292);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.Size = new System.Drawing.Size(160, 24);
             this.comboBox1.TabIndex = 5;
             this.comboBox1.Text = "Select NPC problem";
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(926, 236);
+            this.button3.Location = new System.Drawing.Point(1235, 292);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(118, 21);
+            this.button3.Size = new System.Drawing.Size(157, 26);
             this.button3.TabIndex = 7;
             this.button3.Text = "Find solution";
             this.button3.UseVisualStyleBackColor = true;
@@ -214,9 +227,10 @@ namespace npc_visualizer
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(795, 141);
+            this.button6.Location = new System.Drawing.Point(1061, 175);
+            this.button6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(118, 44);
+            this.button6.Size = new System.Drawing.Size(157, 54);
             this.button6.TabIndex = 14;
             this.button6.Text = "Delete Vertex";
             this.button6.UseVisualStyleBackColor = true;
@@ -224,10 +238,11 @@ namespace npc_visualizer
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 642);
+            this.ClientSize = new System.Drawing.Size(1423, 790);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "NPC-visualizer";

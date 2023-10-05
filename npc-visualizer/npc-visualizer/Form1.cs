@@ -163,6 +163,11 @@ namespace npc_visualizer
                     problem.Solve();
                     problem.DrawSolution();
                     break;
+                case 5:
+                    problem = new HamilPath(g, param);
+                    problem.Solve();
+                    problem.DrawSolution();
+                    break;
                 default:
                     break;
             }
