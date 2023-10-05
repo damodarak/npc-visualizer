@@ -9,25 +9,38 @@ using Microsoft.Msagl.Drawing;
 
 namespace npc_visualizer
 {
-    class DominatingSet
+    class DominatingSet : Problem
     {
-        public static int[] Solve(Graph g, int param)
+        public DominatingSet(Graph g, int param)
         {
-            int[] satVarToVertex = new int[param * g.NodeCount];
-            Dictionary<int, int> indexToSatVar = new Dictionary<int, int>();
+            this.g = g;
+            this.param = param;
+        }
+        public override Literal[][] ToSat()
+        {
+            satVarToVertex = new int[param * g.NodeCount];
+            indexToSatVar = new Dictionary<int, int>();
 
             Utilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
-            int clauseCount = ClauseCount(g.NodeCount, param);
+            ClauseCount();
 
-            Literal[][] clauses = new Literal[clauseCount][];
-            DefineClauses(clauses, param, g, indexToSatVar);
+            sat = new Literal[clauseCount][];
+            DefineClauses();
+
+            return sat;
+        }
+        public override int[] Solve()
+        {
+            ToSat();
             int varLim = g.NodeCount * param;
-            IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, clauses);
+            IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
-            return Utilities.SatSolutionToVertices(solutions, param, satVarToVertex);
+            solution =  Utilities.SatSolutionToVertices(solutions, param, satVarToVertex);
+
+            return solution;
         }
 
-        static void DefineClauses(Literal[][] clauses, int param, Graph g, Dictionary<int, int> indexToSatVar)
+        void DefineClauses()
         {
             int clauseIndex = 0;
 
@@ -38,7 +51,7 @@ namespace npc_visualizer
                 {
                     for (int vertexNum2 = vertexNum1 + 1; vertexNum2 < g.NodeCount; vertexNum2++)
                     {
-                        clauses[clauseIndex++] = new Literal[2]
+                        sat[clauseIndex++] = new Literal[2]
                         {
                             new Literal(indexToSatVar[i * 1000 + vertexNum1], false),
                             new Literal(indexToSatVar[i * 1000 + vertexNum2], false)
@@ -50,47 +63,50 @@ namespace npc_visualizer
             //the chosen vertex-set is a dominating set
             foreach (Node node in g.Nodes)
             {
-                int[] adjacentNodes = AdjacentNodes(node, g);
-                clauses[clauseIndex] = new Literal[adjacentNodes.Length * param];
+                int[] adjacentNodes = Utilities.AdjacentNodes(node, g);
+                sat[clauseIndex] = new Literal[adjacentNodes.Length * param];
                 int literal = 0;
                 
                 for (int i = 1; i < param + 1; i++)
                 {
                     for (int neighbour = 0; neighbour < adjacentNodes.Length; neighbour++)
                     {
-                        clauses[clauseIndex][literal++] = new Literal(indexToSatVar[i * 1000 + adjacentNodes[neighbour]], true);
+                        sat[clauseIndex][literal++] = new Literal(indexToSatVar[i * 1000 + adjacentNodes[neighbour]], true);
                     }
                 }
                 clauseIndex++;
             }
         }
-
-        static int[] AdjacentNodes(Node node, Graph g)
+        void ClauseCount()
         {
-            int adjacentCount = 0;
-            foreach (Edge edge in node.Edges)
-            {
-                adjacentCount++;
-            }
-
-            int[] adjacent = new int[adjacentCount + 1];
-
-
-            int index = 0;
-            adjacent[index++] = int.Parse(node.Id);
-            foreach (Edge edge in node.Edges)
-            {
-                adjacent[index++] = edge.Source == node.Id ? int.Parse(edge.Target) : int.Parse(edge.Source);
-            }
-
-            return adjacent;
-        }
-
-        static int ClauseCount(int nodeCount, int param)
-        {
+            int nodeCount = g.NodeCount;
             int seriesSum = (nodeCount - 1) * nodeCount / 2;
 
-            return (param * seriesSum) + nodeCount;
+            clauseCount =  (param * seriesSum) + nodeCount;
+        }
+        public override Graph ToClique()
+        {
+            throw new NotImplementedException();
+        }
+        public override Graph ToColorability()
+        {
+            throw new NotImplementedException();
+        }
+        public override Graph ToDominatingSet()
+        {
+            return g;
+        }
+        public override Graph ToHamilPath()
+        {
+            throw new NotImplementedException();
+        }
+        public override Graph ToIndepSet()
+        {
+            throw new NotImplementedException();
+        }
+        public override Graph ToVertexCover()
+        {
+            throw new NotImplementedException();
         }
     }
 }

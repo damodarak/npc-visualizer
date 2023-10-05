@@ -19,15 +19,14 @@ namespace npc_visualizer
         protected int[] satVarToVertex;
         protected Dictionary<int, int> indexToSatVar;
 
-        protected abstract void ToSat();
+        public abstract Literal[][] ToSat();
         public abstract Graph ToClique();
         public abstract Graph ToColorability();
         public abstract Graph ToDominatingSet();
         public abstract Graph ToIndepSet();
         public abstract Graph ToVertexCover();
         public abstract Graph ToHamilPath();
-        public abstract void Solve();
-        protected abstract void DefineClauses();
+        public abstract int[] Solve();
         public virtual void DrawSolution()
         {
             for (int i = 0; i < solution.Length; i++)

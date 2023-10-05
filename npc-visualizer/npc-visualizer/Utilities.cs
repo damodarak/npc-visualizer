@@ -18,7 +18,6 @@ namespace npc_visualizer
                 node.Attr.FillColor = Color.White;
             }
         }
-
         public static Edge EdgeById(Graph g, string id)
         {
             IEnumerable<Edge> edges = g.Edges;
@@ -36,7 +35,6 @@ namespace npc_visualizer
 
             return null;
         }
-
         public static Tuple<int, int>[] FindMissingEdges(Graph g)
         {
             int missingCount = ((g.NodeCount * (g.NodeCount - 1)) / 2) - g.EdgeCount;
@@ -56,7 +54,6 @@ namespace npc_visualizer
 
             return missingEdges;
         }
-
         public static Graph FlipEdges(Graph g)
         {
             Graph flippedGraph = new Graph("flippedGraph");
@@ -76,7 +73,6 @@ namespace npc_visualizer
 
             return flippedGraph;
         }
-
         public static void DrawSolution(Graph g, int[] solution)
         {
             for (int i = 0; i < solution.Length; i++)
@@ -87,22 +83,6 @@ namespace npc_visualizer
                 }       
             }
         }
-
-        public static void ColorabilitySolution(Graph g, int[] solution)
-        {
-            Color[] colors = new Color[20] 
-            {
-                Color.Blue, Color.Brown, Color.BlueViolet, Color.DarkGreen, Color.Gold, Color.Indigo, Color.Lime,
-                Color.Magenta, Color.MistyRose, Color.Olive, Color.Orange, Color.Red, Color.Purple, Color.Silver,
-                Color.Snow, Color.Tan, Color.White, Color.Yellow, Color.LightCoral, Color.LemonChiffon
-            };
-
-            for (int i = 0; i < solution.Length; i++)
-            {
-                g.FindNode(i.ToString()).Attr.FillColor = colors[solution[i] - 1];
-            }
-        }
-
         public static void CreateMapping(int[] satVarToVertex, Dictionary<int, int> indexToSatVar, int nodeCount, int param)
         {
             int satVar = 0;
@@ -116,7 +96,6 @@ namespace npc_visualizer
                 }
             }
         }
-
         public static int[] SatSolutionToVertices(IEnumerable<SatSolution> solutions, int solutionSize, int[] satVarToVertex)
         {
             foreach (SatSolution solution in solutions)
@@ -145,6 +124,25 @@ namespace npc_visualizer
 
             return new int[] { };
         }
+        public static int[] AdjacentNodes(Node node, Graph g)
+        {
+            int adjacentCount = 0;
+            foreach (Edge edge in node.Edges)
+            {
+                adjacentCount++;
+            }
+
+            int[] adjacent = new int[adjacentCount + 1];
+
+
+            int index = 0;
+            adjacent[index++] = int.Parse(node.Id);
+            foreach (Edge edge in node.Edges)
+            {
+                adjacent[index++] = edge.Source == node.Id ? int.Parse(edge.Target) : int.Parse(edge.Source);
+            }
+
+            return adjacent;
+        }
     }
 }
-

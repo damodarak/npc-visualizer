@@ -18,44 +18,50 @@ namespace npc_visualizer
             this.param = param;
         }
 
-        protected override void ToSat()
+        public override Literal[][] ToSat()
         {
             satVarToVertex = new int[param * g.NodeCount];
             indexToSatVar = new Dictionary<int, int>();
 
             Utilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
-            ClauseCount(g.NodeCount, param, g.EdgeCount);
+            ClauseCount();
 
             sat = new Literal[clauseCount][];
             DefineClauses();
+
+            return sat;
         }
-        public override void Solve()
+        public override int[] Solve()
         {
             if (param == 1)
             {
                 solution = new int[] { 0 };
-                return;
+                return solution;
             }
 
             ToSat();
-
             int varLim = g.NodeCount * param;
             IEnumerable<SatSolution> satSolutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
             solution = Utilities.SatSolutionToVertices(satSolutions, param, satVarToVertex);
+
+            return solution;
         }
 
-        void ClauseCount(int nodeCount, int cliqueSize, int edgeCount)
+        void ClauseCount()
         {
-            int seriesSumClique = ((cliqueSize - 1) * cliqueSize) / 2;
+            int nodeCount = g.NodeCount;
+            int edgeCount = g.EdgeCount;
+
+            int seriesSumClique = ((param - 1) * param) / 2;
             int seriesSumNodes = ((nodeCount - 1) * nodeCount) / 2;
             int maxEdges = (nodeCount * (nodeCount - 1)) / 2;
             int missingEdges = maxEdges - edgeCount;
 
-            clauseCount =  (seriesSumClique * nodeCount) + (seriesSumClique * missingEdges * 2) + cliqueSize + (cliqueSize * seriesSumNodes);
+            clauseCount =  (seriesSumClique * nodeCount) + (seriesSumClique * missingEdges * 2) + param + (param * seriesSumNodes);
         }
 
-        protected override void DefineClauses()
+        void DefineClauses()
         {
             int clauseIndex = 0;
             int nodeCount = g.NodeCount;
@@ -127,32 +133,26 @@ namespace npc_visualizer
                 }
             }
         }
-
         public override Graph ToClique()
         {
             return g;
         }
-
         public override Graph ToColorability()
         {
             throw new NotImplementedException();
         }
-
         public override Graph ToDominatingSet()
         {
             throw new NotImplementedException();
         }
-
         public override Graph ToHamilPath()
         {
             throw new NotImplementedException();
         }
-
         public override Graph ToIndepSet()
         {
             throw new NotImplementedException();
         }
-
         public override Graph ToVertexCover()
         {
             throw new NotImplementedException();

@@ -9,20 +9,32 @@ using Microsoft.SolverFoundation.Solvers;
 
 namespace npc_visualizer
 {
-    class Colorability
+    class Colorability : Problem
     {
-        public static int[] Solve(Graph g, int colors)
+        int[] satVarToIndex;
+        public Colorability(Graph g, int param)
         {
-            int[] satVarToIndex = new int[colors * g.NodeCount];
-            Dictionary<int, int> indexToSatVar = new Dictionary<int, int>();
+            this.g = g;
+            this.param = param;
+            satVarToIndex = new int[param * g.NodeCount];
+        }
+        public override Literal[][] ToSat()
+        {
+            indexToSatVar = new Dictionary<int, int>();
 
-            CreateMapping(satVarToIndex, indexToSatVar, g.NodeCount, colors);
-            int clauseCount = ClauseCount(g.NodeCount, colors, g.EdgeCount);
+            CreateMapping(satVarToIndex, indexToSatVar, g.NodeCount, param);
+            ClauseCount();
 
-            Literal[][] clauses = new Literal[clauseCount][];
-            DefineClauses(clauses, colors, g, indexToSatVar);
-            int varLim = g.NodeCount * colors;
-            IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, clauses);
+            sat = new Literal[clauseCount][];
+            DefineClauses();
+
+            return sat;
+        }
+        public override int[] Solve()
+        {
+            ToSat();
+            int varLim = g.NodeCount * param;
+            IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
             foreach (SatSolution solution in solutions)
             {
@@ -33,12 +45,13 @@ namespace npc_visualizer
                 {
                     coloring[satVarToIndex[pos] % 1000] = satVarToIndex[pos] / 1000;
                 }
+                this.solution = coloring;
                 return coloring;
             }
 
+            this.solution = new int[] { };
             return new int[] { };
         }
-
         static void CreateMapping(int[] satVarToIndex, Dictionary<int, int> indexToSatVar, int nodeCount, int colors)
         {
             int satVar = 0;
@@ -52,8 +65,7 @@ namespace npc_visualizer
                 }
             }
         }
-
-        static void DefineClauses(Literal[][] clauses, int colors, Graph g, Dictionary<int, int> indexToSatVar)
+        void DefineClauses()
         {
             int clauseIndex = 0;
 
@@ -61,11 +73,11 @@ namespace npc_visualizer
             for (int vertex = 0; vertex < g.NodeCount; vertex++)
             {
                 //at most one color
-                for (int i = 1; i < colors + 1; i++)
+                for (int i = 1; i < param + 1; i++)
                 {
-                    for (int j = i + 1; j < colors + 1; j++)
+                    for (int j = i + 1; j < param + 1; j++)
                     {
-                        clauses[clauseIndex++] = new Literal[2]
+                        sat[clauseIndex++] = new Literal[2]
                         {
                             new Literal(indexToSatVar[i * 1000 + vertex], false),
                             new Literal(indexToSatVar[j * 1000 + vertex], false)
@@ -74,10 +86,10 @@ namespace npc_visualizer
                 }
 
                 //at least one color
-                clauses[clauseIndex] = new Literal[colors];
-                for (int i = 0; i < colors; i++)
+                sat[clauseIndex] = new Literal[param];
+                for (int i = 0; i < param; i++)
                 {
-                    clauses[clauseIndex][i] = new Literal(indexToSatVar[(i + 1) * 1000 + vertex], true);
+                    sat[clauseIndex][i] = new Literal(indexToSatVar[(i + 1) * 1000 + vertex], true);
                 }
                 clauseIndex++;
             }
@@ -85,9 +97,9 @@ namespace npc_visualizer
             //the second part verifies that no conict-edge exists
             foreach (Edge edge in g.Edges)
             {
-                for (int i = 1; i < colors + 1; i++)
+                for (int i = 1; i < param + 1; i++)
                 {
-                    clauses[clauseIndex++] = new Literal[2]
+                    sat[clauseIndex++] = new Literal[2]
                     {
                         new Literal(indexToSatVar[i * 1000 + int.Parse(edge.Source)], false),
                         new Literal(indexToSatVar[i * 1000 + int.Parse(edge.Target)], false)
@@ -95,13 +107,49 @@ namespace npc_visualizer
                 }
             }
         }
-
-        static int ClauseCount(int nodeCount, int colors, int edgeCount)
+        void ClauseCount()
         {
-            int seriesSum = colors * (colors - 1) / 2;
+            int seriesSum = param * (param - 1) / 2;
 
+            clauseCount =  (g.NodeCount * (seriesSum + 1)) + (g.EdgeCount * param);
+        }
+        public override void DrawSolution()
+        {
+            Color[] colors = new Color[20]
+            {
+                Color.Blue, Color.Brown, Color.BlueViolet, Color.DarkGreen, Color.Gold, Color.Indigo, Color.Lime,
+                Color.Magenta, Color.MistyRose, Color.Olive, Color.Orange, Color.Red, Color.Purple, Color.Silver,
+                Color.Snow, Color.Tan, Color.White, Color.Yellow, Color.LightCoral, Color.LemonChiffon
+            };
 
-            return (nodeCount * (seriesSum + 1)) + (edgeCount * colors);
+            for (int i = 0; i < solution.Length; i++)
+            {
+                g.FindNode(i.ToString()).Attr.FillColor = colors[solution[i] - 1];
+            }
+        }
+        public override Graph ToClique()
+        {
+            throw new NotImplementedException();
+        }
+        public override Graph ToColorability()
+        {
+            return g;
+        }
+        public override Graph ToDominatingSet()
+        {
+            throw new NotImplementedException();
+        }
+        public override Graph ToHamilPath()
+        {
+            throw new NotImplementedException();
+        }
+        public override Graph ToIndepSet()
+        {
+            throw new NotImplementedException();
+        }
+        public override Graph ToVertexCover()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -134,29 +134,34 @@ namespace npc_visualizer
             int index = comboBox1.SelectedIndex;
             int param = (int)numericUpDown1.Value;
 
+            Problem problem;
             Utilities.ClearVertexColor(g);
             switch (index)
             {
                 case 0:
-                    Problem problem = new Clique(g, param);
+                    problem = new Clique(g, param);
                     problem.Solve();
                     problem.DrawSolution();
                     break;
                 case 1:
-                    solution = IndepSet.Solve(g, param);
-                    Utilities.DrawSolution(g, solution);
+                    problem = new IndepSet(g, param);
+                    problem.Solve();
+                    problem.DrawSolution();
                     break;
                 case 2:
-                    solution = VertexCover.Solve(g, param);
-                    Utilities.DrawSolution(g, solution);
+                    problem = new VertexCover(g, param);
+                    problem.Solve();
+                    problem.DrawSolution();
                     break;
                 case 3:
-                    solution = DominatingSet.Solve(g, param);
-                    Utilities.DrawSolution(g, solution);
+                    problem = new DominatingSet(g, param);
+                    problem.Solve();
+                    problem.DrawSolution();
                     break;
                 case 4:
-                    solution = Colorability.Solve(g, param);
-                    Utilities.ColorabilitySolution(g, solution);
+                    problem = new Colorability(g, param);
+                    problem.Solve();
+                    problem.DrawSolution();
                     break;
                 default:
                     break;
