@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Microsoft.Msagl.Drawing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TreeView;
 
 namespace test_graph_drawing
 {
@@ -17,6 +18,7 @@ namespace test_graph_drawing
         Graph g;
         Microsoft.Msagl.GraphViewerGdi.GViewer viewer;
         int counter = 0;
+        string firstNodeClicked = "";
 
         public Form1()
         {
@@ -28,6 +30,8 @@ namespace test_graph_drawing
             viewer.LayoutAlgorithmSettingsButtonVisible = false;
             viewer.NavigationVisible = false;
             viewer.UndoRedoButtonsVisible = false;
+            viewer.OutsideAreaBrush = System.Drawing.Brushes.White;
+            viewer.ToolBarIsVisible = false;
 
             //create a graph object 
             g = new Graph("graph");
@@ -54,19 +58,20 @@ namespace test_graph_drawing
             //bind the graph to the viewer 
             viewer.Graph = g;
             //associate the viewer with the form 
-            this.SuspendLayout();
-            viewer.Dock = DockStyle.Fill;
             this.panel1.Controls.Add(viewer);
-            this.ResumeLayout();
+            viewer.Dock = DockStyle.Fill;
+
+            // Handle double-click event on the viewer
+            viewer.MouseDoubleClick += Viewer_MouseDoubleClick;
+
+            // handel single-click for adding edges
+            viewer.MouseUp += Viewer_MouseUp;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             g.AddNode((counter++).ToString());
             viewer.Graph = g;
-            this.SuspendLayout();
-            this.panel1.Controls.Add(viewer);
-            this.ResumeLayout();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -81,10 +86,55 @@ namespace test_graph_drawing
             {
                 g.AddEdge(t1, t2).Attr.ArrowheadAtTarget = ArrowStyle.None;
                 viewer.Graph = g;
-                this.SuspendLayout();
-                this.panel1.Controls.Add(viewer);
-                this.ResumeLayout();
             }
+        }
+
+        private void Viewer_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            // Get the mouse click coordinates
+            Microsoft.Msagl.Core.Geometry.Point mousePosition = viewer.ScreenToSource(e.Location);
+
+            // Add a new node to the graph at the clicked position
+            string nodeName = g.NodeCount.ToString();
+            g.AddNode(nodeName).Attr.Shape = Shape.Circle;
+            //g.FindNode(nodeName).GeometryNode.Center = mousePosition;
+
+            // Refresh the viewer to display the updated graph
+            viewer.Graph = g;
+        }
+
+        private void Viewer_MouseUp(object sender, MouseEventArgs e)
+        {
+            var gviewer = (Microsoft.Msagl.GraphViewerGdi.GViewer)sender;
+            var dnode = gviewer.ObjectUnderMouseCursor as Microsoft.Msagl.GraphViewerGdi.DNode;
+            if (dnode == null)
+            {
+                firstNodeClicked = "";
+                return;
+            }
+            if (firstNodeClicked == "")
+            {
+                firstNodeClicked = dnode.Node.LabelText;
+            }
+            else
+            {
+                g.AddEdge(firstNodeClicked, dnode.Node.LabelText).Attr.ArrowheadAtTarget = ArrowStyle.None;
+                firstNodeClicked = "";
+                viewer.Graph = g;
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Graph new_g = new Graph();
+            foreach (var nod in g.Nodes)
+            {
+                new_g.AddNode(nod.Label.Text).Attr.Shape = Shape.Circle;
+            }
+
+            g = new_g;
+
+            viewer.Graph = new_g;
         }
     }
 }
