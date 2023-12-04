@@ -18,26 +18,22 @@ namespace npc_visualizer
         Microsoft.Msagl.GraphViewerGdi.GViewer viewer;
         int counter = 3;
         int[] solution;
+        string firstNodeClicked = "";
+        Edge selectedEdge = null;
 
         public Form1()
         {
             InitializeComponent();
             InitGraphLayout();
-            this.edgeNode1.Maximum = counter - 1;
-            this.edgeNode2.Maximum = counter - 1;
         }
 
         private void InitGraphLayout()
         {
             //create a viewer object 
             viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
-            viewer.EdgeInsertButtonVisible = false;
-            viewer.LayoutAlgorithmSettingsButtonVisible = false;
-            viewer.NavigationVisible = false;
-            viewer.UndoRedoButtonsVisible = false;
-            viewer.SaveAsMsaglEnabled = false;
+            viewer.OutsideAreaBrush = System.Drawing.Brushes.White;
+            viewer.ToolBarIsVisible = false;
             viewer.AllowDrop = false;
-            //viewer.AutoValidate ?
             viewer.InsertingEdge = false;
 
             //create a graph object 
@@ -49,79 +45,32 @@ namespace npc_visualizer
             Edge e = g.AddEdge("0", "1");
             e.Attr.ArrowheadAtTarget = ArrowStyle.None;
             e.Attr.Id = "0_1";
-
             e = g.AddEdge("1", "2");   
             e.Attr.ArrowheadAtTarget = ArrowStyle.None;
             e.Attr.Id = "1_2";
-
             e = g.AddEdge("0", "2");
             e.Attr.ArrowheadAtTarget = ArrowStyle.None;
             e.Attr.Id = "0_2";
-
-            //change vertex color
-            //g.FindNode("A").Attr.FillColor = Microsoft.Msagl.Drawing.Color.Magenta;
-            //g.FindNode("B").Attr.FillColor = Microsoft.Msagl.Drawing.Color.MistyRose;
-
-            Node c = g.FindNode("2");
-            //c.Attr.FillColor = Microsoft.Msagl.Drawing.Color.PaleGreen;
-            c.Attr.Shape = Shape.Circle;
+           
             g.FindNode("0").Attr.Shape = Shape.Circle;
             g.FindNode("1").Attr.Shape = Shape.Circle;
+            g.FindNode("2").Attr.Shape = Shape.Circle;
 
             //bind the graph to the viewer 
             viewer.Graph = g;
+
             //associate the viewer with the form 
-            this.SuspendLayout();
             viewer.Dock = DockStyle.Fill;
             this.panel1.Controls.Add(viewer);
-            this.ResumeLayout();
-        }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (counter == 20)
-            {
-                return;
-            }
-            g.AddNode((counter++).ToString()).Attr.Shape = Shape.Circle;
-            Utilities.ClearVertexColor(g);
-            viewer.Graph = g;
+            // Handle double-click event on the viewer
+            viewer.MouseDoubleClick += Viewer_MouseDoubleClick;
 
-            this.edgeNode1.Maximum = counter - 1;
-            this.edgeNode2.Maximum = counter - 1;
-        }
+            // Handle single-click events for adding edges
+            viewer.MouseUp += Viewer_MouseUp;
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            string vertex1 = edgeNode1.Text;
-            string vertex2 = edgeNode2.Text;
-
-            Node n1 = g.FindNode(vertex1);
-            Node n2 = g.FindNode(vertex2);
-
-            Edge e1 = Utilities.EdgeById(g, vertex1 + "_" + vertex2);
-            Edge e2 = Utilities.EdgeById(g, vertex2 + "_" + vertex1);
-
-            if (n1 != null && n2 != null && e1 == null && e2 == null && n1.Id != n2.Id)
-            {
-                int index1 = int.Parse(vertex1);
-                int index2 = int.Parse(vertex2);
-
-                //edge is always from vertex with smaller index to vertex with higher index
-                if (index1 > index2)
-                {
-                    string temp = vertex1;
-                    vertex1 = vertex2;
-                    vertex2 = temp;
-                }
-
-                Edge new_e = g.AddEdge(vertex1, vertex2);
-                new_e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                new_e.Attr.Id = vertex1 + "_" + vertex2;
-
-                Utilities.ClearVertexColor(g);
-                viewer.Graph = g;
-            }
+            // Handle delete button press
+            viewer.KeyDown += Viewer_KeyDown;
         }
         
         private void button3_Click(object sender, EventArgs e)
@@ -164,6 +113,7 @@ namespace npc_visualizer
                     problem.DrawSolution();
                     break;
                 case 5:
+                    return;
                     problem = new HamilPath(g, param);
                     problem.Solve();
                     problem.DrawSolution();
@@ -217,18 +167,110 @@ namespace npc_visualizer
             viewer.Graph = g;
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void CleanGraph()
         {
-            if (counter == 1)
+            Graph new_g = new Graph();
+            foreach (var nod in g.Nodes)
+            {
+                new_g.AddNode(nod.Label.Text).Attr.Shape = Shape.Circle;
+            }
+
+            g = new_g;
+
+            viewer.Graph = new_g;
+            //dodelat
+            //zmensit labely vrcholu o jedna
+        }
+
+        private void Viewer_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (counter == 20)
             {
                 return;
             }
-            g.RemoveNode(g.FindNode((--counter).ToString()));
+            g.AddNode((counter++).ToString()).Attr.Shape = Shape.Circle;
             Utilities.ClearVertexColor(g);
             viewer.Graph = g;
+        }
 
-            this.edgeNode1.Maximum = counter - 1;
-            this.edgeNode2.Maximum = counter - 1;
+        private void Viewer_MouseUp(object sender, MouseEventArgs e)
+        {
+            var gviewer = (Microsoft.Msagl.GraphViewerGdi.GViewer)sender;
+            var dnode = gviewer.ObjectUnderMouseCursor as Microsoft.Msagl.GraphViewerGdi.DNode;
+            var dedge = gviewer.ObjectUnderMouseCursor as Microsoft.Msagl.GraphViewerGdi.DEdge;
+
+            if(dedge != null)
+            {
+                selectedEdge = dedge.Edge;
+                return;
+            }
+
+            if (dnode == null)
+            {
+                firstNodeClicked = "";
+                return;
+            }
+            if (firstNodeClicked == "")
+            {
+                firstNodeClicked = dnode.Node.LabelText;
+            }
+            else
+            {
+                string dnodeLabel = dnode.Node.LabelText;
+                Node n1 = g.FindNode(firstNodeClicked);
+                Node n2 = g.FindNode(dnodeLabel);
+
+                Edge e1 = Utilities.EdgeById(g, firstNodeClicked + "_" + dnodeLabel);
+                Edge e2 = Utilities.EdgeById(g, dnodeLabel + "_" + firstNodeClicked);
+
+                if (n1 != null && n2 != null && e1 == null && e2 == null && n1.Id != n2.Id)
+                {
+                    int index1 = int.Parse(firstNodeClicked);
+                    int index2 = int.Parse(dnodeLabel);
+
+                    //edge is always from vertex with smaller index to vertex with higher index
+                    if (index1 > index2)
+                    {
+                        string temp = firstNodeClicked;
+                        firstNodeClicked = dnodeLabel;
+                        dnodeLabel = temp;
+                    }
+
+                    Edge new_e = g.AddEdge(firstNodeClicked, dnodeLabel);
+                    new_e.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                    new_e.Attr.Id = firstNodeClicked + "_" + dnodeLabel;
+
+                    Utilities.ClearVertexColor(g);
+                    viewer.Graph = g;
+                    firstNodeClicked = "";
+                }
+            }
+        }
+
+        private void Viewer_KeyDown(object sender, KeyEventArgs e)
+        {
+            // If not delete
+            if(e.KeyCode != Keys.Delete)
+            {
+                return;
+            }
+
+            if(selectedEdge != null)
+            {
+                g.RemoveEdge(selectedEdge);
+                viewer.Graph = g;
+            }
+
+
+            //CAUSES AN ERROR
+            //if (firstNodeClicked != "" && g.NodeCount != 1)
+            //{
+            //    g.RemoveNode(g.FindNode(firstNodeClicked));
+            //    Utilities.ClearVertexColor(g);
+            //    viewer.Graph = g;
+            //    firstNodeClicked = "";
+            //    counter--;
+            //}
         }
     }
 }

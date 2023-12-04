@@ -91,15 +91,8 @@ namespace test_graph_drawing
 
         private void Viewer_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            // Get the mouse click coordinates
-            Microsoft.Msagl.Core.Geometry.Point mousePosition = viewer.ScreenToSource(e.Location);
-
-            // Add a new node to the graph at the clicked position
             string nodeName = g.NodeCount.ToString();
             g.AddNode(nodeName).Attr.Shape = Shape.Circle;
-            //g.FindNode(nodeName).GeometryNode.Center = mousePosition;
-
-            // Refresh the viewer to display the updated graph
             viewer.Graph = g;
         }
 
@@ -107,6 +100,7 @@ namespace test_graph_drawing
         {
             var gviewer = (Microsoft.Msagl.GraphViewerGdi.GViewer)sender;
             var dnode = gviewer.ObjectUnderMouseCursor as Microsoft.Msagl.GraphViewerGdi.DNode;
+            //var dnode = gviewer.SelectedObject as Microsoft.Msagl.GraphViewerGdi.DNode;
             if (dnode == null)
             {
                 firstNodeClicked = "";
