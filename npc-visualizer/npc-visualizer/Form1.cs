@@ -16,8 +16,7 @@ namespace npc_visualizer
     {
         Graph g;
         Microsoft.Msagl.GraphViewerGdi.GViewer viewer;
-        int counter = 3;
-        int[] solution;
+
         string firstNodeClicked = "";
         Edge selectedEdge = null;
 
@@ -32,13 +31,19 @@ namespace npc_visualizer
             //create a viewer object 
             viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
             viewer.OutsideAreaBrush = System.Drawing.Brushes.White;
-            viewer.ToolBarIsVisible = false;
+            viewer.UndoRedoButtonsVisible = false;
+            viewer.EdgeInsertButtonVisible = false;
+            viewer.SaveAsMsaglEnabled = false;
+            viewer.SaveInVectorFormatEnabled = false;
+            viewer.SaveAsImageEnabled = false;
+            viewer.NavigationVisible = false;
             viewer.AllowDrop = false;
             viewer.InsertingEdge = false;
+            viewer.LayoutAlgorithmSettingsButtonVisible = false;
+            viewer.SaveButtonVisible = false;
 
             //create a graph object 
             g = new Graph("graph");
-
             g.Directed = false;
 
             //create the graph content 
@@ -75,6 +80,9 @@ namespace npc_visualizer
         
         private void button3_Click(object sender, EventArgs e)
         {
+            selectedEdge = null;
+            firstNodeClicked = "";
+
             if (g.NodeCount == 0)
             {
                 return;
@@ -113,7 +121,7 @@ namespace npc_visualizer
                     problem.DrawSolution();
                     break;
                 case 5:
-                    return;
+                    break;
                     problem = new HamilPath(g, param);
                     problem.Solve();
                     problem.DrawSolution();
@@ -126,7 +134,10 @@ namespace npc_visualizer
         }
 
         private void button4_Click(object sender, EventArgs e)
-        {       
+        {
+            selectedEdge = null;
+            firstNodeClicked = "";
+
             while (g.EdgeCount > 0)
             {
                 IEnumerable<Edge> edges = g.Edges;
@@ -148,7 +159,6 @@ namespace npc_visualizer
             }
 
             int param = (int)numericUpDown2.Value;
-            counter = param;
 
             for (int i = 0; i < param; i++)
             {
@@ -184,11 +194,14 @@ namespace npc_visualizer
 
         private void Viewer_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (counter == 20)
+            selectedEdge = null;
+            firstNodeClicked = "";
+
+            if (g.NodeCount == 20)
             {
                 return;
             }
-            g.AddNode((counter++).ToString()).Attr.Shape = Shape.Circle;
+            g.AddNode(g.NodeCount.ToString()).Attr.Shape = Shape.Circle;
             Utilities.ClearVertexColor(g);
             viewer.Graph = g;
         }
@@ -201,6 +214,7 @@ namespace npc_visualizer
 
             if(dedge != null)
             {
+                firstNodeClicked = "";
                 selectedEdge = dedge.Edge;
                 return;
             }
@@ -208,11 +222,14 @@ namespace npc_visualizer
             if (dnode == null)
             {
                 firstNodeClicked = "";
+                selectedEdge = null;
                 return;
             }
+
             if (firstNodeClicked == "")
             {
                 firstNodeClicked = dnode.Node.LabelText;
+                selectedEdge = null;
             }
             else
             {
@@ -223,7 +240,7 @@ namespace npc_visualizer
                 Edge e1 = Utilities.EdgeById(g, firstNodeClicked + "_" + dnodeLabel);
                 Edge e2 = Utilities.EdgeById(g, dnodeLabel + "_" + firstNodeClicked);
 
-                if (n1 != null && n2 != null && e1 == null && e2 == null && n1.Id != n2.Id)
+                if (n1 != null && n2 != null && e1 == null && e2 == null && n1.Id != n2.Id && e.Button == System.Windows.Forms.MouseButtons.Right)
                 {
                     int index1 = int.Parse(firstNodeClicked);
                     int index2 = int.Parse(dnodeLabel);
@@ -243,14 +260,17 @@ namespace npc_visualizer
                     Utilities.ClearVertexColor(g);
                     viewer.Graph = g;
                     firstNodeClicked = "";
+                    selectedEdge = null;
                 }
             }
         }
 
         private void Viewer_KeyDown(object sender, KeyEventArgs e)
         {
+            firstNodeClicked = "";
+
             // If not delete
-            if(e.KeyCode != Keys.Delete)
+            if (e.KeyCode != Keys.Delete)
             {
                 return;
             }
@@ -258,6 +278,7 @@ namespace npc_visualizer
             if(selectedEdge != null)
             {
                 g.RemoveEdge(selectedEdge);
+                selectedEdge = null;
                 viewer.Graph = g;
             }
 
