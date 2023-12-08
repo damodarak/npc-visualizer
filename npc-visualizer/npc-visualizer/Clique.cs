@@ -21,7 +21,7 @@ namespace npc_visualizer
         public override Literal[][] ToSat()
         {
             satVarToVertex = new int[param * g.NodeCount];
-            indexToSatVar = new Dictionary<int, int>();
+            indexToSatVar = new int[g.NodeCount, param + 1];
 
             Utilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
             ClauseCount();
@@ -67,7 +67,7 @@ namespace npc_visualizer
             int nodeCount = g.NodeCount;
 
             //ith and jth vertices in one clique are different
-            for (int k = 0; k < nodeCount; k++)
+            for (int vertex = 0; vertex < nodeCount; vertex++)
             {
                 for (int i = 1; i < param + 1; i++)
                 {
@@ -75,8 +75,8 @@ namespace npc_visualizer
                     {
                         sat[clauseIndex++] = new Literal[]
                         {
-                            new Literal(indexToSatVar[i * 1000 + k], false),
-                            new Literal(indexToSatVar[j * 1000 + k], false)
+                            new Literal(indexToSatVar[vertex, i], false),
+                            new Literal(indexToSatVar[vertex, j], false)
                         };
                     }
                 }
@@ -84,7 +84,7 @@ namespace npc_visualizer
 
             //Any two vertices in the clique are connected
             Tuple<int, int>[] missingEdges = Utilities.FindMissingEdges(g);
-            for (int k = 0; k < missingEdges.Length; k++)
+            for (int missEdge = 0; missEdge < missingEdges.Length; missEdge++)
             {
                 for (int i = 1; i < param + 1; i++)
                 {
@@ -92,14 +92,14 @@ namespace npc_visualizer
                     {
                         sat[clauseIndex++] = new Literal[]
                         {
-                        new Literal(indexToSatVar[i * 1000 + missingEdges[k].Item1], false),
-                        new Literal(indexToSatVar[j * 1000 + missingEdges[k].Item2], false)
+                        new Literal(indexToSatVar[missingEdges[missEdge].Item1, i], false),
+                        new Literal(indexToSatVar[missingEdges[missEdge].Item2, j], false)
                         };
 
                         sat[clauseIndex++] = new Literal[]
                         {
-                        new Literal(indexToSatVar[j * 1000 + missingEdges[k].Item1], false),
-                        new Literal(indexToSatVar[i * 1000 + missingEdges[k].Item2], false)
+                        new Literal(indexToSatVar[missingEdges[missEdge].Item1, j], false),
+                        new Literal(indexToSatVar[missingEdges[missEdge].Item2, i], false)
                         };
                     }
                 }
@@ -109,9 +109,9 @@ namespace npc_visualizer
             for (int i = 1; i < param + 1; i++)
             {
                 sat[clauseIndex] = new Literal[g.NodeCount];
-                for (int j = 0; j < g.NodeCount; j++)
+                for (int vertex = 0; vertex < g.NodeCount; vertex++)
                 {
-                    sat[clauseIndex][j] = new Literal(indexToSatVar[i * 1000 + j], true);
+                    sat[clauseIndex][vertex] = new Literal(indexToSatVar[vertex, i], true);
                 }
 
                 clauseIndex++;
@@ -126,8 +126,8 @@ namespace npc_visualizer
                     {
                         sat[clauseIndex++] = new Literal[]
                         {
-                        new Literal(indexToSatVar[i * 1000 + nodeNum1], false),
-                        new Literal(indexToSatVar[i * 1000 + nodeNum2], false)
+                        new Literal(indexToSatVar[nodeNum1, i], false),
+                        new Literal(indexToSatVar[nodeNum2, i], false)
                         };
                     }
                 }

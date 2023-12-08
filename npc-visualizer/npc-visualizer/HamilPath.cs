@@ -19,7 +19,7 @@ namespace npc_visualizer
         public override Literal[][] ToSat()
         {
             satVarToIndex = new int[g.NodeCount * g.NodeCount];
-            indexToSatVar = new Dictionary<int, int>();
+            indexToSatVar = new int[g.NodeCount, param + 1];
 
             CreateMapping();
             ClauseCount();

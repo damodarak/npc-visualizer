@@ -11,18 +11,16 @@ namespace npc_visualizer
 {
     class Colorability : Problem
     {
-        int[] satVarToIndex;
         public Colorability(Graph g, int param)
         {
             this.g = g;
             this.param = param;
-            satVarToIndex = new int[param * g.NodeCount];
         }
         public override Literal[][] ToSat()
         {
-            indexToSatVar = new Dictionary<int, int>();
+            indexToSatVar = new int[g.NodeCount, param + 1];
 
-            CreateMapping(satVarToIndex, indexToSatVar, g.NodeCount, param);
+            CreateMapping(indexToSatVar, g.NodeCount, param);
             ClauseCount();
 
             sat = new Literal[clauseCount][];
@@ -43,7 +41,7 @@ namespace npc_visualizer
                 int[] coloring = new int[g.NodeCount];
                 foreach (int pos in positive)
                 {
-                    coloring[satVarToIndex[pos] % 1000] = satVarToIndex[pos] / 1000;
+                    coloring[pos % g.NodeCount] = pos / g.NodeCount;
                 }
                 this.solution = coloring;
                 return coloring;
@@ -52,7 +50,7 @@ namespace npc_visualizer
             this.solution = new int[] { };
             return new int[] { };
         }
-        static void CreateMapping(int[] satVarToIndex, Dictionary<int, int> indexToSatVar, int nodeCount, int colors)
+        static void CreateMapping(int[,] indexToSatVar, int nodeCount, int colors)
         {
             int satVar = 0;
 
@@ -60,8 +58,7 @@ namespace npc_visualizer
             {
                 for (int vertexNum = 0; vertexNum < nodeCount; vertexNum++)
                 {
-                    indexToSatVar[i * 1000 + vertexNum] = satVar;
-                    satVarToIndex[satVar++] = i * 1000 + vertexNum;
+                    indexToSatVar[vertexNum, i] = satVar++;
                 }
             }
         }
@@ -79,8 +76,8 @@ namespace npc_visualizer
                     {
                         sat[clauseIndex++] = new Literal[2]
                         {
-                            new Literal(indexToSatVar[i * 1000 + vertex], false),
-                            new Literal(indexToSatVar[j * 1000 + vertex], false)
+                            new Literal(indexToSatVar[vertex, i], false),
+                            new Literal(indexToSatVar[vertex, j], false)
                         };
                     }
                 }
@@ -89,7 +86,7 @@ namespace npc_visualizer
                 sat[clauseIndex] = new Literal[param];
                 for (int i = 0; i < param; i++)
                 {
-                    sat[clauseIndex][i] = new Literal(indexToSatVar[(i + 1) * 1000 + vertex], true);
+                    sat[clauseIndex][i] = new Literal(indexToSatVar[vertex, i + 1], true);
                 }
                 clauseIndex++;
             }
@@ -101,8 +98,8 @@ namespace npc_visualizer
                 {
                     sat[clauseIndex++] = new Literal[2]
                     {
-                        new Literal(indexToSatVar[i * 1000 + int.Parse(edge.Source)], false),
-                        new Literal(indexToSatVar[i * 1000 + int.Parse(edge.Target)], false)
+                        new Literal(indexToSatVar[int.Parse(edge.Source), i], false),
+                        new Literal(indexToSatVar[int.Parse(edge.Target), i], false)
                     };
                 }
             }
@@ -111,7 +108,7 @@ namespace npc_visualizer
         {
             int seriesSum = param * (param - 1) / 2;
 
-            clauseCount =  (g.NodeCount * (seriesSum + 1)) + (g.EdgeCount * param);
+            clauseCount = (g.NodeCount * (seriesSum + 1)) + (g.EdgeCount * param);
         }
         public override void DrawSolution()
         {
@@ -124,7 +121,7 @@ namespace npc_visualizer
 
             for (int i = 0; i < solution.Length; i++)
             {
-                g.FindNode(i.ToString()).Attr.FillColor = colors[solution[i] - 1];
+                g.FindNode(i.ToString()).Attr.FillColor = colors[solution[i]];
             }
         }
         public override Graph ToClique()

@@ -19,7 +19,7 @@ namespace npc_visualizer
         public override Literal[][] ToSat()
         {
             satVarToVertex = new int[param * g.NodeCount];
-            indexToSatVar = new Dictionary<int, int>();
+            indexToSatVar = new int[g.NodeCount, param + 1];
 
             Utilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
             ClauseCount();
@@ -53,8 +53,8 @@ namespace npc_visualizer
                     {
                         sat[clauseIndex++] = new Literal[2]
                         {
-                            new Literal(indexToSatVar[i * 1000 + vertexNum1], false),
-                            new Literal(indexToSatVar[i * 1000 + vertexNum2], false)
+                            new Literal(indexToSatVar[vertexNum1, i], false),
+                            new Literal(indexToSatVar[vertexNum2, i], false)
                         };
                     }
                 }
@@ -71,7 +71,7 @@ namespace npc_visualizer
                 {
                     for (int neighbour = 0; neighbour < adjacentNodes.Length; neighbour++)
                     {
-                        sat[clauseIndex][literal++] = new Literal(indexToSatVar[i * 1000 + adjacentNodes[neighbour]], true);
+                        sat[clauseIndex][literal++] = new Literal(indexToSatVar[adjacentNodes[neighbour], i], true);
                     }
                 }
                 clauseIndex++;

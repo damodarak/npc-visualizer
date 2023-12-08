@@ -17,7 +17,7 @@ namespace npc_visualizer
         protected int param;
         protected int clauseCount;
         protected int[] satVarToVertex;
-        protected Dictionary<int, int> indexToSatVar;
+        protected int[,] indexToSatVar; // [vertex, param]
 
         public abstract Literal[][] ToSat();
         public abstract Graph ToClique();

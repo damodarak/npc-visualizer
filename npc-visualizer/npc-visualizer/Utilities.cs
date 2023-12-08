@@ -83,7 +83,7 @@ namespace npc_visualizer
                 }       
             }
         }
-        public static void CreateMapping(int[] satVarToVertex, Dictionary<int, int> indexToSatVar, int nodeCount, int param)
+        public static void CreateMapping(int[] satVarToVertex, int[,] indexToSatVar, int nodeCount, int param)
         {
             int satVar = 0;
 
@@ -91,7 +91,7 @@ namespace npc_visualizer
             {
                 for (int vertexNum = 0; vertexNum < nodeCount; vertexNum++)
                 {
-                    indexToSatVar[i * 1000 + vertexNum] = satVar;
+                    indexToSatVar[vertexNum, i] = satVar;
                     satVarToVertex[satVar++] = vertexNum;
                 }
             }
