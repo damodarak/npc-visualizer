@@ -84,9 +84,9 @@ namespace npc_visualizer
 
                 //at least one color
                 sat[clauseIndex] = new Literal[param];
-                for (int i = 0; i < param; i++)
+                for (int i = 1; i < param + 1; i++)
                 {
-                    sat[clauseIndex][i] = new Literal(indexToSatVar[vertex, i + 1], true);
+                    sat[clauseIndex][i] = new Literal(indexToSatVar[vertex, i], true);
                 }
                 clauseIndex++;
             }
