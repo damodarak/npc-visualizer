@@ -106,7 +106,12 @@ namespace npc_visualizer
             viewerRight.Dock = DockStyle.Fill;
             this.panel2.Controls.Add(viewerRight);
         }
-        
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void button3_Click(object sender, EventArgs e)
         {
             selectedEdge = null;
@@ -161,7 +166,7 @@ namespace npc_visualizer
             viewer.Graph = g;
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        void addCompleteGraph(int vertexCount)
         {
             selectedEdge = null;
             firstNodeClicked = "";
@@ -186,7 +191,7 @@ namespace npc_visualizer
                 }
             }
 
-            int param = (int)numericUpDown2.Value;
+            int param = vertexCount;
 
             for (int i = 0; i < param; i++)
             {
@@ -291,8 +296,13 @@ namespace npc_visualizer
 
             firstNodeClicked = "";
 
-            // If not delete
-            if (e.KeyCode != Keys.Delete)
+            // If not delete or NumPad
+            if ((e.KeyValue) >= 97 && e.KeyValue <= 105)
+            {
+                addCompleteGraph(e.KeyValue - 96);
+                return;
+            }
+            else if (e.KeyCode != Keys.Delete)
             {
                 return;
             }
