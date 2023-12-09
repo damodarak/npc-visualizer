@@ -19,6 +19,7 @@ namespace npc_visualizer
 
         string firstNodeClicked = "";
         Edge selectedEdge = null;
+        //gViewer1.NeedToCalculateLayout = false;
 
         public Form1()
         {
@@ -176,21 +177,6 @@ namespace npc_visualizer
             viewer.Graph = g;
         }
 
-        private void CleanGraph()
-        {
-            Graph new_g = new Graph();
-            foreach (var nod in g.Nodes)
-            {
-                new_g.AddNode(nod.Label.Text).Attr.Shape = Shape.Circle;
-            }
-
-            g = new_g;
-
-            viewer.Graph = new_g;
-            //dodelat
-            //zmensit labely vrcholu o jedna
-        }
-
         private void Viewer_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             selectedEdge = null;
@@ -273,6 +259,8 @@ namespace npc_visualizer
 
         private void Viewer_KeyDown(object sender, KeyEventArgs e)
         {
+            //TODO: delete the vertex and lower the IDs of higher vertices 
+
             firstNodeClicked = "";
 
             // If not delete
@@ -288,17 +276,6 @@ namespace npc_visualizer
                 Utilities.ClearVertexColorAndEdgeStyle(g);
                 viewer.Graph = g;
             }
-
-
-            //CAUSES AN ERROR
-            //if (firstNodeClicked != "" && g.NodeCount != 1)
-            //{
-            //    g.RemoveNode(g.FindNode(firstNodeClicked));
-            //    Utilities.ClearVertexColor(g);
-            //    viewer.Graph = g;
-            //    firstNodeClicked = "";
-            //    counter--;
-            //}
         }
     }
 }

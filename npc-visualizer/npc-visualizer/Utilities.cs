@@ -16,6 +16,7 @@ namespace npc_visualizer
             foreach (Node node in g.Nodes)
             {
                 node.Attr.FillColor = Color.White;
+                node.Attr.LineWidth = 1;
             }
 
             foreach (Edge edge in g.Edges)
