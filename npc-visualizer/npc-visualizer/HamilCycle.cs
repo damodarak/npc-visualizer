@@ -161,7 +161,7 @@ namespace npc_visualizer
         }
         public override void DrawSolution()
         {
-            if(solution.Length != g.NodeCount)
+            if(solution.Length != g.NodeCount || solution.Length < 2)
             {
                 return;
             }
