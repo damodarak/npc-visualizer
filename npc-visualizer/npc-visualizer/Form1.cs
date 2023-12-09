@@ -16,6 +16,7 @@ namespace npc_visualizer
     {
         Graph g;
         Microsoft.Msagl.GraphViewerGdi.GViewer viewer;
+        Microsoft.Msagl.GraphViewerGdi.GViewer viewerRight;
 
         string firstNodeClicked = "";
         Edge selectedEdge = null;
@@ -29,6 +30,8 @@ namespace npc_visualizer
 
         private void InitGraphLayout()
         {
+            //FIRST viewer
+
             //create a viewer object 
             viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
             viewer.OutsideAreaBrush = System.Drawing.Brushes.White;
@@ -77,6 +80,31 @@ namespace npc_visualizer
 
             // Handle delete button press
             viewer.KeyDown += Viewer_KeyDown;
+
+            // SECOND VIEWER
+
+            viewerRight = new Microsoft.Msagl.GraphViewerGdi.GViewer();
+            viewerRight = new Microsoft.Msagl.GraphViewerGdi.GViewer();
+            viewerRight.OutsideAreaBrush = System.Drawing.Brushes.White;
+            viewerRight.UndoRedoButtonsVisible = false;
+            viewerRight.EdgeInsertButtonVisible = false;
+            viewerRight.SaveAsMsaglEnabled = false;
+            viewerRight.SaveInVectorFormatEnabled = false;
+            viewerRight.SaveAsImageEnabled = false;
+            viewerRight.NavigationVisible = false;
+            viewerRight.AllowDrop = false;
+            viewerRight.InsertingEdge = false;
+            viewerRight.LayoutAlgorithmSettingsButtonVisible = false;
+            viewerRight.SaveButtonVisible = false;
+
+            Graph dummy = new Graph("dummy");
+            dummy.Directed = false;
+            dummy.AddNode("dummy").Attr.Shape = Shape.Circle;
+
+            viewerRight.Graph = dummy;
+
+            viewerRight.Dock = DockStyle.Fill;
+            this.panel2.Controls.Add(viewerRight);
         }
         
         private void button3_Click(object sender, EventArgs e)
@@ -122,7 +150,7 @@ namespace npc_visualizer
                     problem.DrawSolution();
                     break;
                 case 5:
-                    problem = new HamilPath(g, param);
+                    problem = new HamilCycle(g, param);
                     problem.Solve();
                     problem.DrawSolution();
                     break;

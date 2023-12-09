@@ -83,7 +83,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="HamilPath.cs" />
+    <Compile Include="HamilCycle.cs" />
     <Compile Include="IndepSet.cs" />
     <Compile Include="Problem.cs" />
     <Compile Include="Program.cs" />
