@@ -64,11 +64,12 @@ namespace npc_visualizer
             foreach (Node node in g.Nodes)
             {
                 int[] adjacentNodes = Utilities.AdjacentNodes(node, g);
-                sat[clauseIndex] = new Literal[adjacentNodes.Length * param];
+                sat[clauseIndex] = new Literal[(adjacentNodes.Length + 1) * param];
                 int literal = 0;
                 
                 for (int i = 1; i < param + 1; i++)
                 {
+                    sat[clauseIndex][literal++] = new Literal(indexToSatVar[int.Parse(node.Id), i], true);
                     for (int neighbour = 0; neighbour < adjacentNodes.Length; neighbour++)
                     {
                         sat[clauseIndex][literal++] = new Literal(indexToSatVar[adjacentNodes[neighbour], i], true);

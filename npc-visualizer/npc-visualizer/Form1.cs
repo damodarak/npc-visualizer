@@ -92,7 +92,7 @@ namespace npc_visualizer
             int param = (int)numericUpDown1.Value;
 
             Problem problem;
-            Utilities.ClearVertexColor(g);
+            Utilities.ClearVertexColorAndEdgeStyle(g);
             switch (index)
             {
                 case 0:
@@ -121,7 +121,6 @@ namespace npc_visualizer
                     problem.DrawSolution();
                     break;
                 case 5:
-                    break;
                     problem = new HamilPath(g, param);
                     problem.Solve();
                     problem.DrawSolution();
@@ -197,12 +196,19 @@ namespace npc_visualizer
             selectedEdge = null;
             firstNodeClicked = "";
 
+            var gviewer = (Microsoft.Msagl.GraphViewerGdi.GViewer)sender;
+            var dnode = gviewer.ObjectUnderMouseCursor as Microsoft.Msagl.GraphViewerGdi.DNode;
+            if(dnode != null )
+            {
+                return;
+            }
+
             if (g.NodeCount == 20)
             {
                 return;
             }
             g.AddNode(g.NodeCount.ToString()).Attr.Shape = Shape.Circle;
-            Utilities.ClearVertexColor(g);
+            Utilities.ClearVertexColorAndEdgeStyle(g);
             viewer.Graph = g;
         }
 
@@ -257,7 +263,7 @@ namespace npc_visualizer
                     new_e.Attr.ArrowheadAtTarget = ArrowStyle.None;
                     new_e.Attr.Id = firstNodeClicked + "_" + dnodeLabel;
 
-                    Utilities.ClearVertexColor(g);
+                    Utilities.ClearVertexColorAndEdgeStyle(g);
                     viewer.Graph = g;
                     firstNodeClicked = "";
                     selectedEdge = null;
@@ -279,6 +285,7 @@ namespace npc_visualizer
             {
                 g.RemoveEdge(selectedEdge);
                 selectedEdge = null;
+                Utilities.ClearVertexColorAndEdgeStyle(g);
                 viewer.Graph = g;
             }
 

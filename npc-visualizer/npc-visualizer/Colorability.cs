@@ -20,7 +20,7 @@ namespace npc_visualizer
         {
             indexToSatVar = new int[g.NodeCount, param + 1];
 
-            CreateMapping(indexToSatVar, g.NodeCount, param);
+            CreateMapping();
             ClauseCount();
 
             sat = new Literal[clauseCount][];
@@ -50,8 +50,10 @@ namespace npc_visualizer
             this.solution = new int[] { };
             return new int[] { };
         }
-        static void CreateMapping(int[,] indexToSatVar, int nodeCount, int colors)
+        void CreateMapping()
         {
+            int nodeCount = g.NodeCount;
+            int colors = param;
             int satVar = 0;
 
             for (int i = 1; i < colors + 1; i++)

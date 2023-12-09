@@ -11,11 +11,18 @@ namespace npc_visualizer
 {
     class Utilities
     {
-        public static void ClearVertexColor(Graph g)
+        public static void ClearVertexColorAndEdgeStyle(Graph g)
         {
             foreach (Node node in g.Nodes)
             {
                 node.Attr.FillColor = Color.White;
+            }
+
+            foreach (Edge edge in g.Edges)
+            {
+                edge.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                edge.Attr.ArrowheadAtSource = ArrowStyle.None;
+                edge.Attr.Color = Color.Black;
             }
         }
         public static Edge EdgeById(Graph g, string id)
@@ -132,11 +139,9 @@ namespace npc_visualizer
                 adjacentCount++;
             }
 
-            int[] adjacent = new int[adjacentCount + 1];
-
+            int[] adjacent = new int[adjacentCount];
 
             int index = 0;
-            adjacent[index++] = int.Parse(node.Id);
             foreach (Edge edge in node.Edges)
             {
                 adjacent[index++] = edge.Source == node.Id ? int.Parse(edge.Target) : int.Parse(edge.Source);
