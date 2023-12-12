@@ -72,9 +72,6 @@ namespace npc_visualizer
             viewer.Dock = DockStyle.Fill;
             this.panel1.Controls.Add(viewer);
 
-            // Handle double-click event on the viewer
-            viewer.MouseDoubleClick += Viewer_MouseDoubleClick;
-
             // Handle single-click events for adding edges
             viewer.MouseUp += Viewer_MouseUp;
 
@@ -210,27 +207,6 @@ namespace npc_visualizer
             viewer.Graph = g;
         }
 
-        private void Viewer_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            selectedEdge = null;
-            firstNodeClicked = "";
-
-            var gviewer = (Microsoft.Msagl.GraphViewerGdi.GViewer)sender;
-            var dnode = gviewer.ObjectUnderMouseCursor as Microsoft.Msagl.GraphViewerGdi.DNode;
-            if(dnode != null )
-            {
-                return;
-            }
-
-            if (g.NodeCount == 20)
-            {
-                return;
-            }
-            g.AddNode(g.NodeCount.ToString()).Attr.Shape = Shape.Circle;
-            Utilities.ClearVertexColorAndEdgeStyle(g);
-            viewer.Graph = g;
-        }
-
         private void Viewer_MouseUp(object sender, MouseEventArgs e)
         {
             var gviewer = (Microsoft.Msagl.GraphViewerGdi.GViewer)sender;
@@ -297,9 +273,23 @@ namespace npc_visualizer
             firstNodeClicked = "";
 
             // If not delete or NumPad
-            if ((e.KeyValue) >= 97 && e.KeyValue <= 105)
+            if (e.KeyValue >= 97 && e.KeyValue <= 105)
             {
                 addCompleteGraph(e.KeyValue - 96);
+                return;
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                selectedEdge = null;
+                firstNodeClicked = "";
+
+                if (g.NodeCount == 20)
+                {
+                    return;
+                }
+                g.AddNode(g.NodeCount.ToString()).Attr.Shape = Shape.Circle;
+                Utilities.ClearVertexColorAndEdgeStyle(g);
+                viewer.Graph = g;
                 return;
             }
             else if (e.KeyCode != Keys.Delete)
