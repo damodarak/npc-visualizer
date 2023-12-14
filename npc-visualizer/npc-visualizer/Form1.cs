@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Microsoft.Msagl.Drawing;
@@ -106,7 +100,79 @@ namespace npc_visualizer
 
         private void button1_Click(object sender, EventArgs e)
         {
+            int from = comboBox2.SelectedIndex;
+            int to = comboBox3.SelectedIndex;
+            int param = (int)numericUpDown1.Value;
 
+            Problem problem; // default value, so the compiler doesn't scream
+            Utilities.ClearVertexColorAndEdgeStyle(g);
+            switch (from)
+            {
+                case 0:
+                    problem = new Clique(g, param);
+                    break;
+                case 1:
+                    problem = new IndepSet(g, param);
+                    break;
+                case 2:
+                    problem = new VertexCover(g, param);
+                    break;
+                case 3:
+                    problem = new DominatingSet(g, param);
+                    break;
+                case 4:
+                    problem = new Colorability(g, param);
+                    break;
+                case 5:
+                    problem = new HamilCycle(g, param);
+                    break;
+                default:
+                    return;
+            }
+
+            Tuple<Graph, int> result;
+            Graph reduction;
+            int secondParam;
+            switch (to)
+            {
+                case 0:
+                    result = problem.ToClique();
+                    reduction = result.Item1;
+                    secondParam = result.Item2;
+                    break;
+                case 1:
+                    result = problem.ToIndepSet();
+                    reduction = result.Item1;
+                    secondParam = result.Item2;
+                    break;
+                case 2:
+                    result = problem.ToVertexCover();
+                    reduction = result.Item1;
+                    secondParam = result.Item2;
+                    break;
+                case 3:
+                    result = problem.ToDominatingSet();
+                    reduction = result.Item1;
+                    secondParam = result.Item2;
+                    break;
+                case 4:
+                    result = problem.ToColorability();
+                    reduction = result.Item1;
+                    secondParam = result.Item2;
+                    break;
+                case 5:
+                    result = problem.ToHamilCycle();
+                    reduction = result.Item1;
+                    secondParam = result.Item2;
+                    break;
+                default:
+                    return;
+            }
+
+            label1.Text = $"Param: {param}";
+            label2.Text = $"Param: {secondParam}";
+            viewerRight.Graph = reduction;
+            viewer.Graph = g;
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -122,42 +188,44 @@ namespace npc_visualizer
             int index = comboBox1.SelectedIndex;
             int param = (int)numericUpDown1.Value;
 
-            Problem problem;
+            Problem problem = new Clique(g, 0); // default value, so the compiler doesn't scream
             Utilities.ClearVertexColorAndEdgeStyle(g);
+            bool newProblem;
             switch (index)
             {
                 case 0:
                     problem = new Clique(g, param);
-                    problem.Solve();
-                    problem.DrawSolution();
+                    newProblem = true;
                     break;
                 case 1:
                     problem = new IndepSet(g, param);
-                    problem.Solve();
-                    problem.DrawSolution();
+                    newProblem = true;
                     break;
                 case 2:
                     problem = new VertexCover(g, param);
-                    problem.Solve();
-                    problem.DrawSolution();
+                    newProblem = true;
                     break;
                 case 3:
                     problem = new DominatingSet(g, param);
-                    problem.Solve();
-                    problem.DrawSolution();
+                    newProblem = true;
                     break;
                 case 4:
                     problem = new Colorability(g, param);
-                    problem.Solve();
-                    problem.DrawSolution();
+                    newProblem = true;
                     break;
                 case 5:
                     problem = new HamilCycle(g, param);
-                    problem.Solve();
-                    problem.DrawSolution();
+                    newProblem = true;
                     break;
                 default:
+                    newProblem = false;
                     break;
+            }
+
+            if(newProblem)
+            {
+                problem.Solve();
+                problem.DrawSolution();
             }
             
             viewer.Graph = g;
@@ -254,9 +322,9 @@ namespace npc_visualizer
                         dnodeLabel = temp;
                     }
 
-                    Edge new_e = g.AddEdge(firstNodeClicked, dnodeLabel);
-                    new_e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                    new_e.Attr.Id = firstNodeClicked + "_" + dnodeLabel;
+                    Edge newEdge = g.AddEdge(firstNodeClicked, dnodeLabel);
+                    newEdge.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                    newEdge.Attr.Id = firstNodeClicked + "_" + dnodeLabel;
 
                     Utilities.ClearVertexColorAndEdgeStyle(g);
                     viewer.Graph = g;
@@ -281,7 +349,6 @@ namespace npc_visualizer
             else if (e.KeyCode == Keys.Enter)
             {
                 selectedEdge = null;
-                firstNodeClicked = "";
 
                 if (g.NodeCount == 20)
                 {

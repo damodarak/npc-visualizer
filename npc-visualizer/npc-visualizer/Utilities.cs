@@ -9,7 +9,7 @@ using Microsoft.SolverFoundation.Solvers;
 
 namespace npc_visualizer
 {
-    class Utilities
+    static class Utilities
     {
         public static void ClearVertexColorAndEdgeStyle(Graph g)
         {
@@ -26,6 +26,23 @@ namespace npc_visualizer
                 edge.Attr.Color = Color.Black;
             }
         }
+
+        public static Graph CopyGraph(Graph g)
+        {
+            Graph copy = new Graph();
+            foreach (Node node in g.Nodes)
+            {
+                copy.AddNode(node.Id).Attr.Shape = Shape.Circle;
+            }
+
+            foreach (Edge edge in g.Edges)
+            {
+                copy.AddEdge(edge.Source, edge.Target).Attr.ArrowheadAtTarget = ArrowStyle.None;
+            }
+
+            return copy;
+        }
+
         public static Edge EdgeById(Graph g, string id)
         {
             IEnumerable<Edge> edges = g.Edges;
@@ -68,15 +85,16 @@ namespace npc_visualizer
 
             foreach (Node node in g.Nodes)
             {
-                flippedGraph.AddNode(node.Id);
+                flippedGraph.AddNode(node.Id).Attr.Shape = Shape.Circle;
             }
 
             Tuple<int, int>[] missingEdges = FindMissingEdges(g);
-            Edge new_e;
+            Edge newEdge;
             for (int i = 0; i < missingEdges.Length; i++)
             {
-                new_e = flippedGraph.AddEdge(missingEdges[i].Item1.ToString(), missingEdges[i].Item2.ToString());
-                new_e.Attr.Id = missingEdges[i].Item1.ToString() + "_" + missingEdges[i].Item2.ToString();
+                newEdge = flippedGraph.AddEdge(missingEdges[i].Item1.ToString(), missingEdges[i].Item2.ToString());
+                newEdge.Attr.Id = missingEdges[i].Item1.ToString() + "_" + missingEdges[i].Item2.ToString();
+                newEdge.Attr.ArrowheadAtTarget = ArrowStyle.None;
             }
 
             return flippedGraph;

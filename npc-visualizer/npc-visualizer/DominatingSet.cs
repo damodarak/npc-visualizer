@@ -85,27 +85,27 @@ namespace npc_visualizer
 
             clauseCount =  (param * seriesSum) + nodeCount;
         }
-        public override Graph ToClique()
+        public override Tuple<Graph, int> ToClique()
         {
             throw new NotImplementedException();
         }
-        public override Graph ToColorability()
+        public override Tuple<Graph, int> ToColorability()
         {
             throw new NotImplementedException();
         }
-        public override Graph ToDominatingSet()
+        public override Tuple<Graph, int> ToDominatingSet()
         {
-            return g;
+            return new Tuple<Graph, int>(Utilities.CopyGraph(g), param);
         }
-        public override Graph ToHamilPath()
-        {
-            throw new NotImplementedException();
-        }
-        public override Graph ToIndepSet()
+        public override Tuple<Graph, int> ToHamilCycle()
         {
             throw new NotImplementedException();
         }
-        public override Graph ToVertexCover()
+        public override Tuple<Graph, int> ToIndepSet()
+        {
+            throw new NotImplementedException();
+        }
+        public override Tuple<Graph, int> ToVertexCover()
         {
             throw new NotImplementedException();
         }

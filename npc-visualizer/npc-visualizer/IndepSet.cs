@@ -30,35 +30,35 @@ namespace npc_visualizer
 
             return solution;
         }
-        public override Graph ToClique()
+        public override Tuple<Graph, int> ToClique()
         {
             Graph flippedGraph = Utilities.FlipEdges(g);
-            return flippedGraph;
+            return new Tuple<Graph, int>(flippedGraph, param);
         }
 
-        public override Graph ToColorability()
+        public override Tuple<Graph, int> ToColorability()
         {
             throw new NotImplementedException();
         }
 
-        public override Graph ToDominatingSet()
+        public override Tuple<Graph, int> ToDominatingSet()
         {
             throw new NotImplementedException();
         }
 
-        public override Graph ToHamilPath()
+        public override Tuple<Graph, int> ToHamilCycle()
         {
             throw new NotImplementedException();
         }
 
-        public override Graph ToIndepSet()
+        public override Tuple<Graph, int> ToIndepSet()
         {
-            return g;
+            return new Tuple<Graph, int>(Utilities.CopyGraph(g), param);
         }
 
-        public override Graph ToVertexCover()
+        public override Tuple<Graph, int> ToVertexCover()
         {
-            throw new NotImplementedException();
+            return new Tuple<Graph, int>(Utilities.CopyGraph(g), g.NodeCount - param);
         }
     }
 }

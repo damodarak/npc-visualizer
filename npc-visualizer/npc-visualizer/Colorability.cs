@@ -126,27 +126,27 @@ namespace npc_visualizer
                 g.FindNode(i.ToString()).Attr.FillColor = colors[solution[i]];
             }
         }
-        public override Graph ToClique()
+        public override Tuple<Graph, int> ToClique()
         {
             throw new NotImplementedException();
         }
-        public override Graph ToColorability()
+        public override Tuple<Graph, int> ToColorability()
         {
-            return g;
+            return new Tuple<Graph, int>(Utilities.CopyGraph(g), param);
         }
-        public override Graph ToDominatingSet()
-        {
-            throw new NotImplementedException();
-        }
-        public override Graph ToHamilPath()
+        public override Tuple<Graph, int> ToDominatingSet()
         {
             throw new NotImplementedException();
         }
-        public override Graph ToIndepSet()
+        public override Tuple<Graph, int> ToHamilCycle()
         {
             throw new NotImplementedException();
         }
-        public override Graph ToVertexCover()
+        public override Tuple<Graph, int> ToIndepSet()
+        {
+            throw new NotImplementedException();
+        }
+        public override Tuple<Graph, int> ToVertexCover()
         {
             throw new NotImplementedException();
         }
