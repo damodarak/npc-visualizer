@@ -336,24 +336,22 @@ namespace npc_visualizer
 
         private void Viewer_KeyDown(object sender, KeyEventArgs e)
         {
-            //TODO: delete the vertex and lower the IDs of higher vertices 
-
-            firstNodeClicked = "";
-
             // If not delete or NumPad
             if (e.KeyValue >= 97 && e.KeyValue <= 105)
             {
+                firstNodeClicked = "";
+                selectedEdge = null;
                 addCompleteGraph(e.KeyValue - 96);
                 return;
             }
             else if (e.KeyCode == Keys.Enter)
             {
-                selectedEdge = null;
-
                 if (g.NodeCount == 20)
                 {
                     return;
                 }
+                selectedEdge = null;
+                firstNodeClicked = "";
                 g.AddNode(g.NodeCount.ToString()).Attr.Shape = Shape.Circle;
                 Utilities.ClearVertexColorAndEdgeStyle(g);
                 viewer.Graph = g;
@@ -364,11 +362,19 @@ namespace npc_visualizer
                 return;
             }
 
-            if(selectedEdge != null)
+            if (selectedEdge != null)
             {
                 g.RemoveEdge(selectedEdge);
                 selectedEdge = null;
+                firstNodeClicked = "";
                 Utilities.ClearVertexColorAndEdgeStyle(g);
+                viewer.Graph = g;
+            }
+            else if (firstNodeClicked != "")
+            {
+                Utilities.RemoveNode(ref g, firstNodeClicked);
+                selectedEdge = null;
+                firstNodeClicked = "";
                 viewer.Graph = g;
             }
         }
