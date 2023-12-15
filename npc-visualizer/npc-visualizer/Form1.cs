@@ -137,37 +137,27 @@ namespace npc_visualizer
             {
                 case 0:
                     result = problem.ToClique();
-                    reduction = result.Item1;
-                    secondParam = result.Item2;
                     break;
                 case 1:
                     result = problem.ToIndepSet();
-                    reduction = result.Item1;
-                    secondParam = result.Item2;
                     break;
                 case 2:
                     result = problem.ToVertexCover();
-                    reduction = result.Item1;
-                    secondParam = result.Item2;
                     break;
                 case 3:
                     result = problem.ToDominatingSet();
-                    reduction = result.Item1;
-                    secondParam = result.Item2;
                     break;
                 case 4:
                     result = problem.ToColorability();
-                    reduction = result.Item1;
-                    secondParam = result.Item2;
                     break;
                 case 5:
                     result = problem.ToHamilCycle();
-                    reduction = result.Item1;
-                    secondParam = result.Item2;
                     break;
                 default:
                     return;
             }
+            reduction = result.Item1;
+            secondParam = result.Item2;
 
             label1.Text = $"Param: {param}";
             label2.Text = $"Param: {secondParam}";

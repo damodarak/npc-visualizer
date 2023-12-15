@@ -96,7 +96,42 @@ namespace npc_visualizer
 
         public override Tuple<Graph, int> ToDominatingSet()
         {
-            throw new NotImplementedException();
+            Graph reduction = Utilities.CopyGraph(g);
+
+            // Remove singletons
+            List<string> removeNodes = new List<string>();
+            foreach (Node node in reduction.Nodes)
+            {
+                bool hasEdges = false;
+                foreach (Edge edge in node.Edges)
+                {
+                    hasEdges = true;
+                }
+
+                if (!hasEdges)
+                {
+                    removeNodes.Add(node.Id);
+                }
+            }
+
+            foreach (string node in removeNodes)
+            {
+                reduction.RemoveNode(reduction.FindNode(node));
+            }
+
+            foreach (Edge edge in g.Edges)
+            {
+                int newNode = reduction.NodeCount;
+                Edge e = reduction.AddEdge(edge.SourceNode.Id, (newNode).ToString());
+                e.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                e.Attr.Id = edge.SourceNode.Id + "_" + newNode.ToString();
+
+                e = reduction.AddEdge(edge.TargetNode.Id, (newNode).ToString());
+                e.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                e.Attr.Id = edge.TargetNode.Id + "_" + newNode.ToString();
+            }
+
+            return new Tuple<Graph, int>(reduction, param);
         }
 
         public override Tuple<Graph, int> ToHamilCycle()

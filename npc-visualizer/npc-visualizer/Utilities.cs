@@ -81,6 +81,7 @@ namespace npc_visualizer
         public static Graph CopyGraph(Graph g)
         {
             Graph copy = new Graph();
+            copy.Directed = false;
             foreach (Node node in g.Nodes)
             {
                 copy.AddNode(node.Id).Attr.Shape = Shape.Circle;
@@ -135,6 +136,7 @@ namespace npc_visualizer
         public static Graph FlipEdges(Graph g)
         {
             Graph flippedGraph = new Graph("flippedGraph");
+            flippedGraph.Directed = false;
 
             foreach (Node node in g.Nodes)
             {
