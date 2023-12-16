@@ -20,7 +20,7 @@ namespace npc_visualizer
             List<List<Literal>> reduction = new List<List<Literal>>();
             int highest = findHighestLit();
 
-            for (int i = 0; i <= sat.Length; i++)
+            for (int i = 0; i < sat.Length; i++)
             {
                 if (sat[i].Length < 4)
                 {
@@ -58,6 +58,7 @@ namespace npc_visualizer
                     remaining.RemoveAt(0);
                 }
                 clause.Add(new Literal(highest + 1, true));
+                reduction.Add(clause);
                 remaining.Insert(0, new Literal(++highest, false));
                 divideClause(reduction, remaining, ref highest);
             }
