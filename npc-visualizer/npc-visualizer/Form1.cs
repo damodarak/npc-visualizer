@@ -178,46 +178,35 @@ namespace npc_visualizer
             int index = comboBox1.SelectedIndex;
             int param = (int)numericUpDown1.Value;
 
-            Problem problem = new Clique(g, 0); // default value, so the compiler doesn't scream
+            Problem problem;
             Utilities.ClearVertexColorAndEdgeStyle(g);
-            bool newProblem;
             switch (index)
             {
                 case 0:
                     problem = new Clique(g, param);
-                    newProblem = true;
                     break;
                 case 1:
                     problem = new IndepSet(g, param);
-                    newProblem = true;
                     break;
                 case 2:
                     problem = new VertexCover(g, param);
-                    newProblem = true;
                     break;
                 case 3:
                     problem = new DominatingSet(g, param);
-                    newProblem = true;
                     break;
                 case 4:
                     problem = new Colorability(g, param);
-                    newProblem = true;
                     break;
                 case 5:
                     problem = new HamilCycle(g, param);
-                    newProblem = true;
                     break;
                 default:
-                    newProblem = false;
-                    break;
+                    return;
             }
 
-            if(newProblem)
-            {
-                problem.Solve();
-                problem.DrawSolution();
-            }
-            
+            problem.Solve();
+            problem.DrawSolution();
+
             viewer.Graph = g;
         }
 

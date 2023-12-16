@@ -36,6 +36,6 @@ namespace npc_visualizer
                     g.FindNode(solution[i].ToString()).Attr.FillColor = Color.Purple;
                 }
             }
-        }    
+        }
     }
 }

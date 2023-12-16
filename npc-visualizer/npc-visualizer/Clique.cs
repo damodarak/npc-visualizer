@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 using Microsoft.SolverFoundation.Solvers;
 using Microsoft.Msagl.Drawing;
-using Microsoft.Msagl.Core.Geometry.Curves;
 
 namespace npc_visualizer
 {

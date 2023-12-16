@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="3Sat.cs" />
     <Compile Include="Clique.cs" />
     <Compile Include="Colorability.cs" />
     <Compile Include="DominatingSet.cs" />
