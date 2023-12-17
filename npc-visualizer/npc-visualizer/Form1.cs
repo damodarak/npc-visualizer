@@ -357,5 +357,32 @@ namespace npc_visualizer
                 viewer.Graph = g;
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Graph map = new Graph();
+
+            map.AddEdge("Sat", "3-Sat");
+            map.AddEdge("Clique", "Sat");
+            map.AddEdge("Independent Set", "Sat");
+            map.AddEdge("Vertex Cover", "Sat");
+            map.AddEdge("Dominating Set", "Sat");
+            map.AddEdge("Coloring", "Sat");
+            map.AddEdge("Hamiltonian Cycle", "Sat");
+
+            map.AddEdge("Vertex Cover", "Dominating Set");
+            map.AddEdge("Vertex Cover", "Hamiltonian Cycle").Attr.Color = Color.Red;
+
+            map.AddEdge("Independent Set", "Clique");
+            map.AddEdge("Clique", "Independent Set");
+
+            map.AddEdge("Independent Set", "Vertex Cover");
+            map.AddEdge("Vertex Cover", "Independent Set");
+
+            map.AddEdge("3-Sat", "Independent Set").Attr.Color = Color.Red;
+            map.AddEdge("3-Sat", "Coloring").Attr.Color = Color.Red;
+
+            viewerRight.Graph = map;
+        }
     }
 }
