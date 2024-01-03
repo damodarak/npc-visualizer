@@ -5,9 +5,10 @@ using System.Collections.Generic;
 
 namespace npc_visualizer
 {
-    internal class _3Sat : GraphProblem
+    internal class _3Sat : IReducible
     {
         Literal[][] _3sat;
+        Literal[][] sat;
 
         public _3Sat(Literal[][] sat)
         {
@@ -82,33 +83,33 @@ namespace npc_visualizer
             return highest;
         }
 
-        public override int[] Solve()
+        public int[] Solve()
         {
             // Isn't used in this particular set of NP-Complete problems
             throw new NotImplementedException();
         }
 
-        public override Tuple<Graph, int> ToClique()
+        public Tuple<Graph, int> ToClique()
         {
             throw new NotImplementedException();
         }
 
-        public override Tuple<Graph, int> ToColorability()
+        public Tuple<Graph, int> ToColorability()
         {
             throw new NotImplementedException();
         }
 
-        public override Tuple<Graph, int> ToDominatingSet()
+        public Tuple<Graph, int> ToDominatingSet()
         {
             throw new NotImplementedException();
         }
 
-        public override Tuple<Graph, int> ToHamilCycle()
+        public Tuple<Graph, int> ToHamilCycle()
         {
             throw new NotImplementedException();
         }
 
-        public override Tuple<Graph, int> ToIndepSet()
+        public Tuple<Graph, int> ToIndepSet()
         {
             Graph g = new Graph();
             int param = _3sat.Length;
@@ -175,12 +176,12 @@ namespace npc_visualizer
             return new Tuple<Graph, int>(g, param);
         }
 
-        public override Literal[][] ToSat()
+        public Literal[][] ToSat()
         {
             return _3sat;
         }
 
-        public override Tuple<Graph, int> ToVertexCover()
+        public Tuple<Graph, int> ToVertexCover()
         {
             throw new NotImplementedException();
         }
