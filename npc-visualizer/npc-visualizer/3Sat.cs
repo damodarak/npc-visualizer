@@ -8,18 +8,16 @@ namespace npc_visualizer
     internal class _3Sat : IReducible
     {
         Literal[][] _3sat;
-        Literal[][] sat;
 
         public _3Sat(Literal[][] sat)
         {
-            this.sat = sat;
             this._3sat = To3Sat(sat);
         }
 
         Literal[][] To3Sat(Literal[][] sat)
         {
             List<List<Literal>> reduction = new List<List<Literal>>();
-            int highest = findHighestLit();
+            int highest = findHighestLit(sat);
 
             for (int i = 0; i < sat.Length; i++)
             {
@@ -65,7 +63,7 @@ namespace npc_visualizer
             }
         }
 
-        int findHighestLit()
+        int findHighestLit(Literal[][] sat)
         {
             int highest = -1;
 
