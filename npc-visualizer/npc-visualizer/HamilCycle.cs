@@ -131,7 +131,7 @@ namespace npc_visualizer
             {
                 for (int vertex = 0; vertex < g.NodeCount; vertex++)
                 {
-                    int[] adjacentNodes = Utilities.AdjacentNodes(g.FindNode(vertex.ToString()), g);
+                    int[] adjacentNodes = GraphUtilities.AdjacentNodes(g.FindNode(vertex.ToString()), g);
                     sat[clauseIndex] = new Literal[adjacentNodes.Length + 1];
                     sat[clauseIndex][0] = new Literal(indexToSatVar[vertex, index], false);
                     for (int adjNodeIndex = 0;  adjNodeIndex < adjacentNodes.Length; adjNodeIndex++)
@@ -143,7 +143,7 @@ namespace npc_visualizer
             }
 
             //In the fourth part it is verified that the first and the last vertex are connected
-            var missingEdges = Utilities.FindMissingEdges(g);
+            var missingEdges = GraphUtilities.FindMissingEdges(g);
             for(int missEdge = 0; missEdge < missingEdges.Length; missEdge++)
             {
                 sat[clauseIndex++] = new Literal[]
@@ -183,13 +183,13 @@ namespace npc_visualizer
                 }
 
                 string edgeId = $"{first}_{second}";
-                Microsoft.Msagl.Drawing.Edge edge = Utilities.EdgeById(g, edgeId);
+                Microsoft.Msagl.Drawing.Edge edge = GraphUtilities.EdgeById(g, edgeId);
                 edge.Attr.ArrowheadAtSource = ArrowStyle.Diamond;
                 edge.Attr.ArrowheadAtTarget = ArrowStyle.Diamond;
                 edge.Attr.Color = Color.Red;
             }
 
-            Microsoft.Msagl.Drawing.Edge lastEdge = Utilities.EdgeById(g, $"{solution[solution.Length - 1]}_{solution[0]}");
+            Microsoft.Msagl.Drawing.Edge lastEdge = GraphUtilities.EdgeById(g, $"{solution[solution.Length - 1]}_{solution[0]}");
             lastEdge.Attr.ArrowheadAtSource = ArrowStyle.Diamond;
             lastEdge.Attr.ArrowheadAtTarget = ArrowStyle.Diamond;
             lastEdge.Attr.Color = Color.Red;
@@ -208,7 +208,7 @@ namespace npc_visualizer
         }
         public override Tuple<Graph, int> ToHamilCycle()
         {
-            return new Tuple<Graph, int>(Utilities.CopyGraph(g), param);
+            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
         }
         public override Tuple<Graph, int> ToIndepSet()
         {

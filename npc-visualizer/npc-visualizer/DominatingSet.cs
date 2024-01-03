@@ -21,7 +21,7 @@ namespace npc_visualizer
             satVarToVertex = new int[param * g.NodeCount];
             indexToSatVar = new int[g.NodeCount, param + 1];
 
-            Utilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
+            GraphUtilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
             ClauseCount();
 
             sat = new Literal[clauseCount][];
@@ -35,7 +35,7 @@ namespace npc_visualizer
             int varLim = g.NodeCount * param;
             IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
-            solution =  Utilities.SatSolutionToVertices(solutions, param, satVarToVertex);
+            solution =  GraphUtilities.SatSolutionToVertices(solutions, param, satVarToVertex);
 
             return solution;
         }
@@ -63,7 +63,7 @@ namespace npc_visualizer
             //the chosen vertex-set is a dominating set
             foreach (Node node in g.Nodes)
             {
-                int[] adjacentNodes = Utilities.AdjacentNodes(node, g);
+                int[] adjacentNodes = GraphUtilities.AdjacentNodes(node, g);
                 sat[clauseIndex] = new Literal[(adjacentNodes.Length + 1) * param];
                 int literal = 0;
                 
@@ -95,7 +95,7 @@ namespace npc_visualizer
         }
         public override Tuple<Graph, int> ToDominatingSet()
         {
-            return new Tuple<Graph, int>(Utilities.CopyGraph(g), param);
+            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
         }
         public override Tuple<Graph, int> ToHamilCycle()
         {
@@ -103,7 +103,9 @@ namespace npc_visualizer
         }
         public override Tuple<Graph, int> ToIndepSet()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToIndepSet();
         }
         public override Tuple<Graph, int> ToVertexCover()
         {

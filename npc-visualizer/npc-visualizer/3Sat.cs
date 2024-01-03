@@ -1,5 +1,5 @@
-﻿using Microsoft.Msagl.Drawing;
-using System;
+﻿using System;
+using Microsoft.Msagl.Drawing;
 using Microsoft.SolverFoundation.Solvers;
 using System.Collections.Generic;
 
@@ -84,6 +84,7 @@ namespace npc_visualizer
 
         public override int[] Solve()
         {
+            // Isn't used in this particular set of NP-Complete problems
             throw new NotImplementedException();
         }
 
@@ -109,12 +110,74 @@ namespace npc_visualizer
 
         public override Tuple<Graph, int> ToIndepSet()
         {
-            throw new NotImplementedException();
+            Graph g = new Graph();
+            int param = _3sat.Length;
+
+            Dictionary<int, List<Node>> mapping = new Dictionary<int, List<Node>>();
+
+            foreach (Literal[] clause in _3sat)
+            {
+                Node[] nodesFromClause = new Node[clause.Length];
+                for (int i = 0; i < clause.Length; i++) // Create maximum of 3 vertices
+                {
+                    nodesFromClause[i] = g.AddNode(g.NodeCount.ToString());
+                }
+
+                // Creating triangles for each clause
+                // Nested for loop but the maximum amount of edges is 3
+                for (int i = 0; i < nodesFromClause.Length; i++)
+                {
+                    for (int j = i + 1; j < nodesFromClause.Length; j++)
+                    {
+                        Edge ed = g.AddEdge(nodesFromClause[i].Id.ToString(), nodesFromClause[j].Id.ToString());
+                        ed.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                        ed.Attr.Id = nodesFromClause[i].Id + "_" + nodesFromClause[i].Id;
+                    }
+                }
+
+                // Create edges for the opposite literals in SAT formula
+                for (int i = 0; i < clause.Length; i++)
+                {
+                    int litSense = clause[i].Sense ? 1 : -1;
+                    int litVar = clause[i].Var + 1;
+                    int negatednLitaralDictKey = litVar * litSense * -1; // litVar is incremented by 1, that solves positive and negative 0
+
+                    if (mapping.ContainsKey(negatednLitaralDictKey))
+                    {
+                        List<Node> nodes = mapping[negatednLitaralDictKey];
+                        foreach (Node node in nodes)
+                        {
+                            Edge ed = g.AddEdge(node.Id, nodesFromClause[i].Id);
+                            ed.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                            ed.Attr.Id = node.Id + "_" + nodesFromClause[i].Id;
+                        }
+                    }
+                }
+
+                // Add literals to mapping Dictionary
+                for (int i = 0; i < clause.Length; i++)
+                {
+                    int litSense = clause[i].Sense ? 1 : -1;
+                    int litVar = clause[i].Var + 1;
+                    int literalDictKey = litVar * litSense;
+
+                    if (mapping.ContainsKey(literalDictKey))
+                    {
+                        mapping[literalDictKey].Add(nodesFromClause[i]);
+                    }
+                    else
+                    {
+                        mapping[literalDictKey] = new List<Node> { nodesFromClause[i] };
+                    }
+                }
+            }
+
+            return new Tuple<Graph, int>(g, param);
         }
 
         public override Literal[][] ToSat()
         {
-            throw new NotImplementedException();
+            return _3sat;
         }
 
         public override Tuple<Graph, int> ToVertexCover()

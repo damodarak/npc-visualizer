@@ -18,13 +18,13 @@ namespace npc_visualizer
         }
         public override Literal[][] ToSat()
         {
-            Graph flippedGraph = Utilities.FlipEdges(g);
+            Graph flippedGraph = GraphUtilities.FlipEdges(g);
             Clique cliq = new Clique(flippedGraph, param);
             return cliq.ToSat();
         }
         public override int[] Solve()
         {
-            Graph flippedGraph = Utilities.FlipEdges(g);
+            Graph flippedGraph = GraphUtilities.FlipEdges(g);
             Clique cliq = new Clique(flippedGraph, param);
             solution = cliq.Solve();
 
@@ -32,7 +32,7 @@ namespace npc_visualizer
         }
         public override Tuple<Graph, int> ToClique()
         {
-            Graph flippedGraph = Utilities.FlipEdges(g);
+            Graph flippedGraph = GraphUtilities.FlipEdges(g);
             return new Tuple<Graph, int>(flippedGraph, param);
         }
 
@@ -53,12 +53,12 @@ namespace npc_visualizer
 
         public override Tuple<Graph, int> ToIndepSet()
         {
-            return new Tuple<Graph, int>(Utilities.CopyGraph(g), param);
+            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
         }
 
         public override Tuple<Graph, int> ToVertexCover()
         {
-            return new Tuple<Graph, int>(Utilities.CopyGraph(g), g.NodeCount - param);
+            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), g.NodeCount - param);
         }
     }
 }

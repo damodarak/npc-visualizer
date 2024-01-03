@@ -9,7 +9,7 @@ using Microsoft.SolverFoundation.Solvers;
 
 namespace npc_visualizer
 {
-    static class Utilities
+    static class GraphUtilities
     {
         public static void ClearVertexColorAndEdgeStyle(Graph g)
         {

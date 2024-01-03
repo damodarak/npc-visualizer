@@ -22,7 +22,7 @@ namespace npc_visualizer
             satVarToVertex = new int[param * g.NodeCount];
             indexToSatVar = new int[g.NodeCount, param + 1];
 
-            Utilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
+            GraphUtilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
             ClauseCount();
 
             sat = new Literal[clauseCount][];
@@ -42,7 +42,7 @@ namespace npc_visualizer
             int varLim = g.NodeCount * param;
             IEnumerable<SatSolution> satSolutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
-            solution = Utilities.SatSolutionToVertices(satSolutions, param, satVarToVertex);
+            solution = GraphUtilities.SatSolutionToVertices(satSolutions, param, satVarToVertex);
 
             return solution;
         }
@@ -82,7 +82,7 @@ namespace npc_visualizer
             }
 
             //Any two vertices in the clique are connected
-            Tuple<int, int>[] missingEdges = Utilities.FindMissingEdges(g);
+            Tuple<int, int>[] missingEdges = GraphUtilities.FindMissingEdges(g);
             for (int missEdge = 0; missEdge < missingEdges.Length; missEdge++)
             {
                 for (int i = 1; i < param + 1; i++)
@@ -134,7 +134,7 @@ namespace npc_visualizer
         }
         public override Tuple<Graph, int> ToClique()
         {
-            return new Tuple<Graph, int>(Utilities.CopyGraph(g), param);
+            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
         }
         public override Tuple<Graph, int> ToColorability()
         {
@@ -150,12 +150,12 @@ namespace npc_visualizer
         }
         public override Tuple<Graph, int> ToIndepSet()
         {
-            Graph flippedGraph = Utilities.FlipEdges(g);
+            Graph flippedGraph = GraphUtilities.FlipEdges(g);
             return new Tuple<Graph, int>(flippedGraph, param);
         }
         public override Tuple<Graph, int> ToVertexCover()
         {
-            Graph flippedGraph = Utilities.FlipEdges(g);
+            Graph flippedGraph = GraphUtilities.FlipEdges(g);
             return new Tuple<Graph, int>(flippedGraph, g.NodeCount - param);
         }
     }   

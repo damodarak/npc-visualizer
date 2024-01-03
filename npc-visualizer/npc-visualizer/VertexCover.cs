@@ -21,7 +21,7 @@ namespace npc_visualizer
             satVarToVertex = new int[param * g.NodeCount];
             indexToSatVar = new int[g.NodeCount, param + 1];
 
-            Utilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
+            GraphUtilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
             ClauseCount();
 
             sat = new Literal[clauseCount][];
@@ -35,7 +35,7 @@ namespace npc_visualizer
             int varLim = g.NodeCount * param;
             IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
-            solution = Utilities.SatSolutionToVertices(solutions, param, satVarToVertex);
+            solution = GraphUtilities.SatSolutionToVertices(solutions, param, satVarToVertex);
 
             return solution;
         }
@@ -85,7 +85,7 @@ namespace npc_visualizer
         }
         public override Tuple<Graph, int> ToClique()
         {
-            Graph flippedGraph = Utilities.FlipEdges(g);
+            Graph flippedGraph = GraphUtilities.FlipEdges(g);
             return new Tuple<Graph, int>(flippedGraph, g.NodeCount - param);
         }
 
@@ -96,7 +96,7 @@ namespace npc_visualizer
 
         public override Tuple<Graph, int> ToDominatingSet()
         {
-            Graph reduction = Utilities.CopyGraph(g);
+            Graph reduction = GraphUtilities.CopyGraph(g);
 
             // Remove singletons
             List<string> removeNodes = new List<string>();
@@ -141,12 +141,12 @@ namespace npc_visualizer
 
         public override Tuple<Graph, int> ToIndepSet()
         {
-            return new Tuple<Graph, int>(Utilities.CopyGraph(g), g.NodeCount - param);
+            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), g.NodeCount - param);
         }
 
         public override Tuple<Graph, int> ToVertexCover()
         {
-            return new Tuple<Graph, int>(Utilities.CopyGraph(g), param);
+            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
         }
     }
 }

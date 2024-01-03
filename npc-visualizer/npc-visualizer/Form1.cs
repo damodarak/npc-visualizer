@@ -37,7 +37,6 @@ namespace npc_visualizer
             viewer.NavigationVisible = false;
             viewer.AllowDrop = false;
             viewer.InsertingEdge = false;
-            viewer.LayoutAlgorithmSettingsButtonVisible = false;
             viewer.SaveButtonVisible = false;
 
             //create a graph object 
@@ -85,7 +84,6 @@ namespace npc_visualizer
             viewerRight.NavigationVisible = false;
             viewerRight.AllowDrop = false;
             viewerRight.InsertingEdge = false;
-            viewerRight.LayoutAlgorithmSettingsButtonVisible = false;
             viewerRight.SaveButtonVisible = false;
 
             Graph dummy = new Graph("dummy");
@@ -105,7 +103,7 @@ namespace npc_visualizer
             int param = (int)numericUpDown1.Value;
 
             Problem problem; // default value, so the compiler doesn't scream
-            Utilities.ClearVertexColorAndEdgeStyle(g);
+            GraphUtilities.ClearVertexColorAndEdgeStyle(g);
             switch (from)
             {
                 case 0:
@@ -179,7 +177,7 @@ namespace npc_visualizer
             int param = (int)numericUpDown1.Value;
 
             Problem problem;
-            Utilities.ClearVertexColorAndEdgeStyle(g);
+            GraphUtilities.ClearVertexColorAndEdgeStyle(g);
             switch (index)
             {
                 case 0:
@@ -212,9 +210,6 @@ namespace npc_visualizer
 
         void addCompleteGraph(int vertexCount)
         {
-            selectedEdge = null;
-            firstNodeClicked = "";
-
             while (g.EdgeCount > 0)
             {
                 IEnumerable<Edge> edges = g.Edges;
@@ -285,8 +280,8 @@ namespace npc_visualizer
                 Node n1 = g.FindNode(firstNodeClicked);
                 Node n2 = g.FindNode(dnodeLabel);
 
-                Edge e1 = Utilities.EdgeById(g, firstNodeClicked + "_" + dnodeLabel);
-                Edge e2 = Utilities.EdgeById(g, dnodeLabel + "_" + firstNodeClicked);
+                Edge e1 = GraphUtilities.EdgeById(g, firstNodeClicked + "_" + dnodeLabel);
+                Edge e2 = GraphUtilities.EdgeById(g, dnodeLabel + "_" + firstNodeClicked);
 
                 if (n1 != null && n2 != null && e1 == null && e2 == null && n1.Id != n2.Id && e.Button == System.Windows.Forms.MouseButtons.Right)
                 {
@@ -305,7 +300,7 @@ namespace npc_visualizer
                     newEdge.Attr.ArrowheadAtTarget = ArrowStyle.None;
                     newEdge.Attr.Id = firstNodeClicked + "_" + dnodeLabel;
 
-                    Utilities.ClearVertexColorAndEdgeStyle(g);
+                    GraphUtilities.ClearVertexColorAndEdgeStyle(g);
                     viewer.Graph = g;
                     firstNodeClicked = "";
                     selectedEdge = null;
@@ -332,7 +327,7 @@ namespace npc_visualizer
                 selectedEdge = null;
                 firstNodeClicked = "";
                 g.AddNode(g.NodeCount.ToString()).Attr.Shape = Shape.Circle;
-                Utilities.ClearVertexColorAndEdgeStyle(g);
+                GraphUtilities.ClearVertexColorAndEdgeStyle(g);
                 viewer.Graph = g;
                 return;
             }
@@ -346,12 +341,12 @@ namespace npc_visualizer
                 g.RemoveEdge(selectedEdge);
                 selectedEdge = null;
                 firstNodeClicked = "";
-                Utilities.ClearVertexColorAndEdgeStyle(g);
+                GraphUtilities.ClearVertexColorAndEdgeStyle(g);
                 viewer.Graph = g;
             }
             else if (firstNodeClicked != "")
             {
-                Utilities.RemoveNode(ref g, firstNodeClicked);
+                GraphUtilities.RemoveNode(ref g, firstNodeClicked);
                 selectedEdge = null;
                 firstNodeClicked = "";
                 viewer.Graph = g;

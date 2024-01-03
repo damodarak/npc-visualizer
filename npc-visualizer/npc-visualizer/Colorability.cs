@@ -132,7 +132,7 @@ namespace npc_visualizer
         }
         public override Tuple<Graph, int> ToColorability()
         {
-            return new Tuple<Graph, int>(Utilities.CopyGraph(g), param);
+            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
         }
         public override Tuple<Graph, int> ToDominatingSet()
         {
