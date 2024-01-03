@@ -102,7 +102,7 @@ namespace npc_visualizer
             int to = comboBox3.SelectedIndex;
             int param = (int)numericUpDown1.Value;
 
-            Problem problem; // default value, so the compiler doesn't scream
+            GraphProblem problem; // default value, so the compiler doesn't scream
             GraphUtilities.ClearVertexColorAndEdgeStyle(g);
             switch (from)
             {
@@ -176,7 +176,7 @@ namespace npc_visualizer
             int index = comboBox1.SelectedIndex;
             int param = (int)numericUpDown1.Value;
 
-            Problem problem;
+            GraphProblem problem;
             GraphUtilities.ClearVertexColorAndEdgeStyle(g);
             switch (index)
             {
@@ -374,7 +374,7 @@ namespace npc_visualizer
             map.AddEdge("Independent Set", "Vertex Cover");
             map.AddEdge("Vertex Cover", "Independent Set");
 
-            map.AddEdge("3-Sat", "Independent Set").Attr.Color = Color.Red;
+            map.AddEdge("3-Sat", "Independent Set");
             map.AddEdge("3-Sat", "Coloring").Attr.Color = Color.Red;
 
             viewerRight.Graph = map;

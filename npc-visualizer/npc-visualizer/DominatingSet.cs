@@ -9,7 +9,7 @@ using Microsoft.Msagl.Drawing;
 
 namespace npc_visualizer
 {
-    class DominatingSet : Problem
+    class DominatingSet : GraphProblem
     {
         public DominatingSet(Graph g, int param)
         {

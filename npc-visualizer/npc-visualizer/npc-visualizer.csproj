@@ -86,7 +86,8 @@
     </Compile>
     <Compile Include="HamilCycle.cs" />
     <Compile Include="IndepSet.cs" />
-    <Compile Include="Problem.cs" />
+    <Compile Include="IReducible.cs" />
+    <Compile Include="GraphProblem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GraphUtilities.cs" />

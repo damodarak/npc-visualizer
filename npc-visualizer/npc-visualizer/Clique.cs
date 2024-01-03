@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.SolverFoundation.Solvers;
 using Microsoft.Msagl.Drawing;
 
 namespace npc_visualizer
 {
-    class Clique : Problem
+    class Clique : GraphProblem
     {
         public Clique(Graph g, int param) 
         {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace npc_visualizer
 {
-    internal class _3Sat : Problem
+    internal class _3Sat : GraphProblem
     {
         Literal[][] _3sat;
 

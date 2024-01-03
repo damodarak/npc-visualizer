@@ -5,7 +5,7 @@ using Microsoft.SolverFoundation.Solvers;
 
 namespace npc_visualizer
 {
-    abstract class Problem
+    abstract class GraphProblem : IReducible
     {
         protected Graph g;
         protected int[] solution;

@@ -9,7 +9,7 @@ using Microsoft.SolverFoundation.Solvers;
 
 namespace npc_visualizer
 {
-    class IndepSet : Problem
+    class IndepSet : GraphProblem
     {
         public IndepSet(Graph g, int param)
         {

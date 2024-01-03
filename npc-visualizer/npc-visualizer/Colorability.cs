@@ -9,7 +9,7 @@ using Microsoft.SolverFoundation.Solvers;
 
 namespace npc_visualizer
 {
-    class Colorability : Problem
+    class Colorability : GraphProblem
     {
         public Colorability(Graph g, int param)
         {

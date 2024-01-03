@@ -9,7 +9,7 @@ using Microsoft.SolverFoundation.Solvers;
 
 namespace npc_visualizer
 {
-    class VertexCover : Problem
+    class VertexCover : GraphProblem
     {
         public VertexCover(Graph g, int param)
         {

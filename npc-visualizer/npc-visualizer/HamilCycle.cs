@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace npc_visualizer
 {
-    class HamilCycle : Problem
+    class HamilCycle : GraphProblem
     {
         public HamilCycle(Graph g, int param)
         {
