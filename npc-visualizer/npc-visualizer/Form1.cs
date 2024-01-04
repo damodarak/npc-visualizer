@@ -121,10 +121,10 @@ namespace npc_visualizer
                 default:
                     return;
             }
+            problem.Solve();
+            problem.DrawSolution();
 
-            Tuple<Graph, int> result;
-            Graph reduction;
-            int secondParam;
+            GraphProblem result;       
             switch (to)
             {
                 case 0:
@@ -148,8 +148,11 @@ namespace npc_visualizer
                 default:
                     return;
             }
-            reduction = result.Item1;
-            secondParam = result.Item2;
+            result.Solve();
+            result.DrawSolution();
+
+            Graph reduction = result.G;
+            int secondParam = result.Param;
 
             label1.Text = $"Param: {param}";
             label2.Text = $"Param: {secondParam}";

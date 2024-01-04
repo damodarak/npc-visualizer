@@ -9,52 +9,52 @@ namespace npc_visualizer
     {
         public IndepSet(Graph g, int param)
         {
-            this.g = g;
-            this.param = param;
+            this.G = g;
+            this.Param = param;
         }
         public override Literal[][] ToSat()
         {
-            Graph flippedGraph = GraphUtilities.FlipEdges(g);
-            Clique cliq = new Clique(flippedGraph, param);
+            Graph flippedGraph = GraphUtilities.FlipEdges(G);
+            Clique cliq = new Clique(flippedGraph, Param);
             return cliq.ToSat();
         }
         public override int[] Solve()
         {
-            Graph flippedGraph = GraphUtilities.FlipEdges(g);
-            Clique cliq = new Clique(flippedGraph, param);
+            Graph flippedGraph = GraphUtilities.FlipEdges(G);
+            Clique cliq = new Clique(flippedGraph, Param);
             solution = cliq.Solve();
 
             return solution;
         }
-        public override Tuple<Graph, int> ToClique()
+        public override GraphProblem ToClique()
         {
-            Graph flippedGraph = GraphUtilities.FlipEdges(g);
-            return new Tuple<Graph, int>(flippedGraph, param);
+            Graph flippedGraph = GraphUtilities.FlipEdges(G);
+            return new Clique(flippedGraph, Param);
         }
 
-        public override Tuple<Graph, int> ToColorability()
+        public override GraphProblem ToColorability()
         {
             throw new NotImplementedException();
         }
 
-        public override Tuple<Graph, int> ToDominatingSet()
+        public override GraphProblem ToDominatingSet()
         {
             throw new NotImplementedException();
         }
 
-        public override Tuple<Graph, int> ToHamilCycle()
+        public override GraphProblem ToHamilCycle()
         {
             throw new NotImplementedException();
         }
 
-        public override Tuple<Graph, int> ToIndepSet()
+        public override GraphProblem ToIndepSet()
         {
-            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
+            return new IndepSet(GraphUtilities.CopyGraph(G), Param);
         }
 
-        public override Tuple<Graph, int> ToVertexCover()
+        public override GraphProblem ToVertexCover()
         {
-            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), g.NodeCount - param);
+            return new VertexCover(GraphUtilities.CopyGraph(G), G.NodeCount - Param);
         }
     }
 }

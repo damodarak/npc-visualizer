@@ -87,12 +87,12 @@ namespace npc_visualizer
             throw new NotImplementedException();
         }
 
-        public Tuple<Graph, int> ToClique()
+        public GraphProblem ToClique()
         {
             throw new NotImplementedException();
         }
 
-        public Tuple<Graph, int> ToColorability()
+        public GraphProblem ToColorability()
         {
             const int param = 3;
             Graph g = new Graph();
@@ -179,20 +179,20 @@ namespace npc_visualizer
                 }
             }
 
-            return new Tuple<Graph, int>(g, param);
+            return new Colorability(g, param);
         }
 
-        public Tuple<Graph, int> ToDominatingSet()
+        public GraphProblem ToDominatingSet()
         {
             throw new NotImplementedException();
         }
 
-        public Tuple<Graph, int> ToHamilCycle()
+        public GraphProblem ToHamilCycle()
         {
             throw new NotImplementedException();
         }
 
-        public Tuple<Graph, int> ToIndepSet()
+        public GraphProblem ToIndepSet()
         {
             Graph g = new Graph();
             g.Directed = false;
@@ -253,7 +253,7 @@ namespace npc_visualizer
                 }
             }
 
-            return new Tuple<Graph, int>(g, param);
+            return new IndepSet(g, param);
         }
 
         public Literal[][] ToSat()
@@ -261,7 +261,7 @@ namespace npc_visualizer
             return _3sat;
         }
 
-        public Tuple<Graph, int> ToVertexCover()
+        public GraphProblem ToVertexCover()
         {
             throw new NotImplementedException();
         }

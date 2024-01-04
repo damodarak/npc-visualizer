@@ -10,12 +10,12 @@ namespace npc_visualizer
     {
         public HamilCycle(Graph g, int param)
         {
-            this.g = g;
-            this.param = param;
+            this.G = g;
+            this.Param = param;
         }
         public override Literal[][] ToSat()
         {
-            indexToSatVar = new int[g.NodeCount, g.NodeCount + 1];
+            indexToSatVar = new int[G.NodeCount, G.NodeCount + 1];
 
             CreateMapping();
             ClauseCount();
@@ -28,17 +28,17 @@ namespace npc_visualizer
         public override int[] Solve()
         {
             ToSat();
-            int varLim = g.NodeCount * g.NodeCount;
+            int varLim = G.NodeCount * G.NodeCount;
             IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
             foreach (SatSolution solution in solutions)
             {
                 //if inside, then there is a solution
                 IEnumerable<int> positive = solution.Pos;
-                int[] ordering = new int[g.NodeCount];
+                int[] ordering = new int[G.NodeCount];
                 foreach (int pos in positive)
                 {
-                    ordering[pos / g.NodeCount] = pos % g.NodeCount;
+                    ordering[pos / G.NodeCount] = pos % G.NodeCount;
                 }
                 this.solution = ordering;
                 return ordering;
@@ -50,7 +50,7 @@ namespace npc_visualizer
 
         void CreateMapping()
         {
-            int nodeCount = g.NodeCount;
+            int nodeCount = G.NodeCount;
             int satVar = 0;
 
             for (int i = 1; i < nodeCount + 1; i++)
@@ -63,22 +63,22 @@ namespace npc_visualizer
         }
         void ClauseCount()
         {
-            int seriesSum = g.NodeCount * (g.NodeCount - 1) / 2;
-            int missingEdges = seriesSum - g.EdgeCount;
+            int seriesSum = G.NodeCount * (G.NodeCount - 1) / 2;
+            int missingEdges = seriesSum - G.EdgeCount;
 
-            clauseCount = 2 * (g.NodeCount * (seriesSum + 1)) + g.NodeCount * (g.NodeCount - 1) + 2 * missingEdges;
+            clauseCount = 2 * (G.NodeCount * (seriesSum + 1)) + G.NodeCount * (G.NodeCount - 1) + 2 * missingEdges;
         }
         void DefineClauses()
         {
             int clauseIndex = 0;
 
             //In the first two parts the one-to-one numbering of the vertices is specified
-            for (int index = 1; index < g.NodeCount + 1; index++)
+            for (int index = 1; index < G.NodeCount + 1; index++)
             {
                 //at most one vertex
-                for (int vertexOne = 0; vertexOne < g.NodeCount; vertexOne++)
+                for (int vertexOne = 0; vertexOne < G.NodeCount; vertexOne++)
                 {
-                    for (int vertexTwo = vertexOne + 1; vertexTwo < g.NodeCount; vertexTwo++)
+                    for (int vertexTwo = vertexOne + 1; vertexTwo < G.NodeCount; vertexTwo++)
                     {
                         sat[clauseIndex++] = new Literal[2]
                         {
@@ -89,20 +89,20 @@ namespace npc_visualizer
                 }
 
                 //at least one vertex
-                sat[clauseIndex] = new Literal[g.NodeCount];
-                for (int vertex = 0; vertex < g.NodeCount; vertex++)
+                sat[clauseIndex] = new Literal[G.NodeCount];
+                for (int vertex = 0; vertex < G.NodeCount; vertex++)
                 {
                     sat[clauseIndex][vertex] = new Literal(indexToSatVar[vertex, index], true);
                 }
                 clauseIndex++;
             }
 
-            for (int vertex = 0; vertex < g.NodeCount; vertex++)
+            for (int vertex = 0; vertex < G.NodeCount; vertex++)
             {
                 //at most one index
-                for (int i = 1; i < g.NodeCount + 1; i++)
+                for (int i = 1; i < G.NodeCount + 1; i++)
                 {
-                    for (int j = i + 1; j < g.NodeCount + 1; j++)
+                    for (int j = i + 1; j < G.NodeCount + 1; j++)
                     {
                         sat[clauseIndex++] = new Literal[2]
                         {
@@ -113,8 +113,8 @@ namespace npc_visualizer
                 }
 
                 //at least one index
-                sat[clauseIndex] = new Literal[g.NodeCount];
-                for (int i = 0; i < g.NodeCount; i++)
+                sat[clauseIndex] = new Literal[G.NodeCount];
+                for (int i = 0; i < G.NodeCount; i++)
                 {
                     sat[clauseIndex][i] = new Literal(indexToSatVar[vertex, i + 1], true);
                 }
@@ -122,11 +122,11 @@ namespace npc_visualizer
             }
 
             //In the third part it is verified that edges between the i-th and (i + 1)-th vertex exist for all 1 <= i < |V|
-            for (int index = 1; index < g.NodeCount; index++)
+            for (int index = 1; index < G.NodeCount; index++)
             {
-                for (int vertex = 0; vertex < g.NodeCount; vertex++)
+                for (int vertex = 0; vertex < G.NodeCount; vertex++)
                 {
-                    int[] adjacentNodes = GraphUtilities.AdjacentNodes(g.FindNode(vertex.ToString()), g);
+                    int[] adjacentNodes = GraphUtilities.AdjacentNodes(G.FindNode(vertex.ToString()), G);
                     sat[clauseIndex] = new Literal[adjacentNodes.Length + 1];
                     sat[clauseIndex][0] = new Literal(indexToSatVar[vertex, index], false);
                     for (int adjNodeIndex = 0;  adjNodeIndex < adjacentNodes.Length; adjNodeIndex++)
@@ -138,25 +138,25 @@ namespace npc_visualizer
             }
 
             //In the fourth part it is verified that the first and the last vertex are connected
-            var missingEdges = GraphUtilities.FindMissingEdges(g);
+            var missingEdges = GraphUtilities.FindMissingEdges(G);
             for(int missEdge = 0; missEdge < missingEdges.Length; missEdge++)
             {
                 sat[clauseIndex++] = new Literal[]
                 {
                 new Literal(indexToSatVar[missingEdges[missEdge].Item1, 1], false),
-                new Literal(indexToSatVar[missingEdges[missEdge].Item2, g.NodeCount], false)
+                new Literal(indexToSatVar[missingEdges[missEdge].Item2, G.NodeCount], false)
                 };
 
                 sat[clauseIndex++] = new Literal[]
                 {
                 new Literal(indexToSatVar[missingEdges[missEdge].Item2, 1], false),
-                new Literal(indexToSatVar[missingEdges[missEdge].Item1, g.NodeCount], false)
+                new Literal(indexToSatVar[missingEdges[missEdge].Item1, G.NodeCount], false)
                 };
             }
         }
         public override void DrawSolution()
         {
-            if(solution.Length != g.NodeCount || solution.Length < 2)
+            if(solution.Length != G.NodeCount || solution.Length < 2)
             {
                 return;
             }
@@ -178,38 +178,38 @@ namespace npc_visualizer
                 }
 
                 string edgeId = $"{first}_{second}";
-                Microsoft.Msagl.Drawing.Edge edge = GraphUtilities.EdgeById(g, edgeId);
+                Microsoft.Msagl.Drawing.Edge edge = GraphUtilities.EdgeById(G, edgeId);
                 edge.Attr.ArrowheadAtSource = ArrowStyle.Diamond;
                 edge.Attr.ArrowheadAtTarget = ArrowStyle.Diamond;
                 edge.Attr.Color = Color.Red;
             }
 
-            Microsoft.Msagl.Drawing.Edge lastEdge = GraphUtilities.EdgeById(g, $"{solution[solution.Length - 1]}_{solution[0]}");
+            Microsoft.Msagl.Drawing.Edge lastEdge = GraphUtilities.EdgeById(G, $"{solution[solution.Length - 1]}_{solution[0]}");
             lastEdge.Attr.ArrowheadAtSource = ArrowStyle.Diamond;
             lastEdge.Attr.ArrowheadAtTarget = ArrowStyle.Diamond;
             lastEdge.Attr.Color = Color.Red;
         }
-        public override Tuple<Graph, int> ToClique()
+        public override GraphProblem ToClique()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToColorability()
+        public override GraphProblem ToColorability()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToDominatingSet()
+        public override GraphProblem ToDominatingSet()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToHamilCycle()
+        public override GraphProblem ToHamilCycle()
         {
-            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
+            return new HamilCycle(GraphUtilities.CopyGraph(G), Param);
         }
-        public override Tuple<Graph, int> ToIndepSet()
+        public override GraphProblem ToIndepSet()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToVertexCover()
+        public override GraphProblem ToVertexCover()
         {
             throw new NotImplementedException();
         }

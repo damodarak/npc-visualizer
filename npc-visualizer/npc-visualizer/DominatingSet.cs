@@ -10,15 +10,15 @@ namespace npc_visualizer
     {
         public DominatingSet(Graph g, int param)
         {
-            this.g = g;
-            this.param = param;
+            this.G = g;
+            this.Param = param;
         }
         public override Literal[][] ToSat()
         {
-            satVarToVertex = new int[param * g.NodeCount];
-            indexToSatVar = new int[g.NodeCount, param + 1];
+            satVarToVertex = new int[Param * G.NodeCount];
+            indexToSatVar = new int[G.NodeCount, Param + 1];
 
-            GraphUtilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
+            GraphUtilities.CreateMapping(satVarToVertex, indexToSatVar, G.NodeCount, Param);
             ClauseCount();
 
             sat = new Literal[clauseCount][];
@@ -29,10 +29,10 @@ namespace npc_visualizer
         public override int[] Solve()
         {
             ToSat();
-            int varLim = g.NodeCount * param;
+            int varLim = G.NodeCount * Param;
             IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
-            solution =  GraphUtilities.SatSolutionToVertices(solutions, param, satVarToVertex);
+            solution =  GraphUtilities.SatSolutionToVertices(solutions, Param, satVarToVertex);
 
             return solution;
         }
@@ -42,11 +42,11 @@ namespace npc_visualizer
             int clauseIndex = 0;
 
             //at most K vertices are chosen
-            for (int i = 1; i < param + 1; i++)
+            for (int i = 1; i < Param + 1; i++)
             {
-                for (int vertexNum1 = 0; vertexNum1 < g.NodeCount; vertexNum1++)
+                for (int vertexNum1 = 0; vertexNum1 < G.NodeCount; vertexNum1++)
                 {
-                    for (int vertexNum2 = vertexNum1 + 1; vertexNum2 < g.NodeCount; vertexNum2++)
+                    for (int vertexNum2 = vertexNum1 + 1; vertexNum2 < G.NodeCount; vertexNum2++)
                     {
                         sat[clauseIndex++] = new Literal[2]
                         {
@@ -58,13 +58,13 @@ namespace npc_visualizer
             }
 
             //the chosen vertex-set is a dominating set
-            foreach (Node node in g.Nodes)
+            foreach (Node node in G.Nodes)
             {
-                int[] adjacentNodes = GraphUtilities.AdjacentNodes(node, g);
-                sat[clauseIndex] = new Literal[(adjacentNodes.Length + 1) * param];
+                int[] adjacentNodes = GraphUtilities.AdjacentNodes(node, G);
+                sat[clauseIndex] = new Literal[(adjacentNodes.Length + 1) * Param];
                 int literal = 0;
                 
-                for (int i = 1; i < param + 1; i++)
+                for (int i = 1; i < Param + 1; i++)
                 {
                     sat[clauseIndex][literal++] = new Literal(indexToSatVar[int.Parse(node.Id), i], true);
                     for (int neighbour = 0; neighbour < adjacentNodes.Length; neighbour++)
@@ -77,34 +77,34 @@ namespace npc_visualizer
         }
         void ClauseCount()
         {
-            int nodeCount = g.NodeCount;
+            int nodeCount = G.NodeCount;
             int seriesSum = (nodeCount - 1) * nodeCount / 2;
 
-            clauseCount =  (param * seriesSum) + nodeCount;
+            clauseCount =  (Param * seriesSum) + nodeCount;
         }
-        public override Tuple<Graph, int> ToClique()
+        public override GraphProblem ToClique()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToColorability()
+        public override GraphProblem ToColorability()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToDominatingSet()
+        public override GraphProblem ToDominatingSet()
         {
-            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
+            return new DominatingSet(GraphUtilities.CopyGraph(G), Param);
         }
-        public override Tuple<Graph, int> ToHamilCycle()
+        public override GraphProblem ToHamilCycle()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToIndepSet()
+        public override GraphProblem ToIndepSet()
         {
             ToSat();
             _3Sat reduction3Sat = new _3Sat(this.sat);
             return reduction3Sat.ToIndepSet();
         }
-        public override Tuple<Graph, int> ToVertexCover()
+        public override GraphProblem ToVertexCover()
         {
             throw new NotImplementedException();
         }

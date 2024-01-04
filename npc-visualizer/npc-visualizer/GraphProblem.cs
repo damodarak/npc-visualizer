@@ -7,21 +7,21 @@ namespace npc_visualizer
 {
     abstract class GraphProblem : IReducible
     {
-        protected Graph g;
+        public Graph G {get; protected set;}
         protected int[] solution;
         protected Literal[][] sat;
-        protected int param;
+        public int Param { get; protected set;}
         protected int clauseCount;
         protected int[] satVarToVertex;
         protected int[,] indexToSatVar; // [vertex, param]
 
         public abstract Literal[][] ToSat();
-        public abstract Tuple<Graph, int> ToClique();
-        public abstract Tuple<Graph, int> ToColorability();
-        public abstract Tuple<Graph, int> ToDominatingSet();
-        public abstract Tuple<Graph, int> ToIndepSet();
-        public abstract Tuple<Graph, int> ToVertexCover();
-        public abstract Tuple<Graph, int> ToHamilCycle();
+        public abstract GraphProblem ToClique();
+        public abstract GraphProblem ToColorability();
+        public abstract GraphProblem ToDominatingSet();
+        public abstract GraphProblem ToIndepSet();
+        public abstract GraphProblem ToVertexCover();
+        public abstract GraphProblem ToHamilCycle();
         public abstract int[] Solve();
         public virtual void DrawSolution()
         {
@@ -29,7 +29,7 @@ namespace npc_visualizer
             {
                 if (solution[i] != -1)
                 {
-                    g.FindNode(solution[i].ToString()).Attr.FillColor = Color.Purple;
+                    G.FindNode(solution[i].ToString()).Attr.FillColor = Color.Purple;
                 }
             }
         }

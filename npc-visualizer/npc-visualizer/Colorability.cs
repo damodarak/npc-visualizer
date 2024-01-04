@@ -10,12 +10,12 @@ namespace npc_visualizer
     {
         public Colorability(Graph g, int param)
         {
-            this.g = g;
-            this.param = param;
+            this.G = g;
+            this.Param = param;
         }
         public override Literal[][] ToSat()
         {
-            indexToSatVar = new int[g.NodeCount, param + 1];
+            indexToSatVar = new int[G.NodeCount, Param + 1];
 
             CreateMapping();
             ClauseCount();
@@ -28,17 +28,17 @@ namespace npc_visualizer
         public override int[] Solve()
         {
             ToSat();
-            int varLim = g.NodeCount * param;
+            int varLim = G.NodeCount * Param;
             IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
             foreach (SatSolution solution in solutions)
             {
                 //if inside, then there is a solution
                 IEnumerable<int> positive = solution.Pos;
-                int[] coloring = new int[g.NodeCount];
+                int[] coloring = new int[G.NodeCount];
                 foreach (int pos in positive)
                 {
-                    coloring[pos % g.NodeCount] = pos / g.NodeCount;
+                    coloring[pos % G.NodeCount] = pos / G.NodeCount;
                 }
                 this.solution = coloring;
                 return coloring;
@@ -49,8 +49,8 @@ namespace npc_visualizer
         }
         void CreateMapping()
         {
-            int nodeCount = g.NodeCount;
-            int colors = param;
+            int nodeCount = G.NodeCount;
+            int colors = Param;
             int satVar = 0;
 
             for (int i = 1; i < colors + 1; i++)
@@ -66,12 +66,12 @@ namespace npc_visualizer
             int clauseIndex = 0;
 
             //the first part selects one color for each vertex
-            for (int vertex = 0; vertex < g.NodeCount; vertex++)
+            for (int vertex = 0; vertex < G.NodeCount; vertex++)
             {
                 //at most one color
-                for (int i = 1; i < param + 1; i++)
+                for (int i = 1; i < Param + 1; i++)
                 {
-                    for (int j = i + 1; j < param + 1; j++)
+                    for (int j = i + 1; j < Param + 1; j++)
                     {
                         sat[clauseIndex++] = new Literal[2]
                         {
@@ -82,8 +82,8 @@ namespace npc_visualizer
                 }
 
                 //at least one color
-                sat[clauseIndex] = new Literal[param];
-                for (int i = 0; i < param; i++)
+                sat[clauseIndex] = new Literal[Param];
+                for (int i = 0; i < Param; i++)
                 {
                     sat[clauseIndex][i] = new Literal(indexToSatVar[vertex, i + 1], true);
                 }
@@ -91,9 +91,9 @@ namespace npc_visualizer
             }
 
             //the second part verifies that no conict-edge exists
-            foreach (Edge edge in g.Edges)
+            foreach (Edge edge in G.Edges)
             {
-                for (int i = 1; i < param + 1; i++)
+                for (int i = 1; i < Param + 1; i++)
                 {
                     sat[clauseIndex++] = new Literal[2]
                     {
@@ -105,9 +105,9 @@ namespace npc_visualizer
         }
         void ClauseCount()
         {
-            int seriesSum = param * (param - 1) / 2;
+            int seriesSum = Param * (Param - 1) / 2;
 
-            clauseCount = (g.NodeCount * (seriesSum + 1)) + (g.EdgeCount * param);
+            clauseCount = (G.NodeCount * (seriesSum + 1)) + (G.EdgeCount * Param);
         }
         public override void DrawSolution()
         {
@@ -120,30 +120,30 @@ namespace npc_visualizer
 
             for (int i = 0; i < solution.Length; i++)
             {
-                g.FindNode(i.ToString()).Attr.FillColor = colors[solution[i]];
+                G.FindNode(i.ToString()).Attr.FillColor = colors[solution[i]];
             }
         }
-        public override Tuple<Graph, int> ToClique()
+        public override GraphProblem ToClique()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToColorability()
+        public override GraphProblem ToColorability()
         {
-            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
+            return new Colorability(GraphUtilities.CopyGraph(G), Param);
         }
-        public override Tuple<Graph, int> ToDominatingSet()
-        {
-            throw new NotImplementedException();
-        }
-        public override Tuple<Graph, int> ToHamilCycle()
+        public override GraphProblem ToDominatingSet()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToIndepSet()
+        public override GraphProblem ToHamilCycle()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToVertexCover()
+        public override GraphProblem ToIndepSet()
+        {
+            throw new NotImplementedException();
+        }
+        public override GraphProblem ToVertexCover()
         {
             throw new NotImplementedException();
         }

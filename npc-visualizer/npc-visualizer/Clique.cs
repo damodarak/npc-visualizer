@@ -10,16 +10,16 @@ namespace npc_visualizer
     {
         public Clique(Graph g, int param) 
         {
-            this.g = g;
-            this.param = param;
+            this.G = g;
+            this.Param = param;
         }
 
         public override Literal[][] ToSat()
         {
-            satVarToVertex = new int[param * g.NodeCount];
-            indexToSatVar = new int[g.NodeCount, param + 1];
+            satVarToVertex = new int[Param * G.NodeCount];
+            indexToSatVar = new int[G.NodeCount, Param + 1];
 
-            GraphUtilities.CreateMapping(satVarToVertex, indexToSatVar, g.NodeCount, param);
+            GraphUtilities.CreateMapping(satVarToVertex, indexToSatVar, G.NodeCount, Param);
             ClauseCount();
 
             sat = new Literal[clauseCount][];
@@ -29,45 +29,45 @@ namespace npc_visualizer
         }
         public override int[] Solve()
         {
-            if (param == 1)
+            if (Param == 1)
             {
                 solution = new int[] { 0 };
                 return solution;
             }
 
             ToSat();
-            int varLim = g.NodeCount * param;
+            int varLim = G.NodeCount * Param;
             IEnumerable<SatSolution> satSolutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
-            solution = GraphUtilities.SatSolutionToVertices(satSolutions, param, satVarToVertex);
+            solution = GraphUtilities.SatSolutionToVertices(satSolutions, Param, satVarToVertex);
 
             return solution;
         }
 
         void ClauseCount()
         {
-            int nodeCount = g.NodeCount;
-            int edgeCount = g.EdgeCount;
+            int nodeCount = G.NodeCount;
+            int edgeCount = G.EdgeCount;
 
-            int seriesSumClique = ((param - 1) * param) / 2;
+            int seriesSumClique = ((Param - 1) * Param) / 2;
             int seriesSumNodes = ((nodeCount - 1) * nodeCount) / 2;
             int maxEdges = (nodeCount * (nodeCount - 1)) / 2;
             int missingEdges = maxEdges - edgeCount;
 
-            clauseCount =  (seriesSumClique * nodeCount) + (seriesSumClique * missingEdges * 2) + param + (param * seriesSumNodes);
+            clauseCount =  (seriesSumClique * nodeCount) + (seriesSumClique * missingEdges * 2) + Param + (Param * seriesSumNodes);
         }
 
         void DefineClauses()
         {
             int clauseIndex = 0;
-            int nodeCount = g.NodeCount;
+            int nodeCount = G.NodeCount;
 
             //ith and jth vertices in one clique are different
             for (int vertex = 0; vertex < nodeCount; vertex++)
             {
-                for (int i = 1; i < param + 1; i++)
+                for (int i = 1; i < Param + 1; i++)
                 {
-                    for (int j = i + 1; j < param + 1; j++)
+                    for (int j = i + 1; j < Param + 1; j++)
                     {
                         sat[clauseIndex++] = new Literal[]
                         {
@@ -79,12 +79,12 @@ namespace npc_visualizer
             }
 
             //Any two vertices in the clique are connected
-            Tuple<int, int>[] missingEdges = GraphUtilities.FindMissingEdges(g);
+            Tuple<int, int>[] missingEdges = GraphUtilities.FindMissingEdges(G);
             for (int missEdge = 0; missEdge < missingEdges.Length; missEdge++)
             {
-                for (int i = 1; i < param + 1; i++)
+                for (int i = 1; i < Param + 1; i++)
                 {
-                    for (int j = i + 1; j < param + 1; j++)
+                    for (int j = i + 1; j < Param + 1; j++)
                     {
                         sat[clauseIndex++] = new Literal[]
                         {
@@ -102,10 +102,10 @@ namespace npc_visualizer
             }
 
             //There is an ith vertex
-            for (int i = 1; i < param + 1; i++)
+            for (int i = 1; i < Param + 1; i++)
             {
-                sat[clauseIndex] = new Literal[g.NodeCount];
-                for (int vertex = 0; vertex < g.NodeCount; vertex++)
+                sat[clauseIndex] = new Literal[G.NodeCount];
+                for (int vertex = 0; vertex < G.NodeCount; vertex++)
                 {
                     sat[clauseIndex][vertex] = new Literal(indexToSatVar[vertex, i], true);
                 }
@@ -114,11 +114,11 @@ namespace npc_visualizer
             }
 
             //there is only one ith vertex in the clique
-            for (int i = 1; i < param + 1; i++)
+            for (int i = 1; i < Param + 1; i++)
             {
-                for (int nodeNum1 = 0; nodeNum1 < g.NodeCount; nodeNum1++)
+                for (int nodeNum1 = 0; nodeNum1 < G.NodeCount; nodeNum1++)
                 {
-                    for (int nodeNum2 = nodeNum1 + 1; nodeNum2 < g.NodeCount; nodeNum2++)
+                    for (int nodeNum2 = nodeNum1 + 1; nodeNum2 < G.NodeCount; nodeNum2++)
                     {
                         sat[clauseIndex++] = new Literal[]
                         {
@@ -129,33 +129,33 @@ namespace npc_visualizer
                 }
             }
         }
-        public override Tuple<Graph, int> ToClique()
+        public override GraphProblem ToClique()
         {
-            return new Tuple<Graph, int>(GraphUtilities.CopyGraph(g), param);
+            return new Clique(GraphUtilities.CopyGraph(G), Param);
         }
-        public override Tuple<Graph, int> ToColorability()
+        public override GraphProblem ToColorability()
         {
             ToSat();
             _3Sat reduction3Sat = new _3Sat(this.sat);
             return reduction3Sat.ToColorability();
         }
-        public override Tuple<Graph, int> ToDominatingSet()
+        public override GraphProblem ToDominatingSet()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToHamilCycle()
+        public override GraphProblem ToHamilCycle()
         {
             throw new NotImplementedException();
         }
-        public override Tuple<Graph, int> ToIndepSet()
+        public override GraphProblem ToIndepSet()
         {
-            Graph flippedGraph = GraphUtilities.FlipEdges(g);
-            return new Tuple<Graph, int>(flippedGraph, param);
+            Graph flippedGraph = GraphUtilities.FlipEdges(G);
+            return new IndepSet(flippedGraph, Param);
         }
-        public override Tuple<Graph, int> ToVertexCover()
+        public override GraphProblem ToVertexCover()
         {
-            Graph flippedGraph = GraphUtilities.FlipEdges(g);
-            return new Tuple<Graph, int>(flippedGraph, g.NodeCount - param);
+            Graph flippedGraph = GraphUtilities.FlipEdges(G);
+            return new VertexCover(flippedGraph, G.NodeCount - Param);
         }
     }   
 }
