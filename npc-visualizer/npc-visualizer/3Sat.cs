@@ -133,7 +133,7 @@ namespace npc_visualizer
             {
                 for (int i = 0; i < clause.Length; i++)
                 {
-                    literalToDictKeys[i] = (clause[i].Sense ? 1 : -1) * clause[i].Var + 1;
+                    literalToDictKeys[i] = (clause[i].Sense ? 1 : -1) * (clause[i].Var + 1);
                 }
 
                 if (clause.Length == 1 && GraphUtilities.EdgeById(g, falseNode.Id + "_" + literalToNode[literalToDictKeys[0]].Id) == null)

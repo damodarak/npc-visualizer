@@ -135,7 +135,9 @@ namespace npc_visualizer
         }
         public override Tuple<Graph, int> ToColorability()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToColorability();
         }
         public override Tuple<Graph, int> ToDominatingSet()
         {
