@@ -44,15 +44,9 @@ namespace npc_visualizer
             g.Directed = false;
 
             //create the graph content 
-            Edge e = g.AddEdge("0", "1");
-            e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-            e.Attr.Id = "0_1";
-            e = g.AddEdge("1", "2");   
-            e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-            e.Attr.Id = "1_2";
-            e = g.AddEdge("0", "2");
-            e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-            e.Attr.Id = "0_2";
+            GraphUtilities.AddEdge(g, "0", "1");
+            GraphUtilities.AddEdge(g, "0", "2");
+            GraphUtilities.AddEdge(g, "1", "2");
            
             g.FindNode("0").Attr.Shape = Shape.Circle;
             g.FindNode("1").Attr.Shape = Shape.Circle;
@@ -240,9 +234,7 @@ namespace npc_visualizer
             {
                 for (int j = i + 1; j < param; j++)
                 {
-                    Edge ed = g.AddEdge(i.ToString(), j.ToString());
-                    ed.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                    ed.Attr.Id = i.ToString() + "_" + j.ToString();
+                    GraphUtilities.AddEdge(g, i.ToString(), j.ToString());
                 }
             }
 
@@ -296,9 +288,7 @@ namespace npc_visualizer
                         dnodeLabel = temp;
                     }
 
-                    Edge newEdge = g.AddEdge(firstNodeClicked, dnodeLabel);
-                    newEdge.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                    newEdge.Attr.Id = firstNodeClicked + "_" + dnodeLabel;
+                    GraphUtilities.AddEdge(g, firstNodeClicked, dnodeLabel);
 
                     GraphUtilities.ClearVertexColorAndEdgeStyle(g);
                     viewer.Graph = g;

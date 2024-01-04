@@ -122,13 +122,8 @@ namespace npc_visualizer
             foreach (Edge edge in g.Edges)
             {
                 int newNode = reduction.NodeCount;
-                Edge e = reduction.AddEdge(edge.SourceNode.Id, (newNode).ToString());
-                e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                e.Attr.Id = edge.SourceNode.Id + "_" + newNode.ToString();
-
-                e = reduction.AddEdge(edge.TargetNode.Id, (newNode).ToString());
-                e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                e.Attr.Id = edge.TargetNode.Id + "_" + newNode.ToString();
+                GraphUtilities.AddEdge(reduction, edge.SourceNode.Id, newNode.ToString());
+                GraphUtilities.AddEdge(reduction, edge.TargetNode.Id, newNode.ToString());
             }
 
             return new Tuple<Graph, int>(reduction, param);

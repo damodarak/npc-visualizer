@@ -9,7 +9,7 @@ using Microsoft.SolverFoundation.Solvers;
 
 namespace npc_visualizer
 {
-    static class GraphUtilities
+    public static class GraphUtilities
     {
         public static void ClearVertexColorAndEdgeStyle(Graph g)
         {
@@ -57,25 +57,26 @@ namespace npc_visualizer
 
                 if (int.Parse(edge.Target) < nodeNum)
                 {
-                    Edge e = new_g.AddEdge(edge.SourceNode.Id, edge.TargetNode.Id);
-                    e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                    e.Attr.Id = edge.SourceNode.Id + "_" + edge.TargetNode.Id;
+                    AddEdge(new_g, edge.SourceNode.Id, edge.TargetNode.Id);
                 }
                 else if (int.Parse(edge.Source) < nodeNum && int.Parse(edge.Target) > nodeNum)
                 {
-                    Edge e = new_g.AddEdge(edge.SourceNode.Id, (int.Parse(edge.TargetNode.Id) - 1).ToString());
-                    e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                    e.Attr.Id = edge.SourceNode.Id + "_" + (int.Parse(edge.TargetNode.Id) - 1).ToString();
+                    AddEdge(new_g, edge.SourceNode.Id, (int.Parse(edge.TargetNode.Id) - 1).ToString());
                 }
                 else
                 {
-                    Edge e = new_g.AddEdge((int.Parse(edge.SourceNode.Id) - 1).ToString(), (int.Parse(edge.TargetNode.Id) - 1).ToString());
-                    e.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                    e.Attr.Id = (int.Parse(edge.SourceNode.Id) - 1).ToString() + "_" + (int.Parse(edge.TargetNode.Id) - 1).ToString();
+                    AddEdge(new_g, (int.Parse(edge.SourceNode.Id) - 1).ToString(), (int.Parse(edge.TargetNode.Id) - 1).ToString());
                 }
             }
 
             g = new_g;
+        }
+
+        public static void AddEdge(Graph g, string source, string target)
+        {
+            Edge ed = g.AddEdge(source, target);
+            ed.Attr.ArrowheadAtTarget = ArrowStyle.None;
+            ed.Attr.Id = source + "_" + target;
         }
 
         public static Graph CopyGraph(Graph g)
@@ -144,12 +145,9 @@ namespace npc_visualizer
             }
 
             Tuple<int, int>[] missingEdges = FindMissingEdges(g);
-            Edge newEdge;
             for (int i = 0; i < missingEdges.Length; i++)
             {
-                newEdge = flippedGraph.AddEdge(missingEdges[i].Item1.ToString(), missingEdges[i].Item2.ToString());
-                newEdge.Attr.Id = missingEdges[i].Item1.ToString() + "_" + missingEdges[i].Item2.ToString();
-                newEdge.Attr.ArrowheadAtTarget = ArrowStyle.None;
+                AddEdge(flippedGraph, missingEdges[i].Item1.ToString(), missingEdges[i].Item2.ToString());
             }
 
             return flippedGraph;

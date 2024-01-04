@@ -94,7 +94,19 @@ namespace npc_visualizer
 
         public Tuple<Graph, int> ToColorability()
         {
-            throw new NotImplementedException();
+            const int param = 3;
+            Graph g = new Graph();
+
+            // Create Truth Gadget
+            g.AddNode("0"); // Truth Node
+            g.AddNode("1"); // False Node
+            g.AddNode("2"); // Other Node
+
+
+
+
+            return null;
+            //return new Tuple<Graph, int>(g, param);
         }
 
         public Tuple<Graph, int> ToDominatingSet()
@@ -128,9 +140,7 @@ namespace npc_visualizer
                 {
                     for (int j = i + 1; j < nodesFromClause.Length; j++)
                     {
-                        Edge ed = g.AddEdge(nodesFromClause[i].Id.ToString(), nodesFromClause[j].Id.ToString());
-                        ed.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                        ed.Attr.Id = nodesFromClause[i].Id + "_" + nodesFromClause[i].Id;
+                        GraphUtilities.AddEdge(g, nodesFromClause[i].Id.ToString(), nodesFromClause[j].Id.ToString());
                     }
                 }
 
@@ -146,9 +156,7 @@ namespace npc_visualizer
                         List<Node> nodes = mapping[negatednLitaralDictKey];
                         foreach (Node node in nodes)
                         {
-                            Edge ed = g.AddEdge(node.Id, nodesFromClause[i].Id);
-                            ed.Attr.ArrowheadAtTarget = ArrowStyle.None;
-                            ed.Attr.Id = node.Id + "_" + nodesFromClause[i].Id;
+                            GraphUtilities.AddEdge(g, node.Id, nodesFromClause[i].Id);
                         }
                     }
                 }
