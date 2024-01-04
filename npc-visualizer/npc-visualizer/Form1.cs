@@ -365,7 +365,7 @@ namespace npc_visualizer
             map.AddEdge("Vertex Cover", "Independent Set");
 
             map.AddEdge("3-Sat", "Independent Set");
-            map.AddEdge("3-Sat", "Coloring").Attr.Color = Color.Red;
+            map.AddEdge("3-Sat", "Coloring");
 
             viewerRight.Graph = map;
         }

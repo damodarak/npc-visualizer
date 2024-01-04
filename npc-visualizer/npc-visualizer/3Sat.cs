@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Msagl.Drawing;
 using Microsoft.SolverFoundation.Solvers;
-using System.Collections.Generic;
 
 namespace npc_visualizer
 {
@@ -96,17 +96,90 @@ namespace npc_visualizer
         {
             const int param = 3;
             Graph g = new Graph();
+            g.Directed = false;
 
             // Create Truth Gadget
-            g.AddNode("0"); // Truth Node
-            g.AddNode("1"); // False Node
-            g.AddNode("2"); // Other Node
+            Node truthNode = g.AddNode("0");
+            Node falseNode = g.AddNode("1");
+            Node otherNode = g.AddNode("2");
+            GraphUtilities.AddEdge(g, truthNode.Id, falseNode.Id);
+            GraphUtilities.AddEdge(g, truthNode.Id, otherNode.Id);
+            GraphUtilities.AddEdge(g, falseNode.Id, otherNode.Id);
 
+            // Create Variable Gadget for each Litetal in 3SAT formula
+            var literalToNode = new Dictionary<int, Node>();
+            foreach (Literal[] clause in _3sat)
+            {
+                foreach (Literal literal in clause)
+                {
+                    int litSense = literal.Sense ? 1 : -1;
+                    int litVar = literal.Var + 1; // So we can have both positive and negative 0
+                    int literalDictKey = litVar * litSense;
 
+                    if (!literalToNode.ContainsKey(literalDictKey))
+                    {
+                        literalToNode[literalDictKey] = g.AddNode(g.NodeCount.ToString());
+                        literalToNode[literalDictKey * -1] = g.AddNode(g.NodeCount.ToString()); // negated literal
+                        GraphUtilities.AddEdge(g, literalToNode[literalDictKey].Id, literalToNode[literalDictKey * -1].Id);
+                        GraphUtilities.AddEdge(g, otherNode.Id, literalToNode[literalDictKey].Id);
+                        GraphUtilities.AddEdge(g, otherNode.Id, literalToNode[literalDictKey * -1].Id);
+                    }
+                }
+            }
 
+            // Create Clause Gadget for each clause in 3SAT formula
+            int[] literalToDictKeys = new int[3]; // Each clause has maximum of 3 literals
+            foreach (Literal[] clause in _3sat)
+            {
+                for (int i = 0; i < clause.Length; i++)
+                {
+                    literalToDictKeys[i] = (clause[i].Sense ? 1 : -1) * clause[i].Var + 1;
+                }
 
-            return null;
-            //return new Tuple<Graph, int>(g, param);
+                if (clause.Length == 1 && GraphUtilities.EdgeById(g, falseNode.Id + "_" + literalToNode[literalToDictKeys[0]].Id) == null)
+                {
+                    GraphUtilities.AddEdge(g, falseNode.Id, literalToNode[literalToDictKeys[0]].Id); // We force this literal to be colored True
+                }
+                else if(clause.Length == 2)
+                {
+                    Node triangle1 = g.AddNode(g.NodeCount.ToString());
+                    Node triangle2 = g.AddNode(g.NodeCount.ToString());
+                    Node triangle3 = g.AddNode(g.NodeCount.ToString());
+
+                    GraphUtilities.AddEdge(g, triangle1.Id, triangle2.Id);
+                    GraphUtilities.AddEdge(g, triangle1.Id, triangle3.Id);
+                    GraphUtilities.AddEdge(g, triangle2.Id, triangle3.Id);
+
+                    GraphUtilities.AddEdge(g, literalToNode[literalToDictKeys[0]].Id, triangle1.Id);
+                    GraphUtilities.AddEdge(g, literalToNode[literalToDictKeys[1]].Id, triangle2.Id);
+
+                    GraphUtilities.AddEdge(g, triangle3.Id, falseNode.Id);
+                }
+                else // clause.Length == 3
+                {
+                    Node triangle1 = g.AddNode(g.NodeCount.ToString());
+                    Node triangle2 = g.AddNode(g.NodeCount.ToString());
+                    Node triangle3 = g.AddNode(g.NodeCount.ToString());
+                    Node connectedToTruthNode1 = g.AddNode(g.NodeCount.ToString());
+                    Node connectedToTruthNode2 = g.AddNode(g.NodeCount.ToString());
+
+                    GraphUtilities.AddEdge(g, triangle1.Id, triangle2.Id);
+                    GraphUtilities.AddEdge(g, triangle1.Id, triangle3.Id);
+                    GraphUtilities.AddEdge(g, triangle2.Id, triangle3.Id);
+
+                    GraphUtilities.AddEdge(g, literalToNode[literalToDictKeys[0]].Id, triangle1.Id);
+                    GraphUtilities.AddEdge(g, literalToNode[literalToDictKeys[1]].Id, triangle2.Id);
+
+                    GraphUtilities.AddEdge(g, triangle3.Id, connectedToTruthNode1.Id);
+                    GraphUtilities.AddEdge(g, literalToNode[literalToDictKeys[2]].Id, connectedToTruthNode2.Id);
+
+                    GraphUtilities.AddEdge(g, truthNode.Id, connectedToTruthNode1.Id);
+                    GraphUtilities.AddEdge(g, truthNode.Id, connectedToTruthNode2.Id);
+                    GraphUtilities.AddEdge(g, connectedToTruthNode1.Id, connectedToTruthNode2.Id);
+                }
+            }
+
+            return new Tuple<Graph, int>(g, param);
         }
 
         public Tuple<Graph, int> ToDominatingSet()
@@ -122,6 +195,7 @@ namespace npc_visualizer
         public Tuple<Graph, int> ToIndepSet()
         {
             Graph g = new Graph();
+            g.Directed = false;
             int param = _3sat.Length;
 
             Dictionary<int, List<Node>> mapping = new Dictionary<int, List<Node>>();
