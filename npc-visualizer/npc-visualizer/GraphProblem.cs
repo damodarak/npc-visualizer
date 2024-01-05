@@ -16,12 +16,12 @@ namespace npc_visualizer
         protected int[,] indexToSatVar; // [vertex, param]
 
         public abstract Literal[][] ToSat();
-        public abstract GraphProblem ToClique();
-        public abstract GraphProblem ToColorability();
-        public abstract GraphProblem ToDominatingSet();
-        public abstract GraphProblem ToIndepSet();
-        public abstract GraphProblem ToVertexCover();
-        public abstract GraphProblem ToHamilCycle();
+        public abstract Clique ToClique();
+        public abstract Colorability ToColorability();
+        public abstract DominatingSet ToDominatingSet();
+        public abstract IndepSet ToIndepSet();
+        public abstract VertexCover ToVertexCover();
+        public abstract HamilCycle ToHamilCycle();
         public abstract int[] Solve();
         public virtual void DrawSolution()
         {

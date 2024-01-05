@@ -26,33 +26,33 @@ namespace npc_visualizer
 
             return solution;
         }
-        public override GraphProblem ToClique()
+        public override Clique ToClique()
         {
             Graph flippedGraph = GraphUtilities.FlipEdges(G);
             return new Clique(flippedGraph, Param);
         }
 
-        public override GraphProblem ToColorability()
+        public override Colorability ToColorability()
         {
             throw new NotImplementedException();
         }
 
-        public override GraphProblem ToDominatingSet()
+        public override DominatingSet ToDominatingSet()
         {
             throw new NotImplementedException();
         }
 
-        public override GraphProblem ToHamilCycle()
+        public override HamilCycle ToHamilCycle()
         {
             throw new NotImplementedException();
         }
 
-        public override GraphProblem ToIndepSet()
+        public override IndepSet ToIndepSet()
         {
             return new IndepSet(GraphUtilities.CopyGraph(G), Param);
         }
 
-        public override GraphProblem ToVertexCover()
+        public override VertexCover ToVertexCover()
         {
             return new VertexCover(GraphUtilities.CopyGraph(G), G.NodeCount - Param);
         }

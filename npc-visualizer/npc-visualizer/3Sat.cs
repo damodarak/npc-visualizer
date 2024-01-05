@@ -87,12 +87,12 @@ namespace npc_visualizer
             throw new NotImplementedException();
         }
 
-        public GraphProblem ToClique()
+        public Clique ToClique()
         {
             throw new NotImplementedException();
         }
 
-        public GraphProblem ToColorability()
+        public Colorability ToColorability()
         {
             const int param = 3;
             Graph g = new Graph();
@@ -182,17 +182,17 @@ namespace npc_visualizer
             return new Colorability(g, param);
         }
 
-        public GraphProblem ToDominatingSet()
+        public DominatingSet ToDominatingSet()
         {
             throw new NotImplementedException();
         }
 
-        public GraphProblem ToHamilCycle()
+        public HamilCycle ToHamilCycle()
         {
             throw new NotImplementedException();
         }
 
-        public GraphProblem ToIndepSet()
+        public IndepSet ToIndepSet()
         {
             Graph g = new Graph();
             g.Directed = false;
@@ -261,7 +261,7 @@ namespace npc_visualizer
             return _3sat;
         }
 
-        public GraphProblem ToVertexCover()
+        public VertexCover ToVertexCover()
         {
             throw new NotImplementedException();
         }

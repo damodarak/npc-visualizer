@@ -129,30 +129,30 @@ namespace npc_visualizer
                 }
             }
         }
-        public override GraphProblem ToClique()
+        public override Clique ToClique()
         {
             return new Clique(GraphUtilities.CopyGraph(G), Param);
         }
-        public override GraphProblem ToColorability()
+        public override Colorability ToColorability()
         {
             ToSat();
             _3Sat reduction3Sat = new _3Sat(this.sat);
             return reduction3Sat.ToColorability();
         }
-        public override GraphProblem ToDominatingSet()
+        public override DominatingSet ToDominatingSet()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToHamilCycle()
+        public override HamilCycle ToHamilCycle()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToIndepSet()
+        public override IndepSet ToIndepSet()
         {
             Graph flippedGraph = GraphUtilities.FlipEdges(G);
             return new IndepSet(flippedGraph, Param);
         }
-        public override GraphProblem ToVertexCover()
+        public override VertexCover ToVertexCover()
         {
             Graph flippedGraph = GraphUtilities.FlipEdges(G);
             return new VertexCover(flippedGraph, G.NodeCount - Param);

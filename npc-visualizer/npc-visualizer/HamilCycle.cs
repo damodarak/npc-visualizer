@@ -189,27 +189,27 @@ namespace npc_visualizer
             lastEdge.Attr.ArrowheadAtTarget = ArrowStyle.Diamond;
             lastEdge.Attr.Color = Color.Red;
         }
-        public override GraphProblem ToClique()
+        public override Clique ToClique()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToColorability()
+        public override Colorability ToColorability()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToDominatingSet()
+        public override DominatingSet ToDominatingSet()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToHamilCycle()
+        public override HamilCycle ToHamilCycle()
         {
             return new HamilCycle(GraphUtilities.CopyGraph(G), Param);
         }
-        public override GraphProblem ToIndepSet()
+        public override IndepSet ToIndepSet()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToVertexCover()
+        public override VertexCover ToVertexCover()
         {
             throw new NotImplementedException();
         }

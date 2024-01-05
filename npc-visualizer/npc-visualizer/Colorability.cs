@@ -123,27 +123,27 @@ namespace npc_visualizer
                 G.FindNode(i.ToString()).Attr.FillColor = colors[solution[i]];
             }
         }
-        public override GraphProblem ToClique()
+        public override Clique ToClique()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToColorability()
+        public override Colorability ToColorability()
         {
             return new Colorability(GraphUtilities.CopyGraph(G), Param);
         }
-        public override GraphProblem ToDominatingSet()
+        public override DominatingSet ToDominatingSet()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToHamilCycle()
+        public override HamilCycle ToHamilCycle()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToIndepSet()
+        public override IndepSet ToIndepSet()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToVertexCover()
+        public override VertexCover ToVertexCover()
         {
             throw new NotImplementedException();
         }

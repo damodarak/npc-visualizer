@@ -82,29 +82,29 @@ namespace npc_visualizer
 
             clauseCount =  (Param * seriesSum) + nodeCount;
         }
-        public override GraphProblem ToClique()
+        public override Clique ToClique()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToColorability()
+        public override Colorability ToColorability()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToDominatingSet()
+        public override DominatingSet ToDominatingSet()
         {
             return new DominatingSet(GraphUtilities.CopyGraph(G), Param);
         }
-        public override GraphProblem ToHamilCycle()
+        public override HamilCycle ToHamilCycle()
         {
             throw new NotImplementedException();
         }
-        public override GraphProblem ToIndepSet()
+        public override IndepSet ToIndepSet()
         {
             ToSat();
             _3Sat reduction3Sat = new _3Sat(this.sat);
             return reduction3Sat.ToIndepSet();
         }
-        public override GraphProblem ToVertexCover()
+        public override VertexCover ToVertexCover()
         {
             throw new NotImplementedException();
         }
