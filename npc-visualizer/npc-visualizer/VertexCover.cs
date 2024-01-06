@@ -128,7 +128,92 @@ namespace npc_visualizer
 
         public override HamilCycle ToHamilCycle()
         {
-            throw new NotImplementedException();
+            Graph reduction = new Graph();
+            reduction.Directed = false;
+            const int param = -1; // Isn't relevant in this NP-Complete problem
+
+            // One of these figure equals zero then the condition equals zero
+            if (G.EdgeCount * G.NodeCount == 0)
+            {
+                return new HamilCycle(reduction, param);
+            }
+
+            //var indexToNodes = new Dictionary<int, Node>();
+            var inVertices = new List<Node>[G.NodeCount];
+            var outVertices = new List<Node>[G.NodeCount];
+
+            for (int i = 0; i < G.NodeCount; i++)
+            {
+                inVertices[i] = new List<Node>();
+                outVertices[i] = new List<Node>();
+            }
+
+            // Create square gadget for each edge in graph
+            foreach (Edge edge in G.Edges)
+            {
+                Node leftIn = reduction.AddNode(reduction.NodeCount.ToString());
+                Node left1 = reduction.AddNode(reduction.NodeCount.ToString());
+                Node left2 = reduction.AddNode(reduction.NodeCount.ToString());
+                Node left3 = reduction.AddNode(reduction.NodeCount.ToString());
+                Node left4 = reduction.AddNode(reduction.NodeCount.ToString());
+                Node leftOut = reduction.AddNode(reduction.NodeCount.ToString());
+
+                Node rightIn = reduction.AddNode(reduction.NodeCount.ToString());
+                Node right1 = reduction.AddNode(reduction.NodeCount.ToString());
+                Node right2 = reduction.AddNode(reduction.NodeCount.ToString());
+                Node right3 = reduction.AddNode(reduction.NodeCount.ToString());
+                Node right4 = reduction.AddNode(reduction.NodeCount.ToString());
+                Node rightOut = reduction.AddNode(reduction.NodeCount.ToString());
+
+                GraphUtilities.AddEdge(reduction, leftIn.Id, left1.Id);
+                GraphUtilities.AddEdge(reduction, left1.Id, left2.Id);
+                GraphUtilities.AddEdge(reduction, left2.Id, left3.Id);
+                GraphUtilities.AddEdge(reduction, left3.Id, left4.Id);
+                GraphUtilities.AddEdge(reduction, left4.Id, leftOut.Id);
+
+                GraphUtilities.AddEdge(reduction, rightIn.Id, right1.Id);
+                GraphUtilities.AddEdge(reduction, right1.Id, right2.Id);
+                GraphUtilities.AddEdge(reduction, right2.Id, right3.Id);
+                GraphUtilities.AddEdge(reduction, right3.Id, right4.Id);
+                GraphUtilities.AddEdge(reduction, right4.Id, rightOut.Id);
+
+                GraphUtilities.AddEdge(reduction, leftIn.Id, right2.Id);
+                GraphUtilities.AddEdge(reduction, left2.Id, rightIn.Id);
+                GraphUtilities.AddEdge(reduction, left3.Id, rightOut.Id);
+                GraphUtilities.AddEdge(reduction, leftOut.Id, right3.Id);
+
+                inVertices[int.Parse(edge.Source)].Add(leftIn);
+                inVertices[int.Parse(edge.Target)].Add(rightIn);
+                outVertices[int.Parse(edge.Source)].Add(leftOut);
+                outVertices[int.Parse(edge.Target)].Add(rightOut);
+            }
+
+            // Chain square gadgets
+            foreach (Node node in G.Nodes)
+            {
+                int edgeCount = GraphUtilities.CountEdges(node.Edges);
+
+                for (int i = 0; i < edgeCount - 1; i++)
+                {
+                    int index = int.Parse(node.Id);
+                    GraphUtilities.AddEdge(reduction, outVertices[index][i].Id, inVertices[index][i + 1].Id);
+                }
+            }
+
+            // Create Param * 'Selector Vertex' and connect them with entry and exit node of each chain
+            for (int i = 0; i < Param; i++)
+            {
+                Node selectorNode = reduction.AddNode(reduction.NodeCount.ToString());
+
+                for (int j = 0; j < G.NodeCount; j++)
+                {
+                    if (inVertices[j].Count == 0) continue;
+                    GraphUtilities.AddEdge(reduction, inVertices[j][0].Id, selectorNode.Id);
+                    GraphUtilities.AddEdge(reduction, outVertices[j][outVertices[j].Count - 1].Id, selectorNode.Id);
+                }
+            }
+
+            return new HamilCycle(reduction, param);
         }
 
         public override IndepSet ToIndepSet()

@@ -27,6 +27,18 @@ namespace npc_visualizer
             }
         }
 
+        public static int CountEdges(IEnumerable<Edge> edges)
+        {
+            int count = 0;
+
+            foreach (Edge e in edges)
+            {
+                count++;
+            }
+
+            return count;
+        }
+
         public static void RemoveNode(ref Graph g, string nodeId)
         {
             Graph new_g = new Graph();
@@ -74,6 +86,14 @@ namespace npc_visualizer
 
         public static void AddEdge(Graph g, string source, string target)
         {
+            // Edge is always made from Vertex with lower Id to Vertex with higher Id
+            if (int.Parse(source) > int.Parse(target))
+            {
+                string temp = source;
+                source = target;
+                target = temp;
+            }
+
             Edge ed = g.AddEdge(source, target);
             ed.Attr.ArrowheadAtTarget = ArrowStyle.None;
             ed.Attr.Id = source + "_" + target;
