@@ -148,7 +148,7 @@ namespace npc_visualizer
                 outVertices[i] = new List<Node>();
             }
 
-            // Create square gadget for each edge in graph
+            // Create gadget for each edge in graph
             foreach (Edge edge in G.Edges)
             {
                 Node leftIn = reduction.AddNode(reduction.NodeCount.ToString());

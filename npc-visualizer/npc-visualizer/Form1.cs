@@ -121,8 +121,6 @@ namespace npc_visualizer
                 default:
                     return;
             }
-            problem.Solve();
-            problem.DrawSolution();
 
             GraphProblem result;       
             switch (to)
@@ -148,8 +146,6 @@ namespace npc_visualizer
                 default:
                     return;
             }
-            result.Solve();
-            result.DrawSolution();
 
             Graph reduction = result.G;
             int secondParam = result.Param;
