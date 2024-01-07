@@ -22,9 +22,10 @@ namespace npc_visualizer
         {
             Graph flippedGraph = GraphUtilities.FlipEdges(G);
             Clique cliq = new Clique(flippedGraph, Param);
-            solution = cliq.Solve();
+            this.sat = cliq.ToSat();
+            this.solution = cliq.Solve();
 
-            return solution;
+            return this.solution;
         }
         public override Clique ToClique()
         {
@@ -34,17 +35,21 @@ namespace npc_visualizer
 
         public override Colorability ToColorability()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToColorability();
         }
 
         public override DominatingSet ToDominatingSet()
         {
-            throw new NotImplementedException();
+            VertexCover vertexCover = ToVertexCover();
+            return vertexCover.ToDominatingSet();
         }
 
         public override HamilCycle ToHamilCycle()
         {
-            throw new NotImplementedException();
+            VertexCover vertexCover = ToVertexCover();
+            return vertexCover.ToHamilCycle();
         }
 
         public override IndepSet ToIndepSet()

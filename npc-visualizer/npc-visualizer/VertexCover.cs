@@ -41,7 +41,7 @@ namespace npc_visualizer
         {
             int clauseIndex = 0;
 
-            //at most K vertices are chosen
+            // At most K vertices are chosen
             for (int i = 1; i < Param + 1; i++)
             {
                 for (int vertexNum1 = 0; vertexNum1 < G.NodeCount; vertexNum1++)
@@ -57,7 +57,7 @@ namespace npc_visualizer
                 }
             }
 
-            //the chosen vertex-set is a vertex cover indeed
+            // The chosen vertex-set is a vertex cover indeed
             foreach (Edge e in G.Edges)
             {
                 sat[clauseIndex] = new Literal[2 * Param];
@@ -88,7 +88,9 @@ namespace npc_visualizer
 
         public override Colorability ToColorability()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToColorability();
         }
 
         public override DominatingSet ToDominatingSet()

@@ -178,28 +178,34 @@ namespace npc_visualizer
                 }
 
                 string edgeId = $"{first}_{second}";
-                Microsoft.Msagl.Drawing.Edge edge = GraphUtilities.EdgeById(G, edgeId);
+                Edge edge = GraphUtilities.EdgeById(G, edgeId);
                 edge.Attr.ArrowheadAtSource = ArrowStyle.Diamond;
                 edge.Attr.ArrowheadAtTarget = ArrowStyle.Diamond;
                 edge.Attr.Color = Color.Red;
             }
 
-            Microsoft.Msagl.Drawing.Edge lastEdge = GraphUtilities.EdgeById(G, $"{solution[solution.Length - 1]}_{solution[0]}");
+            Edge lastEdge = GraphUtilities.EdgeById(G, $"{solution[solution.Length - 1]}_{solution[0]}");
             lastEdge.Attr.ArrowheadAtSource = ArrowStyle.Diamond;
             lastEdge.Attr.ArrowheadAtTarget = ArrowStyle.Diamond;
             lastEdge.Attr.Color = Color.Red;
         }
         public override Clique ToClique()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToClique();
         }
         public override Colorability ToColorability()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToColorability();
         }
         public override DominatingSet ToDominatingSet()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToDominatingSet();
         }
         public override HamilCycle ToHamilCycle()
         {
@@ -207,11 +213,15 @@ namespace npc_visualizer
         }
         public override IndepSet ToIndepSet()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToIndepSet();
         }
         public override VertexCover ToVertexCover()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToVertexCover();
         }
     }
 }

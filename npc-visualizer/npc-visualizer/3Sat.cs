@@ -81,15 +81,10 @@ namespace npc_visualizer
             return highest;
         }
 
-        public int[] Solve()
-        {
-            // Isn't used in this particular set of NP-Complete problems
-            throw new NotImplementedException();
-        }
-
         public Clique ToClique()
         {
-            throw new NotImplementedException();
+            IndepSet indepSet = ToIndepSet();
+            return indepSet.ToClique();
         }
 
         public Colorability ToColorability()
@@ -184,12 +179,14 @@ namespace npc_visualizer
 
         public DominatingSet ToDominatingSet()
         {
-            throw new NotImplementedException();
+            VertexCover vertexCover = ToVertexCover();
+            return vertexCover.ToDominatingSet();
         }
 
         public HamilCycle ToHamilCycle()
         {
-            throw new NotImplementedException();
+            VertexCover vertexCover = ToVertexCover();
+            return vertexCover.ToHamilCycle();
         }
 
         public IndepSet ToIndepSet()
@@ -263,7 +260,8 @@ namespace npc_visualizer
 
         public VertexCover ToVertexCover()
         {
-            throw new NotImplementedException();
+            IndepSet indepSet = ToIndepSet();
+            return new VertexCover(indepSet.G, indepSet.G.NodeCount - indepSet.Param);
         }
     }
 }

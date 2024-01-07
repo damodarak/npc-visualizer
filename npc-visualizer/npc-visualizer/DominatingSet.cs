@@ -84,11 +84,15 @@ namespace npc_visualizer
         }
         public override Clique ToClique()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToClique();
         }
         public override Colorability ToColorability()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToColorability();
         }
         public override DominatingSet ToDominatingSet()
         {
@@ -96,7 +100,9 @@ namespace npc_visualizer
         }
         public override HamilCycle ToHamilCycle()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToHamilCycle();
         }
         public override IndepSet ToIndepSet()
         {
@@ -106,7 +112,9 @@ namespace npc_visualizer
         }
         public override VertexCover ToVertexCover()
         {
-            throw new NotImplementedException();
+            ToSat();
+            _3Sat reduction3Sat = new _3Sat(this.sat);
+            return reduction3Sat.ToVertexCover();
         }
     }
 }

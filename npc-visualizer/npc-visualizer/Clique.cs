@@ -35,7 +35,10 @@ namespace npc_visualizer
                 return solution;
             }
 
-            ToSat();
+            if (this.sat == null)
+            {
+                ToSat();
+            }
             int varLim = G.NodeCount * Param;
             IEnumerable<SatSolution> satSolutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
@@ -141,11 +144,13 @@ namespace npc_visualizer
         }
         public override DominatingSet ToDominatingSet()
         {
-            throw new NotImplementedException();
+            VertexCover vertexCover = ToVertexCover();
+            return vertexCover.ToDominatingSet();
         }
         public override HamilCycle ToHamilCycle()
         {
-            throw new NotImplementedException();
+            VertexCover vertexCover = ToVertexCover();
+            return vertexCover.ToHamilCycle();
         }
         public override IndepSet ToIndepSet()
         {

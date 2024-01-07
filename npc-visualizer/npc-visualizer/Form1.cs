@@ -82,7 +82,7 @@ namespace npc_visualizer
 
             Graph dummy = new Graph("dummy");
             dummy.Directed = false;
-            dummy.AddNode("dummy").Attr.Shape = Shape.Circle;
+            dummy.AddNode("0").Attr.Shape = Shape.Circle;
 
             viewerRight.Graph = dummy;
 
@@ -96,8 +96,14 @@ namespace npc_visualizer
             int to = comboBox3.SelectedIndex;
             int param = (int)numericUpDown1.Value;
 
-            GraphProblem problem; // default value, so the compiler doesn't scream
+            if (param > g.NodeCount)
+            {
+                param = g.NodeCount;
+            }
+
+            GraphProblem problem;
             GraphUtilities.ClearVertexColorAndEdgeStyle(g);
+            cleanRightViewerAndInfoParams();
             switch (from)
             {
                 case 0:
@@ -167,6 +173,8 @@ namespace npc_visualizer
 
         private void button3_Click(object sender, EventArgs e)
         {
+            cleanRightViewerAndInfoParams();
+
             selectedEdge = null;
             firstNodeClicked = "";
 
@@ -177,6 +185,11 @@ namespace npc_visualizer
 
             int index = comboBox1.SelectedIndex;
             int param = (int)numericUpDown1.Value;
+
+            if (param > g.NodeCount)
+            {
+                param = g.NodeCount;
+            }
 
             GraphProblem problem;
             GraphUtilities.ClearVertexColorAndEdgeStyle(g);
@@ -210,8 +223,20 @@ namespace npc_visualizer
             viewer.Graph = g;
         }
 
+        void cleanRightViewerAndInfoParams()
+        {
+            label1.Text = "Param: -1";
+            label2.Text = "Param: -1";
+
+            Graph right = new Graph();
+            right.Directed = false;
+            viewerRight.Graph = right;
+        }
+
         void addCompleteGraph(int vertexCount)
         {
+            cleanRightViewerAndInfoParams();
+
             while (g.EdgeCount > 0)
             {
                 IEnumerable<Edge> edges = g.Edges;
@@ -297,6 +322,7 @@ namespace npc_visualizer
                     GraphUtilities.AddEdge(g, firstNodeClicked, dnodeLabel);
 
                     GraphUtilities.ClearVertexColorAndEdgeStyle(g);
+                    cleanRightViewerAndInfoParams();
                     viewer.Graph = g;
                     firstNodeClicked = "";
                     selectedEdge = null;
@@ -324,6 +350,7 @@ namespace npc_visualizer
                 firstNodeClicked = "";
                 g.AddNode(g.NodeCount.ToString()).Attr.Shape = Shape.Circle;
                 GraphUtilities.ClearVertexColorAndEdgeStyle(g);
+                cleanRightViewerAndInfoParams();
                 viewer.Graph = g;
                 return;
             }
@@ -338,11 +365,13 @@ namespace npc_visualizer
                 selectedEdge = null;
                 firstNodeClicked = "";
                 GraphUtilities.ClearVertexColorAndEdgeStyle(g);
+                cleanRightViewerAndInfoParams();
                 viewer.Graph = g;
             }
             else if (firstNodeClicked != "")
             {
                 GraphUtilities.RemoveNode(ref g, firstNodeClicked);
+                cleanRightViewerAndInfoParams();
                 selectedEdge = null;
                 firstNodeClicked = "";
                 viewer.Graph = g;
