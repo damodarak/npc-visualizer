@@ -44,8 +44,8 @@ namespace npc_visualizer
                 return coloring;
             }
 
-            this.solution = new int[] { };
-            return new int[] { };
+            this.solution = null;
+            return this.solution;
         }
         void CreateMapping()
         {
@@ -111,6 +111,11 @@ namespace npc_visualizer
         }
         public override void DrawSolution()
         {
+            if (solution == null)
+            {
+                return;
+            }
+
             Color[] colors = new Color[20]
             {
                 Color.Blue, Color.Brown, Color.BlueViolet, Color.DarkGreen, Color.Gold, Color.Indigo, Color.Lime,

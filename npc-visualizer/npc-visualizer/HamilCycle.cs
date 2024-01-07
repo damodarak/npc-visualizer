@@ -44,8 +44,8 @@ namespace npc_visualizer
                 return ordering;
             }
 
-            this.solution = new int[] { };
-            return new int[] { };
+            this.solution = null;
+            return this.solution;
         }
 
         void CreateMapping()
@@ -139,7 +139,7 @@ namespace npc_visualizer
 
             //In the fourth part it is verified that the first and the last vertex are connected
             var missingEdges = GraphUtilities.FindMissingEdges(G);
-            for(int missEdge = 0; missEdge < missingEdges.Length; missEdge++)
+            for (int missEdge = 0; missEdge < missingEdges.Length; missEdge++)
             {
                 sat[clauseIndex++] = new Literal[]
                 {
@@ -156,7 +156,7 @@ namespace npc_visualizer
         }
         public override void DrawSolution()
         {
-            if(solution.Length != G.NodeCount || solution.Length < 2)
+            if (solution == null || solution.Length != G.NodeCount || solution.Length < 2)
             {
                 return;
             }

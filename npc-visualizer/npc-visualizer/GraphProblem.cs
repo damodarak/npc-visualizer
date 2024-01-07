@@ -8,7 +8,8 @@ namespace npc_visualizer
     abstract class GraphProblem : IReducible
     {
         public Graph G {get; protected set;}
-        protected int[] solution;
+        public bool HasSolution { get { return solution != null; } }
+        protected int[] solution = null;
         protected Literal[][] sat;
         public int Param { get; protected set;}
         protected int clauseCount;
@@ -25,6 +26,11 @@ namespace npc_visualizer
         public abstract int[] Solve();
         public virtual void DrawSolution()
         {
+            if (solution == null)
+            {
+                return;
+            }
+
             for (int i = 0; i < solution.Length; i++)
             {
                 if (solution[i] != -1)

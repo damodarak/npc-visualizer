@@ -199,7 +199,7 @@ namespace npc_visualizer
         {
             foreach (SatSolution solution in solutions)
             {
-                //if inside, then there is a solution
+                // If inside, then there is a solution
                 IEnumerable<int> positive = solution.Pos;
                 int[] vertices = new int[solutionSize];
                 for (int i = 0; i < vertices.Length; i++)
@@ -221,7 +221,7 @@ namespace npc_visualizer
                 return vertices;
             }
 
-            return new int[] { };
+            return null;
         }
         public static int[] AdjacentNodes(Node node, Graph g)
         {
