@@ -99,6 +99,7 @@ namespace npc_visualizer
 
             // Remove singletons
             List<string> removeNodes = new List<string>();
+            int deletedNodes = 0;
             foreach (Node node in reduction.Nodes)
             {
                 bool hasEdges = false;
@@ -109,20 +110,22 @@ namespace npc_visualizer
 
                 if (!hasEdges)
                 {
-                    removeNodes.Add(node.Id);
+                    removeNodes.Add((int.Parse(node.Id) - deletedNodes++).ToString());
                 }
             }
 
             foreach (string node in removeNodes)
-            {
-                reduction.RemoveNode(reduction.FindNode(node));
+            { 
+                GraphUtilities.RemoveNode(ref reduction, node);
             }
 
-            foreach (Edge edge in G.Edges)
+            Edge[] edges = GraphUtilities.CopyEdges(reduction);
+
+            foreach (Edge edge in edges)
             {
-                int newNode = reduction.NodeCount;
-                GraphUtilities.AddEdge(reduction, edge.SourceNode.Id, newNode.ToString());
-                GraphUtilities.AddEdge(reduction, edge.TargetNode.Id, newNode.ToString());
+                string newNode = reduction.NodeCount.ToString();
+                GraphUtilities.AddEdge(reduction, edge.Source, newNode);
+                GraphUtilities.AddEdge(reduction, edge.Target, newNode);
             }
 
             return new DominatingSet(reduction, Param);

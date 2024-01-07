@@ -118,6 +118,18 @@ namespace npc_visualizer
             return copy;
         }
 
+        public static Edge[] CopyEdges(Graph g)
+        {
+            Edge[] edges = new Edge[g.EdgeCount];
+            int index = 0;
+            foreach (Edge edge in g.Edges)
+            {
+                edges[index++] = new Edge(edge.Source, "", edge.Target);
+            }
+
+            return edges;
+        }
+
         public static Edge EdgeById(Graph g, string id)
         {
             IEnumerable<Edge> edges = g.Edges;

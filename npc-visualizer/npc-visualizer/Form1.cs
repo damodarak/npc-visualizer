@@ -384,5 +384,14 @@ namespace npc_visualizer
             Form2 map = new Form2();
             map.Show();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (g.NodeCount > 20) return;
+
+            g = GraphUtilities.CopyGraph(viewerRight.Graph);
+            cleanRightViewerAndInfoParams();
+            viewer.Graph = g;
+        }
     }
 }
