@@ -15,6 +15,14 @@ namespace npc_visualizer
         }
         public override Literal[][] ToSat()
         {
+            if (this.G.NodeCount == 2)
+            {
+                sat = new Literal[2][];
+                sat[0] = new Literal[1] { new Literal(0, true) };
+                sat[1] = new Literal[1] { new Literal(0, false) };
+                return sat;
+            }
+
             indexToSatVar = new int[G.NodeCount, G.NodeCount + 1];
 
             CreateMapping();

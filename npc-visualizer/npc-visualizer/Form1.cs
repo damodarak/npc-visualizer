@@ -387,7 +387,7 @@ namespace npc_visualizer
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if (g.NodeCount > 20) return;
+            if (viewerRight.Graph.NodeCount > 20) return;
 
             g = GraphUtilities.CopyGraph(viewerRight.Graph);
             cleanRightViewerAndInfoParams();
