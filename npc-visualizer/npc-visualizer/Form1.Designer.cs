@@ -43,6 +43,7 @@ namespace npc_visualizer
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -57,7 +58,6 @@ namespace npc_visualizer
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 122F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 122F));
-            this.tableLayoutPanel1.Controls.Add(this.button2, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.comboBox2, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.button3, 3, 1);
@@ -68,8 +68,10 @@ namespace npc_visualizer
             this.tableLayoutPanel1.Controls.Add(this.comboBox1, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.numericUpDown1, 3, 2);
             this.tableLayoutPanel1.Controls.Add(this.label3, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.button1, 3, 4);
             this.tableLayoutPanel1.Controls.Add(this.button4, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.button2, 3, 5);
+            this.tableLayoutPanel1.Controls.Add(this.button1, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.checkBox1, 3, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(-1, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 6;
@@ -86,10 +88,10 @@ namespace npc_visualizer
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(826, 252);
+            this.button2.Location = new System.Drawing.Point(948, 286);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(118, 19);
+            this.button2.Size = new System.Drawing.Size(118, 24);
             this.button2.TabIndex = 19;
             this.button2.Text = "Reduction Info";
             this.button2.UseVisualStyleBackColor = true;
@@ -248,10 +250,10 @@ namespace npc_visualizer
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(948, 252);
+            this.button1.Location = new System.Drawing.Point(826, 252);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(118, 19);
+            this.button1.Size = new System.Drawing.Size(118, 30);
             this.button1.TabIndex = 18;
             this.button1.Text = "Reduce";
             this.button1.UseVisualStyleBackColor = true;
@@ -261,14 +263,23 @@ namespace npc_visualizer
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.SetColumnSpan(this.button4, 2);
             this.button4.Location = new System.Drawing.Point(827, 287);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(238, 23);
+            this.button4.Size = new System.Drawing.Size(116, 23);
             this.button4.TabIndex = 20;
             this.button4.Text = "Swap";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(949, 253);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(115, 17);
+            this.checkBox1.TabIndex = 21;
+            this.checkBox1.Text = "Reduce and Solve";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -301,6 +312,7 @@ namespace npc_visualizer
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

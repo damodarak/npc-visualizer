@@ -131,8 +131,11 @@ namespace npc_visualizer
                     return;
             }
 
-            problem.Solve();
-            problem.DrawSolution();
+            if (checkBox1.Checked)
+            {
+                problem.Solve();
+                problem.DrawSolution();
+            }           
 
             GraphProblem result;       
             switch (to)
@@ -159,7 +162,7 @@ namespace npc_visualizer
                     return;
             }
 
-            if (problem.HasSolution)
+            if (problem.HasSolution && checkBox1.Checked)
             {
                 result.Solve();
                 result.DrawSolution();
