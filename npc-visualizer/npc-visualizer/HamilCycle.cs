@@ -15,6 +15,7 @@ namespace npc_visualizer
         }
         public override Literal[][] ToSat()
         {
+            // Special case
             if (this.G.NodeCount == 2)
             {
                 sat = new Literal[2][];
@@ -41,7 +42,7 @@ namespace npc_visualizer
 
             foreach (SatSolution solution in solutions)
             {
-                //if inside, then there is a solution
+                // If inside, then there is a solution
                 IEnumerable<int> positive = solution.Pos;
                 int[] ordering = new int[G.NodeCount];
                 foreach (int pos in positive)
@@ -80,10 +81,10 @@ namespace npc_visualizer
         {
             int clauseIndex = 0;
 
-            //In the first two parts the one-to-one numbering of the vertices is specified
+            // In the first two parts the one-to-one numbering of the vertices is specified
             for (int index = 1; index < G.NodeCount + 1; index++)
             {
-                //at most one vertex
+                // At most one vertex
                 for (int vertexOne = 0; vertexOne < G.NodeCount; vertexOne++)
                 {
                     for (int vertexTwo = vertexOne + 1; vertexTwo < G.NodeCount; vertexTwo++)
@@ -107,7 +108,7 @@ namespace npc_visualizer
 
             for (int vertex = 0; vertex < G.NodeCount; vertex++)
             {
-                //at most one index
+                // At most one index
                 for (int i = 1; i < G.NodeCount + 1; i++)
                 {
                     for (int j = i + 1; j < G.NodeCount + 1; j++)
@@ -120,7 +121,7 @@ namespace npc_visualizer
                     }
                 }
 
-                //at least one index
+                // At least one index
                 sat[clauseIndex] = new Literal[G.NodeCount];
                 for (int i = 0; i < G.NodeCount; i++)
                 {
@@ -129,7 +130,7 @@ namespace npc_visualizer
                 clauseIndex++;
             }
 
-            //In the third part it is verified that edges between the i-th and (i + 1)-th vertex exist for all 1 <= i < |V|
+            // In the third part it is verified that edges between the i-th and (i + 1)-th vertex exist for all 1 <= i < |V|
             for (int index = 1; index < G.NodeCount; index++)
             {
                 for (int vertex = 0; vertex < G.NodeCount; vertex++)
@@ -145,7 +146,7 @@ namespace npc_visualizer
                 }
             }
 
-            //In the fourth part it is verified that the first and the last vertex are connected
+            // In the fourth part it is verified that the first and the last vertex are connected
             var missingEdges = GraphUtilities.FindMissingEdges(G);
             for (int missEdge = 0; missEdge < missingEdges.Length; missEdge++)
             {

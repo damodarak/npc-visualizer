@@ -33,7 +33,7 @@ namespace npc_visualizer
 
             foreach (SatSolution solution in solutions)
             {
-                //if inside, then there is a solution
+                // If inside, then there is a solution
                 IEnumerable<int> positive = solution.Pos;
                 int[] coloring = new int[G.NodeCount];
                 foreach (int pos in positive)
@@ -65,10 +65,10 @@ namespace npc_visualizer
         {
             int clauseIndex = 0;
 
-            //the first part selects one color for each vertex
+            // The first part selects one color for each vertex
             for (int vertex = 0; vertex < G.NodeCount; vertex++)
             {
-                //at most one color
+                // At most one color
                 for (int i = 1; i < Param + 1; i++)
                 {
                     for (int j = i + 1; j < Param + 1; j++)
@@ -81,7 +81,7 @@ namespace npc_visualizer
                     }
                 }
 
-                //at least one color
+                // At least one color
                 sat[clauseIndex] = new Literal[Param];
                 for (int i = 0; i < Param; i++)
                 {
@@ -90,7 +90,7 @@ namespace npc_visualizer
                 clauseIndex++;
             }
 
-            //the second part verifies that no conict-edge exists
+            // The second part verifies that no conflict-edge exists
             foreach (Edge edge in G.Edges)
             {
                 for (int i = 1; i < Param + 1; i++)

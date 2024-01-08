@@ -14,7 +14,6 @@ namespace npc_visualizer
 
         string firstNodeClicked = "";
         Edge selectedEdge = null;
-        //gViewer1.NeedToCalculateLayout = false;
 
         public Form1()
         {
@@ -24,9 +23,9 @@ namespace npc_visualizer
 
         private void InitGraphLayout()
         {
-            //FIRST viewer
+            // FIRST viewer
 
-            //create a viewer object 
+            // Create and configurate the viewer object 
             viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
             viewer.OutsideAreaBrush = System.Drawing.Brushes.White;
             viewer.UndoRedoButtonsVisible = false;
@@ -39,11 +38,11 @@ namespace npc_visualizer
             viewer.InsertingEdge = false;
             viewer.SaveButtonVisible = false;
 
-            //create a graph object 
+            // Create a graph object 
             g = new Graph("graph");
             g.Directed = false;
 
-            //create the graph content 
+            // Create simple graph content 
             GraphUtilities.AddEdge(g, "0", "1");
             GraphUtilities.AddEdge(g, "0", "2");
             GraphUtilities.AddEdge(g, "1", "2");
@@ -52,10 +51,10 @@ namespace npc_visualizer
             g.FindNode("1").Attr.Shape = Shape.Circle;
             g.FindNode("2").Attr.Shape = Shape.Circle;
 
-            //bind the graph to the viewer 
+            // Bind the graph to the viewer 
             viewer.Graph = g;
 
-            //associate the viewer with the form 
+            // Associate the viewer with the form 
             viewer.Dock = DockStyle.Fill;
             this.panel1.Controls.Add(viewer);
 
@@ -92,10 +91,13 @@ namespace npc_visualizer
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // Indices of the problems
             int from = comboBox2.SelectedIndex;
             int to = comboBox3.SelectedIndex;
+
             int param = (int)numericUpDown1.Value;
 
+            // Param larger than the g.NodeCount doesn't make any sense and might create some bugs
             if (param > g.NodeCount)
             {
                 param = g.NodeCount;
@@ -104,6 +106,7 @@ namespace npc_visualizer
             GraphProblem problem;
             GraphUtilities.ClearVertexColorAndEdgeStyle(g);
             cleanRightViewerAndInfoParams();
+
             switch (from)
             {
                 case 0:
@@ -178,6 +181,7 @@ namespace npc_visualizer
             selectedEdge = null;
             firstNodeClicked = "";
 
+            // No need to calculate anything
             if (g.NodeCount == 0)
             {
                 return;
@@ -278,6 +282,7 @@ namespace npc_visualizer
             var dnode = gviewer.ObjectUnderMouseCursor as Microsoft.Msagl.GraphViewerGdi.DNode;
             var dedge = gviewer.ObjectUnderMouseCursor as Microsoft.Msagl.GraphViewerGdi.DEdge;
 
+            // Clicked on an edge
             if(dedge != null)
             {
                 firstNodeClicked = "";
@@ -285,6 +290,7 @@ namespace npc_visualizer
                 return;
             }
 
+            // Clicked on empty space
             if (dnode == null)
             {
                 firstNodeClicked = "";
@@ -292,6 +298,7 @@ namespace npc_visualizer
                 return;
             }
 
+            // Clicked on a node
             if (firstNodeClicked == "")
             {
                 firstNodeClicked = dnode.Node.LabelText;
@@ -299,6 +306,7 @@ namespace npc_visualizer
             }
             else
             {
+                // Second clicked indicates that the user wants to connect the nodes in graph
                 string dnodeLabel = dnode.Node.LabelText;
                 Node n1 = g.FindNode(firstNodeClicked);
                 Node n2 = g.FindNode(dnodeLabel);
@@ -306,18 +314,11 @@ namespace npc_visualizer
                 Edge e1 = GraphUtilities.EdgeById(g, firstNodeClicked + "_" + dnodeLabel);
                 Edge e2 = GraphUtilities.EdgeById(g, dnodeLabel + "_" + firstNodeClicked);
 
+                // Vertices exist and aren't connected and second click was with the RMB
                 if (n1 != null && n2 != null && e1 == null && e2 == null && n1.Id != n2.Id && e.Button == System.Windows.Forms.MouseButtons.Right)
                 {
                     int index1 = int.Parse(firstNodeClicked);
                     int index2 = int.Parse(dnodeLabel);
-
-                    //edge is always from vertex with smaller index to vertex with higher index
-                    if (index1 > index2)
-                    {
-                        string temp = firstNodeClicked;
-                        firstNodeClicked = dnodeLabel;
-                        dnodeLabel = temp;
-                    }
 
                     GraphUtilities.AddEdge(g, firstNodeClicked, dnodeLabel);
 
@@ -332,7 +333,7 @@ namespace npc_visualizer
 
         private void Viewer_KeyDown(object sender, KeyEventArgs e)
         {
-            // If not Delete or Enter or NumPad
+            // Add complete graph with 0-9 vertices
             if (e.KeyValue >= 97 && e.KeyValue <= 105)
             {
                 firstNodeClicked = "";
@@ -340,12 +341,14 @@ namespace npc_visualizer
                 addCompleteGraph(e.KeyValue - 96);
                 return;
             }
+            // Add another vertex to the graph
             else if (e.KeyCode == Keys.Enter)
             {
-                if (g.NodeCount == 20)
+                if (g.NodeCount == 20) // Maximum amount
                 {
                     return;
                 }
+
                 selectedEdge = null;
                 firstNodeClicked = "";
                 g.AddNode(g.NodeCount.ToString()).Attr.Shape = Shape.Circle;
@@ -359,6 +362,7 @@ namespace npc_visualizer
                 return;
             }
 
+            // Remove Edge from graph
             if (selectedEdge != null)
             {
                 g.RemoveEdge(selectedEdge);
@@ -368,6 +372,7 @@ namespace npc_visualizer
                 cleanRightViewerAndInfoParams();
                 viewer.Graph = g;
             }
+            // Remove Node from graph
             else if (firstNodeClicked != "")
             {
                 GraphUtilities.RemoveNode(ref g, firstNodeClicked);
@@ -385,6 +390,7 @@ namespace npc_visualizer
             map.Show();
         }
 
+        // Copy graph from the right panel to the left panel
         private void button4_Click(object sender, EventArgs e)
         {
             if (viewerRight.Graph.NodeCount > 20) return;

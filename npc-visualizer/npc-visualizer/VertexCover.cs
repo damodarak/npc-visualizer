@@ -97,7 +97,7 @@ namespace npc_visualizer
         {
             Graph reduction = GraphUtilities.CopyGraph(G);
 
-            // Remove singletons
+            // Find and remove singletons
             List<string> removeNodes = new List<string>();
             int deletedNodes = 0;
             foreach (Node node in reduction.Nodes)
@@ -143,7 +143,6 @@ namespace npc_visualizer
                 return new HamilCycle(reduction, param);
             }
 
-            //var indexToNodes = new Dictionary<int, Node>();
             var inVertices = new List<Node>[G.NodeCount];
             var outVertices = new List<Node>[G.NodeCount];
 

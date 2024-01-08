@@ -41,7 +41,7 @@ namespace npc_visualizer
         {
             int clauseIndex = 0;
 
-            //at most K vertices are chosen
+            // At most Param vertices are chosen
             for (int i = 1; i < Param + 1; i++)
             {
                 for (int vertexNum1 = 0; vertexNum1 < G.NodeCount; vertexNum1++)

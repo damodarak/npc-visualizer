@@ -11,14 +11,16 @@ namespace npc_visualizer
 
         public _3Sat(Literal[][] sat)
         {
+            // After the constructor we will have valid 3SAT formula in this._3sat
             this._3sat = To3Sat(sat);
         }
 
         Literal[][] To3Sat(Literal[][] sat)
         {
             List<List<Literal>> reduction = new List<List<Literal>>();
-            int highest = findHighestLit(sat);
+            int highest = findHighestLit(sat); 
 
+            // Traverse the clauses of CNF formula and divide long clauses into smaller
             for (int i = 0; i < sat.Length; i++)
             {
                 if (sat[i].Length < 4)
@@ -33,6 +35,7 @@ namespace npc_visualizer
                 }
             }
 
+            // Copying the result into the jagged array
             Literal[][] array = new Literal[reduction.Count][];
             for (int i = 0; i < reduction.Count; i++)
             {
@@ -56,13 +59,14 @@ namespace npc_visualizer
                     clause.Add(remaining[0]);
                     remaining.RemoveAt(0);
                 }
-                clause.Add(new Literal(highest + 1, true));
+                clause.Add(new Literal(highest + 1, true)); // Creating new literal that will be passed into divided clauses with opposite sense
                 reduction.Add(clause);
                 remaining.Insert(0, new Literal(++highest, false));
                 divideClause(reduction, remaining, ref highest);
             }
         }
 
+        // Finds and returns the highest literal in a given SAT formula
         int findHighestLit(Literal[][] sat)
         {
             int highest = -1;
@@ -89,11 +93,11 @@ namespace npc_visualizer
 
         public Colorability ToColorability()
         {
-            const int param = 3;
+            const int param = 3; // We are creating an instance of 3-color graph
             Graph g = new Graph();
             g.Directed = false;
 
-            // Create Truth Gadget
+            // Create Truth Gadget representing 3 colors of the graph
             Node truthNode = g.AddNode("0");
             Node falseNode = g.AddNode("1");
             Node otherNode = g.AddNode("2");

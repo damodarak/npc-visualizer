@@ -29,6 +29,7 @@ namespace npc_visualizer
         }
         public override int[] Solve()
         {
+            // Trivial solution
             if (Param == 1)
             {
                 solution = new int[] { 0 };
@@ -65,7 +66,7 @@ namespace npc_visualizer
             int clauseIndex = 0;
             int nodeCount = G.NodeCount;
 
-            //ith and jth vertices in one clique are different
+            // i-th and j-th vertices in one clique are different
             for (int vertex = 0; vertex < nodeCount; vertex++)
             {
                 for (int i = 1; i < Param + 1; i++)
@@ -81,7 +82,7 @@ namespace npc_visualizer
                 }
             }
 
-            //Any two vertices in the clique are connected
+            // Any two vertices in the clique are connected
             Tuple<int, int>[] missingEdges = GraphUtilities.FindMissingEdges(G);
             for (int missEdge = 0; missEdge < missingEdges.Length; missEdge++)
             {
@@ -104,7 +105,7 @@ namespace npc_visualizer
                 }
             }
 
-            //There is an ith vertex
+            //There is an i-th vertex
             for (int i = 1; i < Param + 1; i++)
             {
                 sat[clauseIndex] = new Literal[G.NodeCount];
@@ -116,7 +117,7 @@ namespace npc_visualizer
                 clauseIndex++;
             }
 
-            //there is only one ith vertex in the clique
+            // There is only one i-th vertex in the clique
             for (int i = 1; i < Param + 1; i++)
             {
                 for (int nodeNum1 = 0; nodeNum1 < G.NodeCount; nodeNum1++)

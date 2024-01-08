@@ -9,6 +9,8 @@ namespace npc_visualizer
     {
         public Form2()
         {
+            // Second Form will pop out after clicking on 'Reduction info' button, shows the graph of reductions
+
             InitializeComponent();
             Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
             viewer.OutsideAreaBrush = System.Drawing.Brushes.White;
@@ -26,7 +28,7 @@ namespace npc_visualizer
 
             map.AddEdge("Sat", "3-Sat");
             map.AddEdge("Clique", "Sat");
-            map.AddEdge("Independent Set", "Sat");
+            //map.AddEdge("Independent Set", "Sat");
             map.AddEdge("Vertex Cover", "Sat");
             map.AddEdge("Dominating Set", "Sat");
             map.AddEdge("Coloring", "Sat");

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.Msagl.Drawing;
 using Microsoft.SolverFoundation.Solvers;
@@ -31,16 +28,15 @@ namespace npc_visualizer
         {
             int count = 0;
 
-            foreach (Edge e in edges)
-            {
-                count++;
-            }
+            foreach (Edge e in edges) count++;
 
             return count;
         }
 
         public static void RemoveNode(ref Graph g, string nodeId)
         {
+            // Actually quite difficult to implement
+
             Graph new_g = new Graph();
             new_g.Directed = false;
             int nodeNum = int.Parse(nodeId);
@@ -51,6 +47,7 @@ namespace npc_visualizer
                 {
                     if (int.Parse(node.Id) > nodeNum)
                     {
+                        // Lower the node.Id by one
                         new_g.AddNode((int.Parse(node.Id) - 1).ToString()).Attr.Shape = Shape.Circle;
                     }
                     else
@@ -62,6 +59,7 @@ namespace npc_visualizer
 
             foreach (Edge edge in g.Edges)
             {
+                // Edge from/to the vertice that doesn't exist
                 if (edge.Source  == nodeId || edge.Target == nodeId)
                 {
                     continue;
@@ -69,14 +67,17 @@ namespace npc_visualizer
 
                 if (int.Parse(edge.Target) < nodeNum)
                 {
+                    // Both source and target ID are lower than deleted node ID
                     AddEdge(new_g, edge.SourceNode.Id, edge.TargetNode.Id);
                 }
                 else if (int.Parse(edge.Source) < nodeNum && int.Parse(edge.Target) > nodeNum)
                 {
+                    // Only target node ID is higher therefore needs to be lowered
                     AddEdge(new_g, edge.SourceNode.Id, (int.Parse(edge.TargetNode.Id) - 1).ToString());
                 }
                 else
                 {
+                    // Both source and target ID are higher than deleted node ID
                     AddEdge(new_g, (int.Parse(edge.SourceNode.Id) - 1).ToString(), (int.Parse(edge.TargetNode.Id) - 1).ToString());
                 }
             }
@@ -86,7 +87,7 @@ namespace npc_visualizer
 
         public static void AddEdge(Graph g, string source, string target)
         {
-            // Edge is always made from Vertex with lower Id to Vertex with higher Id
+            // Edge is always made from Vertex with lower ID to vertex with higher ID
             if (int.Parse(source) > int.Parse(target))
             {
                 string temp = source;
@@ -132,6 +133,8 @@ namespace npc_visualizer
 
         public static Edge EdgeById(Graph g, string id)
         {
+            // Find and return edge specified by id, return null if the edge doesn't exist
+
             IEnumerable<Edge> edges = g.Edges;
 
             string[] vertices = id.Split('_');
@@ -147,6 +150,7 @@ namespace npc_visualizer
 
             return null;
         }
+
         public static Tuple<int, int>[] FindMissingEdges(Graph g)
         {
             int missingCount = ((g.NodeCount * (g.NodeCount - 1)) / 2) - g.EdgeCount;
@@ -166,6 +170,7 @@ namespace npc_visualizer
 
             return missingEdges;
         }
+
         public static Graph FlipEdges(Graph g)
         {
             Graph flippedGraph = new Graph("flippedGraph");
@@ -184,19 +189,10 @@ namespace npc_visualizer
 
             return flippedGraph;
         }
-        public static void DrawSolution(Graph g, int[] solution)
-        {
-            for (int i = 0; i < solution.Length; i++)
-            {
-                if (solution[i] != -1)
-                {
-                    g.FindNode(solution[i].ToString()).Attr.FillColor = Color.Purple;
-                }       
-            }
-        }
+
         public static void CreateMapping(int[] satVarToVertex, int[,] indexToSatVar, int nodeCount, int param)
         {
-            int satVar = 0;
+            int satVar = 0; // value of literal in SAT formula
 
             for (int i = 1; i < param + 1; i++)
             {
@@ -207,6 +203,7 @@ namespace npc_visualizer
                 }
             }
         }
+
         public static int[] SatSolutionToVertices(IEnumerable<SatSolution> solutions, int solutionSize, int[] satVarToVertex)
         {
             foreach (SatSolution solution in solutions)
