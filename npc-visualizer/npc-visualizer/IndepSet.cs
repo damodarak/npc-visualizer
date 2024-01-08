@@ -16,13 +16,14 @@ namespace npc_visualizer
         {
             Graph flippedGraph = GraphUtilities.FlipEdges(G);
             Clique cliq = new Clique(flippedGraph, Param);
-            return cliq.ToSat();
+            this.sat = cliq.ToSat();
+            return this.sat;
         }
         public override int[] Solve()
         {
             Graph flippedGraph = GraphUtilities.FlipEdges(G);
             Clique cliq = new Clique(flippedGraph, Param);
-            this.sat = cliq.ToSat();
+            cliq.ToSat();
             this.solution = cliq.Solve();
 
             return this.solution;
