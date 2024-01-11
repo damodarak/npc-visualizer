@@ -97,7 +97,7 @@ namespace npc_visualizer
 
             Edge ed = g.AddEdge(source, target);
             ed.Attr.ArrowheadAtTarget = ArrowStyle.None;
-            ed.Attr.Id = source + "_" + target;
+            ed.Attr.Id = $"{source}_{target}";
         }
 
         public static Graph CopyGraph(Graph g)
