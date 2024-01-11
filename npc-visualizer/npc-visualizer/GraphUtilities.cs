@@ -161,7 +161,7 @@ namespace npc_visualizer
             {
                 for (int j = i + 1; j < g.NodeCount; j++)
                 {
-                    if (EdgeById(g, i.ToString() + "_" + j.ToString()) == null)
+                    if (EdgeById(g, $"{i}_{j}") == null)
                     {
                         missingEdges[index++] = new Tuple<int, int>(i, j);
                     }
