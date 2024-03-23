@@ -206,10 +206,12 @@ namespace npc_visualizer
 
         public static int[] SatSolutionToVertices(IEnumerable<SatSolution> solutions, int solutionSize, int[] satVarToVertex)
         {
-            foreach (SatSolution solution in solutions)
+            IEnumerator<SatSolution> solutionEnumerator = solutions.GetEnumerator();
+
+            if (solutionEnumerator.MoveNext())
             {
                 // If inside, then there is a solution
-                IEnumerable<int> positive = solution.Pos;
+                IEnumerable<int> positive = solutionEnumerator.Current.Pos;
                 int[] vertices = new int[solutionSize];
                 for (int i = 0; i < vertices.Length; i++)
                 {

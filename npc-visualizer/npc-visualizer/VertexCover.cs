@@ -102,11 +102,7 @@ namespace npc_visualizer
             int deletedNodes = 0;
             foreach (Node node in reduction.Nodes)
             {
-                bool hasEdges = false;
-                foreach (Edge edge in node.Edges)
-                {
-                    hasEdges = true;
-                }
+                bool hasEdges = node.Edges.GetEnumerator().MoveNext();
 
                 if (!hasEdges)
                 {

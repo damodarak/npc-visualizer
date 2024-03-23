@@ -40,10 +40,12 @@ namespace npc_visualizer
             int varLim = G.NodeCount * G.NodeCount;
             IEnumerable<SatSolution> solutions = SatSolver.Solve(new SatSolverParams(), varLim, sat);
 
-            foreach (SatSolution solution in solutions)
+            IEnumerator<SatSolution> solutionEnumerator = solutions.GetEnumerator();
+
+            if (solutionEnumerator.MoveNext())
             {
                 // If inside, then there is a solution
-                IEnumerable<int> positive = solution.Pos;
+                IEnumerable<int> positive = solutionEnumerator.Current.Pos;
                 int[] ordering = new int[G.NodeCount];
                 foreach (int pos in positive)
                 {
