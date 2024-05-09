@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Threading;
 
 using Microsoft.Msagl.Drawing;
 
@@ -11,6 +12,8 @@ namespace npc_visualizer
         Graph g;
         Microsoft.Msagl.GraphViewerGdi.GViewer viewer;
         Microsoft.Msagl.GraphViewerGdi.GViewer viewerRight;
+        Mutex mutex = new Mutex();
+        Thread findingSolution = null;
 
         string firstNodeClicked = "";
         Edge selectedEdge = null;
@@ -89,11 +92,21 @@ namespace npc_visualizer
             this.panel2.Controls.Add(viewerRight);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void SolveReductionTask()
         {
             // Indices of the problems
-            int from = comboBox2.SelectedIndex;
-            int to = comboBox3.SelectedIndex;
+            int from = -1;
+            int to = -1;
+
+            comboBox2.Invoke((MethodInvoker)delegate
+            {
+                from = comboBox2.SelectedIndex;
+            });
+
+            comboBox3.Invoke((MethodInvoker)delegate
+            {
+                to = comboBox3.SelectedIndex;
+            });
 
             int param = (int)numericUpDown1.Value;
 
@@ -131,13 +144,20 @@ namespace npc_visualizer
                     return;
             }
 
-            if (checkBox1.Checked)
+            bool solve = false;
+
+            checkBox1.Invoke((MethodInvoker)delegate
+            {
+                solve = checkBox1.Checked;
+            });
+
+            if (solve)
             {
                 problem.Solve();
                 problem.DrawSolution();
-            }           
+            }
 
-            GraphProblem result;       
+            GraphProblem result;
             switch (to)
             {
                 case 0:
@@ -162,7 +182,7 @@ namespace npc_visualizer
                     return;
             }
 
-            if (problem.HasSolution && checkBox1.Checked)
+            if (problem.HasSolution && solve)
             {
                 result.Solve();
                 result.DrawSolution();
@@ -171,13 +191,39 @@ namespace npc_visualizer
             Graph reduction = result.G;
             int secondParam = result.Param;
 
-            label1.Text = $"Param: {param}";
-            label2.Text = $"Param: {secondParam}";
-            viewerRight.Graph = reduction;
-            viewer.Graph = g;
+            mutex.WaitOne();
+
+            label1.Invoke((MethodInvoker)delegate
+            {
+                label1.Text = $"Param: {param}";
+            });
+
+            label2.Invoke((MethodInvoker)delegate
+            {
+                label2.Text = $"Param: {secondParam}";
+            });
+
+            viewerRight.Invoke((MethodInvoker)delegate
+            {
+                viewerRight.Graph = reduction;
+            });
+
+            viewer.Invoke((MethodInvoker)delegate
+            {
+                viewer.Graph = g;
+            });
+
+            mutex.ReleaseMutex();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
+        {
+            findingSolution = new Thread(SolveReductionTask);
+            findingSolution.Start();
+            //await Task.Run(SolveReductionTask);
+        }
+
+        private void solveProblemTask()
         {
             cleanRightViewerAndInfoParams();
 
@@ -190,8 +236,18 @@ namespace npc_visualizer
                 return;
             }
 
-            int index = comboBox1.SelectedIndex;
-            int param = (int)numericUpDown1.Value;
+            int index = -1;
+            int param = -1;
+
+            comboBox1.Invoke((MethodInvoker)delegate
+            {
+                index = comboBox1.SelectedIndex;
+            });
+
+            numericUpDown1.Invoke((MethodInvoker)delegate
+            {
+                param = (int)numericUpDown1.Value;
+            });
 
             if (param > g.NodeCount)
             {
@@ -225,19 +281,44 @@ namespace npc_visualizer
             }
 
             problem.Solve();
+
+            mutex.WaitOne();
             problem.DrawSolution();
 
-            viewer.Graph = g;
+
+            viewer.Invoke((MethodInvoker)delegate
+            {
+                viewer.Graph = g;
+            });
+
+            mutex.ReleaseMutex();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            findingSolution = new Thread(new ThreadStart(solveProblemTask));
+            findingSolution.Start();
         }
 
         void cleanRightViewerAndInfoParams()
         {
-            label1.Text = "Param: -1";
-            label2.Text = "Param: -1";
+            label1.Invoke((MethodInvoker)delegate
+            {
+                label1.Text = "Param: -1";
+            });
+
+            label2.Invoke((MethodInvoker)delegate
+            {
+                label2.Text = "Param: -1";
+            });
 
             Graph right = new Graph();
             right.Directed = false;
-            viewerRight.Graph = right;
+
+            viewerRight.Invoke((MethodInvoker)delegate
+            {
+                viewerRight.Graph = right;
+            });
         }
 
         void addCompleteGraph(int vertexCount)
@@ -401,6 +482,20 @@ namespace npc_visualizer
             g = GraphUtilities.CopyGraph(viewerRight.Graph);
             cleanRightViewerAndInfoParams();
             viewer.Graph = g;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            mutex.WaitOne();
+
+            if (findingSolution != null && findingSolution.ThreadState == ThreadState.Running)
+            {
+                findingSolution.Abort();
+                findingSolution.Join();
+                findingSolution = null;
+            }
+
+            mutex.ReleaseMutex();
         }
     }
 }
