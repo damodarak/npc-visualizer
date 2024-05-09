@@ -488,7 +488,9 @@ namespace npc_visualizer
         {
             mutex.WaitOne();
 
-            if (findingSolution != null && findingSolution.ThreadState == ThreadState.Running)
+            if (findingSolution != null && 
+                (findingSolution.ThreadState == ThreadState.Running || 
+                findingSolution.ThreadState == ThreadState.WaitSleepJoin))
             {
                 findingSolution.Abort();
                 findingSolution.Join();
