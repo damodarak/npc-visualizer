@@ -493,6 +493,7 @@ namespace npc_visualizer
                 findingSolution.Abort();
                 findingSolution.Join();
                 findingSolution = null;
+                MessageBox.Show("Calculating process was killed", "Information", MessageBoxButtons.OK);
             }
 
             mutex.ReleaseMutex();
