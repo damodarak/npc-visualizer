@@ -206,6 +206,9 @@ namespace npc_visualizer
 
         public static int[] SatSolutionToVertices(IEnumerable<SatSolution> solutions, int solutionSize, int[] satVarToVertex)
         {
+            // Strange bug of Sat library is handled with this
+            if (satVarToVertex == Array.Empty<int>()) return null; 
+
             IEnumerator<SatSolution> solutionEnumerator = solutions.GetEnumerator();
 
             if (solutionEnumerator.MoveNext())
