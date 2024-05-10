@@ -417,8 +417,16 @@ namespace npc_visualizer
 
         private void Viewer_KeyDown(object sender, KeyEventArgs e)
         {
-            // Add complete graph with 0-9 vertices
-            if (e.KeyValue >= 97 && e.KeyValue <= 105)
+            if (e.KeyValue == 96)
+            {
+                firstNodeClicked = "";
+                selectedEdge = null;
+                addCompleteGraph(20);
+                return;
+            }
+
+            // Add complete graph with 1-9 vertices
+            else if (e.KeyValue >= 97 && e.KeyValue <= 105)
             {
                 firstNodeClicked = "";
                 selectedEdge = null;
